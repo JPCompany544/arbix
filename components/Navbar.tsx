@@ -48,7 +48,7 @@ export default function Navbar() {
     }, []);
 
     const navLinks = [
-        { name: "Markets", href: "/" },
+        { name: "Markets", href: "/markets" },
         { name: "Futures", href: "/futures" },
         { name: "Tools", href: "/tools" },
         { name: "Earn", href: "/earn" },
