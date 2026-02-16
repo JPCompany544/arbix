@@ -75,7 +75,7 @@ export default function DashboardPage() {
     const totalValue = portfolio?.totalUsdValue || 0;
 
     return (
-        <main className="min-h-screen bg-[#FDFDFD] pt-16 flex">
+        <main className="min-h-screen bg-[#FDFDFD] pt-16 flex overflow-x-hidden">
             {/* Side Panel */}
             <aside className="hidden lg:flex w-64 bg-white border-r border-gray-100 flex-col fixed h-full shadow-[2px_0_10px_rgba(0,0,0,0.02)] z-10">
                 <div className="flex flex-col gap-1 px-4 py-8 flex-1">
@@ -105,33 +105,33 @@ export default function DashboardPage() {
             </aside>
 
             {/* Main Content Area */}
-            <section className="flex-1 ml-0 lg:ml-64 p-4 lg:p-12 text-black">
+            <section className="flex-1 ml-0 lg:ml-64 p-4 lg:p-12 text-black overflow-x-hidden">
                 <div className="max-w-6xl mx-auto">
                     {/* Header Section */}
                     <div className="bg-gray-100 rounded-2xl p-6 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4 gap-6 lg:gap-0">
                         <div className="flex flex-col gap-4 w-full lg:w-auto">
                             <h1 className="text-xl font-black tracking-tight">Asset Overview</h1>
-                            <div className="grid grid-cols-2 gap-3 lg:flex lg:items-center">
+                            <div className="grid grid-cols-2 gap-2 lg:flex lg:items-center lg:gap-3">
                                 <button
                                     onClick={() => openModal(undefined, 'deposit')}
-                                    className="px-5 py-2 bg-black text-white rounded-lg font-bold text-[11px] hover:bg-orange-500 transition-colors shadow-lg shadow-black/5 active:scale-95 text-center"
+                                    className="px-4 py-2 bg-black text-white rounded-lg font-bold text-[11px] hover:bg-orange-500 transition-colors shadow-lg shadow-black/5 active:scale-95 text-center"
                                 >
                                     Deposit
                                 </button>
                                 <button
                                     onClick={() => openModal(undefined, 'withdraw')}
-                                    className="px-5 py-2 bg-white border border-gray-200 text-black rounded-lg font-bold text-[11px] hover:bg-gray-50 transition-colors active:scale-95 text-center"
+                                    className="px-4 py-2 bg-white border border-gray-200 text-black rounded-lg font-bold text-[11px] hover:bg-gray-50 transition-colors active:scale-95 text-center"
                                 >
                                     Withdraw
                                 </button>
                                 <button
                                     onClick={() => openModal(undefined, 'activity')}
-                                    className="px-5 py-2 bg-white border border-gray-200 text-black rounded-lg font-bold text-[11px] hover:bg-gray-50 transition-colors active:scale-95 text-center"
+                                    className="px-4 py-2 bg-white border border-gray-200 text-black rounded-lg font-bold text-[11px] hover:bg-gray-50 transition-colors active:scale-95 text-center"
                                 >
                                     Transfer
                                 </button>
                                 <button
-                                    className="px-5 py-2 bg-white border border-gray-200 text-black rounded-lg font-bold text-[11px] hover:bg-gray-50 transition-colors active:scale-95 text-center"
+                                    className="px-4 py-2 bg-white border border-gray-200 text-black rounded-lg font-bold text-[11px] hover:bg-gray-50 transition-colors active:scale-95 text-center"
                                 >
                                     Swap
                                 </button>
@@ -152,18 +152,18 @@ export default function DashboardPage() {
 
                     {/* Search Bar */}
                     <div className="flex justify-end mb-2 px-1">
-                        <div className="relative group">
+                        <div className="relative group w-full max-w-xs">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-orange-500 transition-colors" size={14} />
                             <input
                                 type="text"
                                 placeholder="Search Coin"
-                                className="bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-[11px] font-bold text-black placeholder:text-gray-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 transition-all w-64 shadow-sm"
+                                className="w-full bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-[11px] font-bold text-black placeholder:text-gray-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 transition-all shadow-sm"
                             />
                         </div>
                     </div>
 
                     {/* Asset Category Heading */}
-                    <div className="bg-gray-100 rounded-lg py-2 shadow-sm grid grid-cols-[50%_50%] lg:grid-cols-[22%_43%_35%] items-center mb-2 gap-0 overflow-hidden">
+                    <div className="bg-gray-100 rounded-lg py-2 shadow-sm grid grid-cols-[45%_55%] lg:grid-cols-[22%_43%_35%] items-center mb-2 gap-0 overflow-hidden">
                         {/* Assets - Left */}
                         <div className="pl-6">
                             <button className="text-[12px] font-black text-black">Assets</button>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
                                 <div key={asset.symbol}>
                                     <div
                                         onClick={() => toggleAsset(asset.symbol)}
-                                        className={`grid grid-cols-[50%_50%] lg:grid-cols-[22%_43%_35%] items-center py-4 gap-0 group cursor-pointer transition-colors hover:bg-gray-50/30 ${index !== displayedAssets.length - 1 ? 'border-b border-gray-100' : ''
+                                        className={`grid grid-cols-[45%_55%] lg:grid-cols-[22%_43%_35%] items-center py-4 gap-0 group cursor-pointer transition-colors hover:bg-gray-50/30 ${index !== displayedAssets.length - 1 ? 'border-b border-gray-100' : ''
                                             }`}
                                     >
                                         {/* Asset Info - Left */}
