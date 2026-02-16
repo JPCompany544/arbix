@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  status    Status   @default(ACTIVE)
+  balance   Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  transactions Transaction[]
+  chainTransactions ChainTransaction[]
+  withdrawals  Withdrawal[]
+  wallets      UserWallet[]
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Float
+  type      TxType
+  status    TxStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model ChainTransaction {
+  id           String   @id @default(cuid())
+  userId       String
+  chain        String
+  to           String
+  amount       String   // stored as string to preserve precision
+  txHash       String?  @unique
+  blockNumber  BigInt?  // block number when detected/confirmed
+  direction    TxDirection @default(OUTBOUND) // INBOUND = deposit, OUTBOUND = withdrawal
+  status       ChainTxStatus @default(PENDING)
+  createdAt    DateTime @default(now())
+  confirmedAt  DateTime?
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([chain])
+  @@index([status])
+}
+
+model LedgerEntry {
+  id            String   @id @default(cuid())
+  userId        String
+  chain         String
+  amount        String   // always positive
+  type          LedgerType
+  referenceId   String?  // ChainTransaction ID or manual reference
+  createdAt     DateTime @default(now())
+
+  @@index([userId, chain])
+}
+
+model UserBalance {
+  id       String @id @default(cuid())
+  userId   String
+  chain    String
+  balance  String  // stored as string for precision
+
+  @@unique([userId, chain])
+}
+
+model Withdrawal {
+  id            String   @id @default(cuid())
+  userId        String
+  amount        Float
+  walletAddress String?
+  status        TxStatus @default(PENDING)
+  createdAt     DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model SystemSetting {
+  key   String @id
+  value String
+}
+
+model UserWallet {
+  id               String   @id @default(cuid())
+  userId           String
+  chain            String
+  derivationIndex  Int
+  address          String
+  lastKnownBalance String   @default("0")
+  createdAt        DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, chain, derivationIndex])
+  @@unique([userId, chain])
+  @@index([userId])
+  @@index([address])
+}
+
+model ChainScanState {
+  chain            String @id
+  lastScannedBlock BigInt @default(0)
+  updatedAt        DateTime @updatedAt @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  ACTIVE
+  BANNED
+}
+
+enum TxType {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+enum TxStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  APPROVED
+  REJECTED
+}
+
+enum ChainTxStatus {
+  PENDING
+  BROADCASTED
+  CONFIRMED
+  FAILED
+}
+
+enum TxDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum LedgerType {
+  DEPOSIT
+  WITHDRAWAL
+  ADJUSTMENT
+}
