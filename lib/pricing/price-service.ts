@@ -128,6 +128,15 @@ export async function getPrices(): Promise<PriceData> {
 }
 
 /**
+ * Force refresh prices from CoinGecko
+ */
+export async function refreshPrices(): Promise<PriceData> {
+    cachedMarketData = null; // Clear cache
+    lastFetch = 0; // Reset timer
+    return await getPrices();
+}
+
+/**
  * Get price for a specific token
  */
 export async function getPrice(symbol: string): Promise<number> {
