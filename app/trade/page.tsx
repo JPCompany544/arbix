@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import TokenLogo from "@/components/TokenLogo";
 
-export default function TradePage() {
+function TradePageContent() {
     const searchParams = useSearchParams();
     const activeSymbol = searchParams.get("symbol") || "ETH";
 
@@ -52,147 +53,169 @@ export default function TradePage() {
                         </div>
                     </div>
 
-                    {/* Chart Placeholder */}
-                    <div className="bg-white border border-gray-200 min-h-[450px] flex items-center justify-center text-gray-400">
-                        Chart Section Placeholder
+                    {/* Chart Area */}
+                    <div className="bg-white border border-gray-200 p-6 flex items-center justify-center min-h-[500px]">
+                        <div className="text-center text-gray-400">
+                            <svg className="mx-auto mb-4" width="80" height="80" viewBox="0 0 80 80" fill="none">
+                                <rect x="10" y="30" width="8" height="40" fill="currentColor" opacity="0.3" />
+                                <rect x="24" y="20" width="8" height="50" fill="currentColor" opacity="0.5" />
+                                <rect x="38" y="35" width="8" height="35" fill="currentColor" opacity="0.4" />
+                                <rect x="52" y="15" width="8" height="55" fill="currentColor" opacity="0.6" />
+                                <rect x="66" y="25" width="8" height="45" fill="currentColor" opacity="0.5" />
+                            </svg>
+                            <p className="text-sm font-semibold">TradingView Chart Coming Soon</p>
+                            <p className="text-xs mt-1">Real-time price action for {activeSymbol}/USDT</p>
+                        </div>
                     </div>
 
-                    {/* Bottom Tabs: My Open Orders & My Trading History */}
-                    <div className="bg-white border border-gray-200 rounded-bl-lg p-6 min-h-[250px] overflow-hidden">
-                        <div className="flex items-center gap-8 border-b border-gray-100 mb-6">
-                            <button className="text-[13px] font-bold text-black border-b-2 border-orange-500 pb-3 -mb-[1px]">
-                                My Open Orders
-                            </button>
-                            <button className="text-[13px] font-bold text-gray-400 hover:text-black pb-3 transition-colors">
-                                My Trading History
-                            </button>
+                    {/* History Tabs */}
+                    <div className="bg-white border border-gray-200 rounded-bl-lg">
+                        <div className="flex items-center border-b border-gray-100 px-6">
+                            <button className="px-4 py-3 text-sm font-bold text-black border-b-2 border-black">Order History</button>
+                            <button className="px-4 py-3 text-sm font-medium text-gray-400 hover:text-black">Trade History</button>
                         </div>
-
                         <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="text-left border-b border-gray-50">
-                                        {orderHistoryHeaders.map(header => (
-                                            <th key={header} className="pb-4 text-[11px] font-medium text-gray-400 uppercase tracking-wider">{header}</th>
+                            <table className="w-full text-sm">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        {orderHistoryHeaders.map((header) => (
+                                            <th key={header} className="px-6 py-3 text-left text-[11px] font-black text-gray-500 uppercase tracking-wider">{header}</th>
                                         ))}
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {mockOrders.map((order, i) => (
-                                        <tr key={i} className="group hover:bg-gray-50/50 transition-colors">
-                                            <td className="py-4 text-[12px] font-medium text-gray-900">{order.date}</td>
-                                            <td className="py-4 text-[12px] font-bold text-black">{order.pair}</td>
-                                            <td className={`py-4 text-[12px] font-bold ${order.side === 'Buy' ? 'text-green-500' : 'text-red-500'}`}>{order.side}</td>
-                                            <td className="py-4 text-[12px] font-medium text-gray-600">{order.type}</td>
-                                            <td className="py-4 text-[12px] font-bold text-black">{order.amount}</td>
-                                            <td className="py-4 text-[12px] font-bold text-black">{order.price}</td>
-                                            <td className="py-4">
-                                                <button className="text-[11px] font-bold text-orange-500 hover:text-orange-600 transition-colors">Cancel</button>
+                                <tbody className="divide-y divide-gray-100">
+                                    {mockOrders.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
+                                                <div className="flex flex-col items-center gap-2">
+                                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="opacity-30">
+                                                        <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" strokeWidth="2" />
+                                                        <path d="M16 24h16M24 16v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                                    </svg>
+                                                    <p className="text-sm font-semibold">No Orders Yet</p>
+                                                    <p className="text-xs">Place your first order to get started</p>
+                                                </div>
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        mockOrders.map((order, idx) => (
+                                            <tr key={idx} className="hover:bg-gray-50">
+                                                <td className="px-6 py-3 font-medium text-gray-600">{order.date}</td>
+                                                <td className="px-6 py-3 font-bold text-black">{order.pair}</td>
+                                                <td className="px-6 py-3">
+                                                    <span className={`font-bold ${order.side === 'Buy' ? 'text-green-500' : 'text-red-500'}`}>
+                                                        {order.side}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-3 text-gray-600">{order.type}</td>
+                                                <td className="px-6 py-3 font-semibold text-black">{order.amount}</td>
+                                                <td className="px-6 py-3 font-semibold text-black">{order.price}</td>
+                                                <td className="px-6 py-3">
+                                                    <button className="text-xs font-bold text-red-500 hover:text-red-600">Cancel</button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
-                            {mockOrders.length === 0 && (
-                                <div className="flex flex-col items-center justify-center py-12">
-                                    <span className="text-[12px] text-gray-300 font-medium">No active orders found</span>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
 
-                {/* Right Section: Order Book & Trades side-by-side + Trading Panel */}
-                <div className="lg:col-span-4 flex flex-col gap-1">
-                    <div className="grid grid-cols-2 gap-1">
-                        <div className="bg-white border border-gray-200 p-4 flex flex-col h-fit">
-                            <h3 className="text-[14px] font-bold text-black mb-3">Order Book</h3>
-                            <div className="flex flex-col gap-3">
-                                <div className="flex flex-col">
-                                    <span className="text-[11px] font-medium text-gray-400 leading-none mb-1">Price (USDT)</span>
-                                    <span className="text-[13px] font-bold text-black leading-none">2118.5</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-[11px] font-medium text-gray-400 leading-none mb-1">Size (ETH)</span>
-                                    <span className="text-[11px] text-gray-200">─</span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-[11px] font-medium text-gray-400 leading-none mb-1">Total (USDT)</span>
-                                    <span className="text-[11px] text-gray-200">─</span>
-                                </div>
-                            </div>
-                        </div>
+                {/* Right Section: Order Form */}
+                <div className="lg:col-span-4 bg-white border border-gray-200 rounded-tr-lg rounded-br-lg p-6">
+                    <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                        <button className="flex-1 py-2 text-sm font-bold text-green-500 border-b-2 border-green-500">Buy</button>
+                        <button className="flex-1 py-2 text-sm font-medium text-gray-400 hover:text-red-500">Sell</button>
+                    </div>
 
-                        <div className="bg-white border border-gray-200 rounded-tr-lg p-4 flex flex-col h-fit">
-                            <h3 className="text-[14px] font-bold text-black mb-3">Trades</h3>
-                            <div className="flex flex-col gap-3">
-                                <div className="grid grid-cols-3 gap-1">
-                                    <span className="text-[11px] font-medium text-gray-400">Price</span>
-                                    <span className="text-[11px] font-medium text-gray-400">Size</span>
-                                    <span className="text-[11px] font-medium text-gray-400 text-right">Time</span>
-                                </div>
-                                <div className="text-[11px] text-gray-200 italic">No recent trades</div>
-                            </div>
+                    {/* Available Balance */}
+                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-gray-500">Available</span>
+                            <span className="text-sm font-bold text-black">0.00 USDT</span>
                         </div>
                     </div>
 
-                    <div className="bg-white border border-gray-200 rounded-br-lg p-4 flex flex-col min-h-[500px]">
-                        <div className="flex items-center gap-6 mb-5">
-                            <button className="text-[12px] font-bold text-black border-b-2 border-orange-500 pb-1">Limit</button>
-                            <button className="text-[12px] font-bold text-gray-400 hover:text-black pb-1">Market</button>
-                            <button className="text-[12px] font-bold text-gray-400 hover:text-black pb-1">Trigger Order</button>
-                        </div>
+                    {/* Order Type */}
+                    <div className="mb-4">
+                        <label className="block text-xs font-bold text-gray-600 mb-2">Order Type</label>
+                        <select className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option>Limit</option>
+                            <option>Market</option>
+                        </select>
+                    </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="flex flex-col gap-3.5">
-                                <div className="flex justify-between items-center text-[11px]">
-                                    <span className="text-gray-400 font-medium">Available:</span>
-                                    <span className="text-black font-bold">0.00 USDT</span>
-                                </div>
-                                <div className="relative">
-                                    <input type="text" readOnly value="Market Price" className="w-full bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-[12px] font-bold text-gray-400 cursor-not-allowed" />
-                                </div>
-                                <div className="relative">
-                                    <input type="text" placeholder="Amount" className="w-full bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-[12px] font-bold text-black placeholder:text-gray-400 pr-12 focus:outline-none focus:border-orange-500" />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-gray-400">USDT</span>
-                                </div>
-                                <div className="flex items-center justify-between gap-1">
-                                    {['0%', '25%', '50%', '75%', '100%'].map((p) => (
-                                        <button key={p} className="flex-1 py-1 text-[10px] font-bold text-gray-400 bg-gray-50 hover:bg-gray-100 rounded transition-colors">{p}</button>
-                                    ))}
-                                </div>
-                                <div className="text-[11px] text-gray-400 font-medium">Get per purchase: <span className="text-black font-bold">0 {activeSymbol}</span></div>
-                                <button className="w-full py-2.5 bg-green-500 hover:bg-green-600 text-white font-black text-[13px] rounded-lg transition-colors active:scale-95">
-                                    Buy {activeSymbol}
-                                </button>
-                            </div>
-
-                            <div className="flex flex-col gap-3.5">
-                                <div className="flex justify-between items-center text-[11px]">
-                                    <span className="text-gray-400 font-medium">Available:</span>
-                                    <span className="text-black font-bold">0 {activeSymbol}</span>
-                                </div>
-                                <div className="relative">
-                                    <input type="text" readOnly value="Market Price" className="w-full bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-[12px] font-bold text-gray-400 cursor-not-allowed" />
-                                </div>
-                                <div className="relative">
-                                    <input type="text" placeholder="Amount" className="w-full bg-gray-50 border border-gray-100 rounded-lg py-2 px-3 text-[12px] font-bold text-black placeholder:text-gray-400 pr-12 focus:outline-none focus:border-orange-500" />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-gray-400">{activeSymbol}</span>
-                                </div>
-                                <div className="flex items-center justify-between gap-1">
-                                    {['0%', '25%', '50%', '75%', '100%'].map((p) => (
-                                        <button key={p} className="flex-1 py-1 text-[10px] font-bold text-gray-400 bg-gray-50 hover:bg-gray-100 rounded transition-colors">{p}</button>
-                                    ))}
-                                </div>
-                                <div className="text-[11px] text-gray-400 font-medium">Get per sale: <span className="text-black font-bold">0 USDT</span></div>
-                                <button className="w-full py-2.5 bg-red-500 hover:bg-red-600 text-white font-black text-[13px] rounded-lg transition-colors active:scale-95">
-                                    Sell {activeSymbol}
-                                </button>
-                            </div>
+                    {/* Price Input */}
+                    <div className="mb-4">
+                        <label className="block text-xs font-bold text-gray-600 mb-2">Price</label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="0.00"
+                                className="w-full px-4 py-3 pr-16 border border-gray-200 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-green-500"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">USDT</span>
                         </div>
                     </div>
+
+                    {/* Amount Input */}
+                    <div className="mb-4">
+                        <label className="block text-xs font-bold text-gray-600 mb-2">Amount</label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                placeholder="0.00"
+                                className="w-full px-4 py-3 pr-16 border border-gray-200 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-green-500"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">{activeSymbol}</span>
+                        </div>
+                    </div>
+
+                    {/* Percentage selectors */}
+                    <div className="grid grid-cols-4 gap-2 mb-6">
+                        {['25%', '50%', '75%', '100%'].map((pct) => (
+                            <button key={pct} className="py-2 text-xs font-bold text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+                                {pct}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Total */}
+                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-gray-500">Total</span>
+                            <span className="text-sm font-bold text-black">0.00 USDT</span>
+                        </div>
+                    </div>
+
+                    {/* Buy Button */}
+                    <button className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors shadow-lg shadow-green-500/20">
+                        Buy {activeSymbol}
+                    </button>
+
+                    {/* Info */}
+                    <p className="mt-4 text-xs text-center text-gray-400">
+                        Please <span className="text-green-500 font-semibold">log in</span> or <span className="text-green-500 font-semibold">sign up</span> to start trading
+                    </p>
                 </div>
+
             </div>
         </main>
+    );
+}
+
+export default function TradePage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+                    <p className="text-sm font-semibold text-gray-600">Loading trade page...</p>
+                </div>
+            </div>
+        }>
+            <TradePageContent />
+        </Suspense>
     );
 }

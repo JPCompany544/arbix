@@ -2,13 +2,14 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyAdmin } from "@/lib/auth";
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
     const admin = await verifyAdmin();
     if (!admin) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     try {
+        const { id } = await params;
         const { status } = await req.json();
 
         if (!['APPROVED', 'REJECTED'].includes(status)) {
@@ -17,7 +18,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
         // Get withdrawal details first
         const withdrawal = await prisma.withdrawal.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: { user: true }
         });
 
@@ -33,7 +34,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         if (status === 'REJECTED') {
             await prisma.$transaction([
                 prisma.withdrawal.update({
-                    where: { id: params.id },
+                    where: { id },
                     data: { status: 'REJECTED' }
                 }),
                 prisma.user.update({
@@ -44,13 +45,13 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         } else {
             // Just approve
             await prisma.withdrawal.update({
-                where: { id: params.id },
+                where: { id },
                 data: { status: 'APPROVED' }
             });
         }
 
         const updated = await prisma.withdrawal.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: { user: { select: { email: true } } }
         });
 

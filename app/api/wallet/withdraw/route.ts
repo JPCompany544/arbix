@@ -74,6 +74,13 @@ export async function POST(request: NextRequest) {
             });
         }
 
+        if (!result) {
+            return NextResponse.json(
+                { error: "Failed to process withdrawal" },
+                { status: 500 }
+            );
+        }
+
         return NextResponse.json({
             success: true,
             txId: result.id,

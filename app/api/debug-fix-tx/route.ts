@@ -8,7 +8,7 @@ export async function GET() {
 
         for (const wallet of wallets) {
             const balance = BigInt(wallet.lastKnownBalance || "0");
-            if (balance > 0n) {
+            if (balance > BigInt(0)) {
                 // Check if transaction already exists
                 const existing = await prisma.chainTransaction.findFirst({
                     where: { userId: wallet.userId, chain: "BTC", amount: balance.toString(), direction: "INBOUND" }
@@ -37,7 +37,7 @@ export async function GET() {
 
         for (const wallet of xrpWallets) {
             const balance = BigInt(wallet.lastKnownBalance || "0");
-            if (balance > 0n) {
+            if (balance > BigInt(0)) {
                 const existing = await prisma.chainTransaction.findFirst({
                     where: { userId: wallet.userId, chain: "XRP", amount: balance.toString(), direction: "INBOUND" }
                 });
