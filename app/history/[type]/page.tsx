@@ -12,6 +12,7 @@ interface Transaction {
     chain?: string;
     status: string;
     txHash?: string;
+    explorerUrl?: string | null;
     createdAt: string;
     to?: string;
     source: "chain" | "ledger";
@@ -161,9 +162,9 @@ export default function HistoryTypePage({ params }: { params: Promise<{ type: st
                                         {formattedDate}
                                     </td>
                                     <td className="px-4 py-4 text-right">
-                                        {tx.txHash && (
+                                        {tx.explorerUrl && (
                                             <a
-                                                href={`https://${tx.chain === 'BSC' ? 'testnet.bscscan.com' : 'sepolia.etherscan.io'}/tx/${tx.txHash}`}
+                                                href={tx.explorerUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="text-xs font-bold text-orange-500 hover:text-orange-400 hover:underline"

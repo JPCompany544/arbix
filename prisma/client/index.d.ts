@@ -58,6 +58,36 @@ export type UserWallet = $Result.DefaultSelection<Prisma.$UserWalletPayload>
  * 
  */
 export type ChainScanState = $Result.DefaultSelection<Prisma.$ChainScanStatePayload>
+/**
+ * Model TreasuryAccount
+ * 
+ */
+export type TreasuryAccount = $Result.DefaultSelection<Prisma.$TreasuryAccountPayload>
+/**
+ * Model TreasuryLedger
+ * 
+ */
+export type TreasuryLedger = $Result.DefaultSelection<Prisma.$TreasuryLedgerPayload>
+/**
+ * Model TreasuryEntry
+ * 
+ */
+export type TreasuryEntry = $Result.DefaultSelection<Prisma.$TreasuryEntryPayload>
+/**
+ * Model BalanceSnapshot
+ * 
+ */
+export type BalanceSnapshot = $Result.DefaultSelection<Prisma.$BalanceSnapshotPayload>
+/**
+ * Model TreasuryState
+ * 
+ */
+export type TreasuryState = $Result.DefaultSelection<Prisma.$TreasuryStatePayload>
+/**
+ * Model Sweep
+ * 
+ */
+export type Sweep = $Result.DefaultSelection<Prisma.$SweepPayload>
 
 /**
  * Enums
@@ -98,14 +128,6 @@ export const TxStatus: {
 export type TxStatus = (typeof TxStatus)[keyof typeof TxStatus]
 
 
-export const TxDirection: {
-  INBOUND: 'INBOUND',
-  OUTBOUND: 'OUTBOUND'
-};
-
-export type TxDirection = (typeof TxDirection)[keyof typeof TxDirection]
-
-
 export const ChainTxStatus: {
   PENDING: 'PENDING',
   BROADCASTED: 'BROADCASTED',
@@ -116,15 +138,54 @@ export const ChainTxStatus: {
 export type ChainTxStatus = (typeof ChainTxStatus)[keyof typeof ChainTxStatus]
 
 
+export const TxDirection: {
+  INBOUND: 'INBOUND',
+  OUTBOUND: 'OUTBOUND'
+};
+
+export type TxDirection = (typeof TxDirection)[keyof typeof TxDirection]
+
+
 export const LedgerType: {
   DEPOSIT: 'DEPOSIT',
   WITHDRAWAL: 'WITHDRAWAL',
+  ADJUSTMENT: 'ADJUSTMENT',
   TRANSFER: 'TRANSFER',
-  EARNING: 'EARNING',
-  ADJUSTMENT: 'ADJUSTMENT'
+  EARNING: 'EARNING'
 };
 
 export type LedgerType = (typeof LedgerType)[keyof typeof LedgerType]
+
+
+export const TreasuryAccountType: {
+  ASSET: 'ASSET',
+  LIABILITY: 'LIABILITY',
+  EQUITY: 'EQUITY'
+};
+
+export type TreasuryAccountType = (typeof TreasuryAccountType)[keyof typeof TreasuryAccountType]
+
+
+export const TreasuryLedgerReferenceType: {
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAWAL_REQUEST: 'WITHDRAWAL_REQUEST',
+  WITHDRAWAL_EXECUTED: 'WITHDRAWAL_EXECUTED',
+  SWEEP: 'SWEEP',
+  TREASURY_MOVE: 'TREASURY_MOVE',
+  ADJUSTMENT: 'ADJUSTMENT'
+};
+
+export type TreasuryLedgerReferenceType = (typeof TreasuryLedgerReferenceType)[keyof typeof TreasuryLedgerReferenceType]
+
+
+export const SweepStatus: {
+  PENDING: 'PENDING',
+  BROADCASTING: 'BROADCASTING',
+  CONFIRMED: 'CONFIRMED',
+  FAILED: 'FAILED'
+};
+
+export type SweepStatus = (typeof SweepStatus)[keyof typeof SweepStatus]
 
 }
 
@@ -144,17 +205,29 @@ export type TxStatus = $Enums.TxStatus
 
 export const TxStatus: typeof $Enums.TxStatus
 
-export type TxDirection = $Enums.TxDirection
-
-export const TxDirection: typeof $Enums.TxDirection
-
 export type ChainTxStatus = $Enums.ChainTxStatus
 
 export const ChainTxStatus: typeof $Enums.ChainTxStatus
 
+export type TxDirection = $Enums.TxDirection
+
+export const TxDirection: typeof $Enums.TxDirection
+
 export type LedgerType = $Enums.LedgerType
 
 export const LedgerType: typeof $Enums.LedgerType
+
+export type TreasuryAccountType = $Enums.TreasuryAccountType
+
+export const TreasuryAccountType: typeof $Enums.TreasuryAccountType
+
+export type TreasuryLedgerReferenceType = $Enums.TreasuryLedgerReferenceType
+
+export const TreasuryLedgerReferenceType: typeof $Enums.TreasuryLedgerReferenceType
+
+export type SweepStatus = $Enums.SweepStatus
+
+export const SweepStatus: typeof $Enums.SweepStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -367,6 +440,66 @@ export class PrismaClient<
     * ```
     */
   get chainScanState(): Prisma.ChainScanStateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.treasuryAccount`: Exposes CRUD operations for the **TreasuryAccount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TreasuryAccounts
+    * const treasuryAccounts = await prisma.treasuryAccount.findMany()
+    * ```
+    */
+  get treasuryAccount(): Prisma.TreasuryAccountDelegate<ExtArgs>;
+
+  /**
+   * `prisma.treasuryLedger`: Exposes CRUD operations for the **TreasuryLedger** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TreasuryLedgers
+    * const treasuryLedgers = await prisma.treasuryLedger.findMany()
+    * ```
+    */
+  get treasuryLedger(): Prisma.TreasuryLedgerDelegate<ExtArgs>;
+
+  /**
+   * `prisma.treasuryEntry`: Exposes CRUD operations for the **TreasuryEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TreasuryEntries
+    * const treasuryEntries = await prisma.treasuryEntry.findMany()
+    * ```
+    */
+  get treasuryEntry(): Prisma.TreasuryEntryDelegate<ExtArgs>;
+
+  /**
+   * `prisma.balanceSnapshot`: Exposes CRUD operations for the **BalanceSnapshot** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BalanceSnapshots
+    * const balanceSnapshots = await prisma.balanceSnapshot.findMany()
+    * ```
+    */
+  get balanceSnapshot(): Prisma.BalanceSnapshotDelegate<ExtArgs>;
+
+  /**
+   * `prisma.treasuryState`: Exposes CRUD operations for the **TreasuryState** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TreasuryStates
+    * const treasuryStates = await prisma.treasuryState.findMany()
+    * ```
+    */
+  get treasuryState(): Prisma.TreasuryStateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sweep`: Exposes CRUD operations for the **Sweep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Sweeps
+    * const sweeps = await prisma.sweep.findMany()
+    * ```
+    */
+  get sweep(): Prisma.SweepDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -845,7 +978,13 @@ export namespace Prisma {
     Withdrawal: 'Withdrawal',
     SystemSetting: 'SystemSetting',
     UserWallet: 'UserWallet',
-    ChainScanState: 'ChainScanState'
+    ChainScanState: 'ChainScanState',
+    TreasuryAccount: 'TreasuryAccount',
+    TreasuryLedger: 'TreasuryLedger',
+    TreasuryEntry: 'TreasuryEntry',
+    BalanceSnapshot: 'BalanceSnapshot',
+    TreasuryState: 'TreasuryState',
+    Sweep: 'Sweep'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -862,7 +1001,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'user' | 'transaction' | 'chainTransaction' | 'ledgerEntry' | 'userBalance' | 'withdrawal' | 'systemSetting' | 'userWallet' | 'chainScanState'
+      modelProps: 'user' | 'transaction' | 'chainTransaction' | 'ledgerEntry' | 'userBalance' | 'withdrawal' | 'systemSetting' | 'userWallet' | 'chainScanState' | 'treasuryAccount' | 'treasuryLedger' | 'treasuryEntry' | 'balanceSnapshot' | 'treasuryState' | 'sweep'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1460,6 +1599,402 @@ export namespace Prisma {
           }
         }
       }
+      TreasuryAccount: {
+        payload: Prisma.$TreasuryAccountPayload<ExtArgs>
+        fields: Prisma.TreasuryAccountFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TreasuryAccountFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TreasuryAccountFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload>
+          }
+          findFirst: {
+            args: Prisma.TreasuryAccountFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TreasuryAccountFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload>
+          }
+          findMany: {
+            args: Prisma.TreasuryAccountFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload>[]
+          }
+          create: {
+            args: Prisma.TreasuryAccountCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload>
+          }
+          createMany: {
+            args: Prisma.TreasuryAccountCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.TreasuryAccountDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload>
+          }
+          update: {
+            args: Prisma.TreasuryAccountUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload>
+          }
+          deleteMany: {
+            args: Prisma.TreasuryAccountDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TreasuryAccountUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.TreasuryAccountUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryAccountPayload>
+          }
+          aggregate: {
+            args: Prisma.TreasuryAccountAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateTreasuryAccount>
+          }
+          groupBy: {
+            args: Prisma.TreasuryAccountGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryAccountGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TreasuryAccountCountArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryAccountCountAggregateOutputType> | number
+          }
+        }
+      }
+      TreasuryLedger: {
+        payload: Prisma.$TreasuryLedgerPayload<ExtArgs>
+        fields: Prisma.TreasuryLedgerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TreasuryLedgerFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TreasuryLedgerFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload>
+          }
+          findFirst: {
+            args: Prisma.TreasuryLedgerFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TreasuryLedgerFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload>
+          }
+          findMany: {
+            args: Prisma.TreasuryLedgerFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload>[]
+          }
+          create: {
+            args: Prisma.TreasuryLedgerCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload>
+          }
+          createMany: {
+            args: Prisma.TreasuryLedgerCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.TreasuryLedgerDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload>
+          }
+          update: {
+            args: Prisma.TreasuryLedgerUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload>
+          }
+          deleteMany: {
+            args: Prisma.TreasuryLedgerDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TreasuryLedgerUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.TreasuryLedgerUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryLedgerPayload>
+          }
+          aggregate: {
+            args: Prisma.TreasuryLedgerAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateTreasuryLedger>
+          }
+          groupBy: {
+            args: Prisma.TreasuryLedgerGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryLedgerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TreasuryLedgerCountArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryLedgerCountAggregateOutputType> | number
+          }
+        }
+      }
+      TreasuryEntry: {
+        payload: Prisma.$TreasuryEntryPayload<ExtArgs>
+        fields: Prisma.TreasuryEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TreasuryEntryFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TreasuryEntryFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.TreasuryEntryFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TreasuryEntryFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload>
+          }
+          findMany: {
+            args: Prisma.TreasuryEntryFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload>[]
+          }
+          create: {
+            args: Prisma.TreasuryEntryCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload>
+          }
+          createMany: {
+            args: Prisma.TreasuryEntryCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.TreasuryEntryDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload>
+          }
+          update: {
+            args: Prisma.TreasuryEntryUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.TreasuryEntryDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TreasuryEntryUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.TreasuryEntryUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.TreasuryEntryAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateTreasuryEntry>
+          }
+          groupBy: {
+            args: Prisma.TreasuryEntryGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TreasuryEntryCountArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryEntryCountAggregateOutputType> | number
+          }
+        }
+      }
+      BalanceSnapshot: {
+        payload: Prisma.$BalanceSnapshotPayload<ExtArgs>
+        fields: Prisma.BalanceSnapshotFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BalanceSnapshotFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BalanceSnapshotFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload>
+          }
+          findFirst: {
+            args: Prisma.BalanceSnapshotFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BalanceSnapshotFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload>
+          }
+          findMany: {
+            args: Prisma.BalanceSnapshotFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload>[]
+          }
+          create: {
+            args: Prisma.BalanceSnapshotCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload>
+          }
+          createMany: {
+            args: Prisma.BalanceSnapshotCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.BalanceSnapshotDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload>
+          }
+          update: {
+            args: Prisma.BalanceSnapshotUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload>
+          }
+          deleteMany: {
+            args: Prisma.BalanceSnapshotDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BalanceSnapshotUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.BalanceSnapshotUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$BalanceSnapshotPayload>
+          }
+          aggregate: {
+            args: Prisma.BalanceSnapshotAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateBalanceSnapshot>
+          }
+          groupBy: {
+            args: Prisma.BalanceSnapshotGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<BalanceSnapshotGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BalanceSnapshotCountArgs<ExtArgs>,
+            result: $Utils.Optional<BalanceSnapshotCountAggregateOutputType> | number
+          }
+        }
+      }
+      TreasuryState: {
+        payload: Prisma.$TreasuryStatePayload<ExtArgs>
+        fields: Prisma.TreasuryStateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TreasuryStateFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TreasuryStateFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload>
+          }
+          findFirst: {
+            args: Prisma.TreasuryStateFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TreasuryStateFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload>
+          }
+          findMany: {
+            args: Prisma.TreasuryStateFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload>[]
+          }
+          create: {
+            args: Prisma.TreasuryStateCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload>
+          }
+          createMany: {
+            args: Prisma.TreasuryStateCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.TreasuryStateDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload>
+          }
+          update: {
+            args: Prisma.TreasuryStateUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload>
+          }
+          deleteMany: {
+            args: Prisma.TreasuryStateDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TreasuryStateUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.TreasuryStateUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$TreasuryStatePayload>
+          }
+          aggregate: {
+            args: Prisma.TreasuryStateAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateTreasuryState>
+          }
+          groupBy: {
+            args: Prisma.TreasuryStateGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryStateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TreasuryStateCountArgs<ExtArgs>,
+            result: $Utils.Optional<TreasuryStateCountAggregateOutputType> | number
+          }
+        }
+      }
+      Sweep: {
+        payload: Prisma.$SweepPayload<ExtArgs>
+        fields: Prisma.SweepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SweepFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SweepFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload>
+          }
+          findFirst: {
+            args: Prisma.SweepFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SweepFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload>
+          }
+          findMany: {
+            args: Prisma.SweepFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload>[]
+          }
+          create: {
+            args: Prisma.SweepCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload>
+          }
+          createMany: {
+            args: Prisma.SweepCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.SweepDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload>
+          }
+          update: {
+            args: Prisma.SweepUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload>
+          }
+          deleteMany: {
+            args: Prisma.SweepDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SweepUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.SweepUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$SweepPayload>
+          }
+          aggregate: {
+            args: Prisma.SweepAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateSweep>
+          }
+          groupBy: {
+            args: Prisma.SweepGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<SweepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SweepCountArgs<ExtArgs>,
+            result: $Utils.Optional<SweepCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1619,17 +2154,17 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    transactions: number
     chainTransactions: number
-    withdrawals: number
+    transactions: number
     wallets: number
+    withdrawals: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
     chainTransactions?: boolean | UserCountOutputTypeCountChainTransactionsArgs
-    withdrawals?: boolean | UserCountOutputTypeCountWithdrawalsArgs
+    transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
     wallets?: boolean | UserCountOutputTypeCountWalletsArgs
+    withdrawals?: boolean | UserCountOutputTypeCountWithdrawalsArgs
   }
 
   // Custom InputTypes
@@ -1648,6 +2183,14 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountChainTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChainTransactionWhereInput
+  }
+
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TransactionWhereInput
   }
@@ -1656,8 +2199,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountChainTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ChainTransactionWhereInput
+  export type UserCountOutputTypeCountWalletsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWalletWhereInput
   }
 
 
@@ -1669,11 +2212,81 @@ export namespace Prisma {
   }
 
 
+
   /**
-   * UserCountOutputType without action
+   * Count Type TreasuryAccountCountOutputType
    */
-  export type UserCountOutputTypeCountWalletsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWalletWhereInput
+
+  export type TreasuryAccountCountOutputType = {
+    children: number
+    entries: number
+  }
+
+  export type TreasuryAccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    children?: boolean | TreasuryAccountCountOutputTypeCountChildrenArgs
+    entries?: boolean | TreasuryAccountCountOutputTypeCountEntriesArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * TreasuryAccountCountOutputType without action
+   */
+  export type TreasuryAccountCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccountCountOutputType
+     */
+    select?: TreasuryAccountCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * TreasuryAccountCountOutputType without action
+   */
+  export type TreasuryAccountCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TreasuryAccountWhereInput
+  }
+
+
+  /**
+   * TreasuryAccountCountOutputType without action
+   */
+  export type TreasuryAccountCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TreasuryEntryWhereInput
+  }
+
+
+
+  /**
+   * Count Type TreasuryLedgerCountOutputType
+   */
+
+  export type TreasuryLedgerCountOutputType = {
+    entries: number
+  }
+
+  export type TreasuryLedgerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | TreasuryLedgerCountOutputTypeCountEntriesArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * TreasuryLedgerCountOutputType without action
+   */
+  export type TreasuryLedgerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedgerCountOutputType
+     */
+    select?: TreasuryLedgerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * TreasuryLedgerCountOutputType without action
+   */
+  export type TreasuryLedgerCountOutputTypeCountEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TreasuryEntryWhereInput
   }
 
 
@@ -1904,10 +2517,10 @@ export namespace Prisma {
     balance?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    transactions?: boolean | User$transactionsArgs<ExtArgs>
     chainTransactions?: boolean | User$chainTransactionsArgs<ExtArgs>
-    withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
     wallets?: boolean | User$walletsArgs<ExtArgs>
+    withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1923,10 +2536,10 @@ export namespace Prisma {
   }
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    transactions?: boolean | User$transactionsArgs<ExtArgs>
     chainTransactions?: boolean | User$chainTransactionsArgs<ExtArgs>
-    withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
     wallets?: boolean | User$walletsArgs<ExtArgs>
+    withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1934,10 +2547,10 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      transactions: Prisma.$TransactionPayload<ExtArgs>[]
       chainTransactions: Prisma.$ChainTransactionPayload<ExtArgs>[]
-      withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+      transactions: Prisma.$TransactionPayload<ExtArgs>[]
       wallets: Prisma.$UserWalletPayload<ExtArgs>[]
+      withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2313,13 +2926,13 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
-    transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, 'findMany'> | Null>;
-
     chainTransactions<T extends User$chainTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$chainTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChainTransactionPayload<ExtArgs>, T, 'findMany'> | Null>;
 
-    withdrawals<T extends User$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, User$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, 'findMany'> | Null>;
+    transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     wallets<T extends User$walletsArgs<ExtArgs> = {}>(args?: Subset<T, User$walletsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserWalletPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    withdrawals<T extends User$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, User$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, 'findMany'> | Null>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2669,27 +3282,6 @@ export namespace Prisma {
 
 
   /**
-   * User.transactions
-   */
-  export type User$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Transaction
-     */
-    select?: TransactionSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: TransactionInclude<ExtArgs> | null
-    where?: TransactionWhereInput
-    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
-    cursor?: TransactionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
-  }
-
-
-  /**
    * User.chainTransactions
    */
   export type User$chainTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2711,23 +3303,23 @@ export namespace Prisma {
 
 
   /**
-   * User.withdrawals
+   * User.transactions
    */
-  export type User$withdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Withdrawal
+     * Select specific fields to fetch from the Transaction
      */
-    select?: WithdrawalSelect<ExtArgs> | null
+    select?: TransactionSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: WithdrawalInclude<ExtArgs> | null
-    where?: WithdrawalWhereInput
-    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
-    cursor?: WithdrawalWhereUniqueInput
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
   }
 
 
@@ -2749,6 +3341,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserWalletScalarFieldEnum | UserWalletScalarFieldEnum[]
+  }
+
+
+  /**
+   * User.withdrawals
+   */
+  export type User$withdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    cursor?: WithdrawalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
   }
 
 
@@ -3758,11 +4371,11 @@ export namespace Prisma {
     to: string | null
     amount: string | null
     txHash: string | null
-    blockNumber: bigint | null
-    direction: $Enums.TxDirection | null
     status: $Enums.ChainTxStatus | null
     createdAt: Date | null
     confirmedAt: Date | null
+    blockNumber: bigint | null
+    direction: $Enums.TxDirection | null
   }
 
   export type ChainTransactionMaxAggregateOutputType = {
@@ -3772,11 +4385,11 @@ export namespace Prisma {
     to: string | null
     amount: string | null
     txHash: string | null
-    blockNumber: bigint | null
-    direction: $Enums.TxDirection | null
     status: $Enums.ChainTxStatus | null
     createdAt: Date | null
     confirmedAt: Date | null
+    blockNumber: bigint | null
+    direction: $Enums.TxDirection | null
   }
 
   export type ChainTransactionCountAggregateOutputType = {
@@ -3786,11 +4399,11 @@ export namespace Prisma {
     to: number
     amount: number
     txHash: number
-    blockNumber: number
-    direction: number
     status: number
     createdAt: number
     confirmedAt: number
+    blockNumber: number
+    direction: number
     _all: number
   }
 
@@ -3810,11 +4423,11 @@ export namespace Prisma {
     to?: true
     amount?: true
     txHash?: true
-    blockNumber?: true
-    direction?: true
     status?: true
     createdAt?: true
     confirmedAt?: true
+    blockNumber?: true
+    direction?: true
   }
 
   export type ChainTransactionMaxAggregateInputType = {
@@ -3824,11 +4437,11 @@ export namespace Prisma {
     to?: true
     amount?: true
     txHash?: true
-    blockNumber?: true
-    direction?: true
     status?: true
     createdAt?: true
     confirmedAt?: true
+    blockNumber?: true
+    direction?: true
   }
 
   export type ChainTransactionCountAggregateInputType = {
@@ -3838,11 +4451,11 @@ export namespace Prisma {
     to?: true
     amount?: true
     txHash?: true
-    blockNumber?: true
-    direction?: true
     status?: true
     createdAt?: true
     confirmedAt?: true
+    blockNumber?: true
+    direction?: true
     _all?: true
   }
 
@@ -3939,11 +4552,11 @@ export namespace Prisma {
     to: string
     amount: string
     txHash: string | null
-    blockNumber: bigint | null
-    direction: $Enums.TxDirection
     status: $Enums.ChainTxStatus
     createdAt: Date
     confirmedAt: Date | null
+    blockNumber: bigint | null
+    direction: $Enums.TxDirection
     _count: ChainTransactionCountAggregateOutputType | null
     _avg: ChainTransactionAvgAggregateOutputType | null
     _sum: ChainTransactionSumAggregateOutputType | null
@@ -3972,11 +4585,11 @@ export namespace Prisma {
     to?: boolean
     amount?: boolean
     txHash?: boolean
-    blockNumber?: boolean
-    direction?: boolean
     status?: boolean
     createdAt?: boolean
     confirmedAt?: boolean
+    blockNumber?: boolean
+    direction?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chainTransaction"]>
 
@@ -3987,11 +4600,11 @@ export namespace Prisma {
     to?: boolean
     amount?: boolean
     txHash?: boolean
-    blockNumber?: boolean
-    direction?: boolean
     status?: boolean
     createdAt?: boolean
     confirmedAt?: boolean
+    blockNumber?: boolean
+    direction?: boolean
   }
 
   export type ChainTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4011,11 +4624,11 @@ export namespace Prisma {
       to: string
       amount: string
       txHash: string | null
-      blockNumber: bigint | null
-      direction: $Enums.TxDirection
       status: $Enums.ChainTxStatus
       createdAt: Date
       confirmedAt: Date | null
+      blockNumber: bigint | null
+      direction: $Enums.TxDirection
     }, ExtArgs["result"]["chainTransaction"]>
     composites: {}
   }
@@ -4417,11 +5030,11 @@ export namespace Prisma {
     readonly to: FieldRef<"ChainTransaction", 'String'>
     readonly amount: FieldRef<"ChainTransaction", 'String'>
     readonly txHash: FieldRef<"ChainTransaction", 'String'>
-    readonly blockNumber: FieldRef<"ChainTransaction", 'BigInt'>
-    readonly direction: FieldRef<"ChainTransaction", 'TxDirection'>
     readonly status: FieldRef<"ChainTransaction", 'ChainTxStatus'>
     readonly createdAt: FieldRef<"ChainTransaction", 'DateTime'>
     readonly confirmedAt: FieldRef<"ChainTransaction", 'DateTime'>
+    readonly blockNumber: FieldRef<"ChainTransaction", 'BigInt'>
+    readonly direction: FieldRef<"ChainTransaction", 'TxDirection'>
   }
     
 
@@ -8326,8 +8939,8 @@ export namespace Prisma {
     chain: string | null
     derivationIndex: number | null
     address: string | null
-    lastKnownBalance: string | null
     createdAt: Date | null
+    lastKnownBalance: string | null
   }
 
   export type UserWalletMaxAggregateOutputType = {
@@ -8336,8 +8949,8 @@ export namespace Prisma {
     chain: string | null
     derivationIndex: number | null
     address: string | null
-    lastKnownBalance: string | null
     createdAt: Date | null
+    lastKnownBalance: string | null
   }
 
   export type UserWalletCountAggregateOutputType = {
@@ -8346,8 +8959,8 @@ export namespace Prisma {
     chain: number
     derivationIndex: number
     address: number
-    lastKnownBalance: number
     createdAt: number
+    lastKnownBalance: number
     _all: number
   }
 
@@ -8366,8 +8979,8 @@ export namespace Prisma {
     chain?: true
     derivationIndex?: true
     address?: true
-    lastKnownBalance?: true
     createdAt?: true
+    lastKnownBalance?: true
   }
 
   export type UserWalletMaxAggregateInputType = {
@@ -8376,8 +8989,8 @@ export namespace Prisma {
     chain?: true
     derivationIndex?: true
     address?: true
-    lastKnownBalance?: true
     createdAt?: true
+    lastKnownBalance?: true
   }
 
   export type UserWalletCountAggregateInputType = {
@@ -8386,8 +8999,8 @@ export namespace Prisma {
     chain?: true
     derivationIndex?: true
     address?: true
-    lastKnownBalance?: true
     createdAt?: true
+    lastKnownBalance?: true
     _all?: true
   }
 
@@ -8483,8 +9096,8 @@ export namespace Prisma {
     chain: string
     derivationIndex: number
     address: string
-    lastKnownBalance: string
     createdAt: Date
+    lastKnownBalance: string
     _count: UserWalletCountAggregateOutputType | null
     _avg: UserWalletAvgAggregateOutputType | null
     _sum: UserWalletSumAggregateOutputType | null
@@ -8512,8 +9125,8 @@ export namespace Prisma {
     chain?: boolean
     derivationIndex?: boolean
     address?: boolean
-    lastKnownBalance?: boolean
     createdAt?: boolean
+    lastKnownBalance?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userWallet"]>
 
@@ -8523,8 +9136,8 @@ export namespace Prisma {
     chain?: boolean
     derivationIndex?: boolean
     address?: boolean
-    lastKnownBalance?: boolean
     createdAt?: boolean
+    lastKnownBalance?: boolean
   }
 
   export type UserWalletInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8543,8 +9156,8 @@ export namespace Prisma {
       chain: string
       derivationIndex: number
       address: string
-      lastKnownBalance: string
       createdAt: Date
+      lastKnownBalance: string
     }, ExtArgs["result"]["userWallet"]>
     composites: {}
   }
@@ -8945,8 +9558,8 @@ export namespace Prisma {
     readonly chain: FieldRef<"UserWallet", 'String'>
     readonly derivationIndex: FieldRef<"UserWallet", 'Int'>
     readonly address: FieldRef<"UserWallet", 'String'>
-    readonly lastKnownBalance: FieldRef<"UserWallet", 'String'>
     readonly createdAt: FieldRef<"UserWallet", 'DateTime'>
+    readonly lastKnownBalance: FieldRef<"UserWallet", 'String'>
   }
     
 
@@ -10157,6 +10770,5801 @@ export namespace Prisma {
 
 
   /**
+   * Model TreasuryAccount
+   */
+
+  export type AggregateTreasuryAccount = {
+    _count: TreasuryAccountCountAggregateOutputType | null
+    _min: TreasuryAccountMinAggregateOutputType | null
+    _max: TreasuryAccountMaxAggregateOutputType | null
+  }
+
+  export type TreasuryAccountMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    type: $Enums.TreasuryAccountType | null
+    network: string | null
+    currency: string | null
+    walletAddress: string | null
+    parentAccountId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type TreasuryAccountMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    type: $Enums.TreasuryAccountType | null
+    network: string | null
+    currency: string | null
+    walletAddress: string | null
+    parentAccountId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type TreasuryAccountCountAggregateOutputType = {
+    id: number
+    name: number
+    type: number
+    network: number
+    currency: number
+    walletAddress: number
+    parentAccountId: number
+    isActive: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type TreasuryAccountMinAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    network?: true
+    currency?: true
+    walletAddress?: true
+    parentAccountId?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type TreasuryAccountMaxAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    network?: true
+    currency?: true
+    walletAddress?: true
+    parentAccountId?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type TreasuryAccountCountAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    network?: true
+    currency?: true
+    walletAddress?: true
+    parentAccountId?: true
+    isActive?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type TreasuryAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryAccount to aggregate.
+     */
+    where?: TreasuryAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryAccounts to fetch.
+     */
+    orderBy?: TreasuryAccountOrderByWithRelationInput | TreasuryAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TreasuryAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TreasuryAccounts
+    **/
+    _count?: true | TreasuryAccountCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TreasuryAccountMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TreasuryAccountMaxAggregateInputType
+  }
+
+  export type GetTreasuryAccountAggregateType<T extends TreasuryAccountAggregateArgs> = {
+        [P in keyof T & keyof AggregateTreasuryAccount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTreasuryAccount[P]>
+      : GetScalarType<T[P], AggregateTreasuryAccount[P]>
+  }
+
+
+
+
+  export type TreasuryAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TreasuryAccountWhereInput
+    orderBy?: TreasuryAccountOrderByWithAggregationInput | TreasuryAccountOrderByWithAggregationInput[]
+    by: TreasuryAccountScalarFieldEnum[] | TreasuryAccountScalarFieldEnum
+    having?: TreasuryAccountScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TreasuryAccountCountAggregateInputType | true
+    _min?: TreasuryAccountMinAggregateInputType
+    _max?: TreasuryAccountMaxAggregateInputType
+  }
+
+  export type TreasuryAccountGroupByOutputType = {
+    id: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network: string | null
+    currency: string
+    walletAddress: string | null
+    parentAccountId: string | null
+    isActive: boolean
+    createdAt: Date
+    _count: TreasuryAccountCountAggregateOutputType | null
+    _min: TreasuryAccountMinAggregateOutputType | null
+    _max: TreasuryAccountMaxAggregateOutputType | null
+  }
+
+  type GetTreasuryAccountGroupByPayload<T extends TreasuryAccountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TreasuryAccountGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TreasuryAccountGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TreasuryAccountGroupByOutputType[P]>
+            : GetScalarType<T[P], TreasuryAccountGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TreasuryAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    network?: boolean
+    currency?: boolean
+    walletAddress?: boolean
+    parentAccountId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    parentAccount?: boolean | TreasuryAccount$parentAccountArgs<ExtArgs>
+    children?: boolean | TreasuryAccount$childrenArgs<ExtArgs>
+    entries?: boolean | TreasuryAccount$entriesArgs<ExtArgs>
+    _count?: boolean | TreasuryAccountCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["treasuryAccount"]>
+
+  export type TreasuryAccountSelectScalar = {
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    network?: boolean
+    currency?: boolean
+    walletAddress?: boolean
+    parentAccountId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }
+
+  export type TreasuryAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parentAccount?: boolean | TreasuryAccount$parentAccountArgs<ExtArgs>
+    children?: boolean | TreasuryAccount$childrenArgs<ExtArgs>
+    entries?: boolean | TreasuryAccount$entriesArgs<ExtArgs>
+    _count?: boolean | TreasuryAccountCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+
+  export type $TreasuryAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TreasuryAccount"
+    objects: {
+      parentAccount: Prisma.$TreasuryAccountPayload<ExtArgs> | null
+      children: Prisma.$TreasuryAccountPayload<ExtArgs>[]
+      entries: Prisma.$TreasuryEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      type: $Enums.TreasuryAccountType
+      network: string | null
+      currency: string
+      walletAddress: string | null
+      parentAccountId: string | null
+      isActive: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["treasuryAccount"]>
+    composites: {}
+  }
+
+
+  type TreasuryAccountGetPayload<S extends boolean | null | undefined | TreasuryAccountDefaultArgs> = $Result.GetResult<Prisma.$TreasuryAccountPayload, S>
+
+  type TreasuryAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TreasuryAccountFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TreasuryAccountCountAggregateInputType | true
+    }
+
+  export interface TreasuryAccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TreasuryAccount'], meta: { name: 'TreasuryAccount' } }
+    /**
+     * Find zero or one TreasuryAccount that matches the filter.
+     * @param {TreasuryAccountFindUniqueArgs} args - Arguments to find a TreasuryAccount
+     * @example
+     * // Get one TreasuryAccount
+     * const treasuryAccount = await prisma.treasuryAccount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TreasuryAccountFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryAccountFindUniqueArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one TreasuryAccount that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TreasuryAccountFindUniqueOrThrowArgs} args - Arguments to find a TreasuryAccount
+     * @example
+     * // Get one TreasuryAccount
+     * const treasuryAccount = await prisma.treasuryAccount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TreasuryAccountFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryAccountFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first TreasuryAccount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryAccountFindFirstArgs} args - Arguments to find a TreasuryAccount
+     * @example
+     * // Get one TreasuryAccount
+     * const treasuryAccount = await prisma.treasuryAccount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TreasuryAccountFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryAccountFindFirstArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first TreasuryAccount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryAccountFindFirstOrThrowArgs} args - Arguments to find a TreasuryAccount
+     * @example
+     * // Get one TreasuryAccount
+     * const treasuryAccount = await prisma.treasuryAccount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TreasuryAccountFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryAccountFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more TreasuryAccounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryAccountFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TreasuryAccounts
+     * const treasuryAccounts = await prisma.treasuryAccount.findMany()
+     * 
+     * // Get first 10 TreasuryAccounts
+     * const treasuryAccounts = await prisma.treasuryAccount.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const treasuryAccountWithIdOnly = await prisma.treasuryAccount.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends TreasuryAccountFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryAccountFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a TreasuryAccount.
+     * @param {TreasuryAccountCreateArgs} args - Arguments to create a TreasuryAccount.
+     * @example
+     * // Create one TreasuryAccount
+     * const TreasuryAccount = await prisma.treasuryAccount.create({
+     *   data: {
+     *     // ... data to create a TreasuryAccount
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TreasuryAccountCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryAccountCreateArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many TreasuryAccounts.
+     *     @param {TreasuryAccountCreateManyArgs} args - Arguments to create many TreasuryAccounts.
+     *     @example
+     *     // Create many TreasuryAccounts
+     *     const treasuryAccount = await prisma.treasuryAccount.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends TreasuryAccountCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryAccountCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a TreasuryAccount.
+     * @param {TreasuryAccountDeleteArgs} args - Arguments to delete one TreasuryAccount.
+     * @example
+     * // Delete one TreasuryAccount
+     * const TreasuryAccount = await prisma.treasuryAccount.delete({
+     *   where: {
+     *     // ... filter to delete one TreasuryAccount
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TreasuryAccountDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryAccountDeleteArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one TreasuryAccount.
+     * @param {TreasuryAccountUpdateArgs} args - Arguments to update one TreasuryAccount.
+     * @example
+     * // Update one TreasuryAccount
+     * const treasuryAccount = await prisma.treasuryAccount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TreasuryAccountUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryAccountUpdateArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more TreasuryAccounts.
+     * @param {TreasuryAccountDeleteManyArgs} args - Arguments to filter TreasuryAccounts to delete.
+     * @example
+     * // Delete a few TreasuryAccounts
+     * const { count } = await prisma.treasuryAccount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TreasuryAccountDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryAccountDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TreasuryAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryAccountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TreasuryAccounts
+     * const treasuryAccount = await prisma.treasuryAccount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TreasuryAccountUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryAccountUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TreasuryAccount.
+     * @param {TreasuryAccountUpsertArgs} args - Arguments to update or create a TreasuryAccount.
+     * @example
+     * // Update or create a TreasuryAccount
+     * const treasuryAccount = await prisma.treasuryAccount.upsert({
+     *   create: {
+     *     // ... data to create a TreasuryAccount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TreasuryAccount we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TreasuryAccountUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryAccountUpsertArgs<ExtArgs>>
+    ): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of TreasuryAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryAccountCountArgs} args - Arguments to filter TreasuryAccounts to count.
+     * @example
+     * // Count the number of TreasuryAccounts
+     * const count = await prisma.treasuryAccount.count({
+     *   where: {
+     *     // ... the filter for the TreasuryAccounts we want to count
+     *   }
+     * })
+    **/
+    count<T extends TreasuryAccountCountArgs>(
+      args?: Subset<T, TreasuryAccountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TreasuryAccountCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TreasuryAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TreasuryAccountAggregateArgs>(args: Subset<T, TreasuryAccountAggregateArgs>): Prisma.PrismaPromise<GetTreasuryAccountAggregateType<T>>
+
+    /**
+     * Group by TreasuryAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryAccountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TreasuryAccountGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TreasuryAccountGroupByArgs['orderBy'] }
+        : { orderBy?: TreasuryAccountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TreasuryAccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTreasuryAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TreasuryAccount model
+   */
+  readonly fields: TreasuryAccountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TreasuryAccount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TreasuryAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    parentAccount<T extends TreasuryAccount$parentAccountArgs<ExtArgs> = {}>(args?: Subset<T, TreasuryAccount$parentAccountArgs<ExtArgs>>): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    children<T extends TreasuryAccount$childrenArgs<ExtArgs> = {}>(args?: Subset<T, TreasuryAccount$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    entries<T extends TreasuryAccount$entriesArgs<ExtArgs> = {}>(args?: Subset<T, TreasuryAccount$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the TreasuryAccount model
+   */ 
+  interface TreasuryAccountFieldRefs {
+    readonly id: FieldRef<"TreasuryAccount", 'String'>
+    readonly name: FieldRef<"TreasuryAccount", 'String'>
+    readonly type: FieldRef<"TreasuryAccount", 'TreasuryAccountType'>
+    readonly network: FieldRef<"TreasuryAccount", 'String'>
+    readonly currency: FieldRef<"TreasuryAccount", 'String'>
+    readonly walletAddress: FieldRef<"TreasuryAccount", 'String'>
+    readonly parentAccountId: FieldRef<"TreasuryAccount", 'String'>
+    readonly isActive: FieldRef<"TreasuryAccount", 'Boolean'>
+    readonly createdAt: FieldRef<"TreasuryAccount", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * TreasuryAccount findUnique
+   */
+  export type TreasuryAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryAccount to fetch.
+     */
+    where: TreasuryAccountWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryAccount findUniqueOrThrow
+   */
+  export type TreasuryAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryAccount to fetch.
+     */
+    where: TreasuryAccountWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryAccount findFirst
+   */
+  export type TreasuryAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryAccount to fetch.
+     */
+    where?: TreasuryAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryAccounts to fetch.
+     */
+    orderBy?: TreasuryAccountOrderByWithRelationInput | TreasuryAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryAccounts.
+     */
+    cursor?: TreasuryAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryAccounts.
+     */
+    distinct?: TreasuryAccountScalarFieldEnum | TreasuryAccountScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryAccount findFirstOrThrow
+   */
+  export type TreasuryAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryAccount to fetch.
+     */
+    where?: TreasuryAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryAccounts to fetch.
+     */
+    orderBy?: TreasuryAccountOrderByWithRelationInput | TreasuryAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryAccounts.
+     */
+    cursor?: TreasuryAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryAccounts.
+     */
+    distinct?: TreasuryAccountScalarFieldEnum | TreasuryAccountScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryAccount findMany
+   */
+  export type TreasuryAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryAccounts to fetch.
+     */
+    where?: TreasuryAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryAccounts to fetch.
+     */
+    orderBy?: TreasuryAccountOrderByWithRelationInput | TreasuryAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TreasuryAccounts.
+     */
+    cursor?: TreasuryAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryAccounts.
+     */
+    skip?: number
+    distinct?: TreasuryAccountScalarFieldEnum | TreasuryAccountScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryAccount create
+   */
+  export type TreasuryAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TreasuryAccount.
+     */
+    data: XOR<TreasuryAccountCreateInput, TreasuryAccountUncheckedCreateInput>
+  }
+
+
+  /**
+   * TreasuryAccount createMany
+   */
+  export type TreasuryAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TreasuryAccounts.
+     */
+    data: TreasuryAccountCreateManyInput | TreasuryAccountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * TreasuryAccount update
+   */
+  export type TreasuryAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TreasuryAccount.
+     */
+    data: XOR<TreasuryAccountUpdateInput, TreasuryAccountUncheckedUpdateInput>
+    /**
+     * Choose, which TreasuryAccount to update.
+     */
+    where: TreasuryAccountWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryAccount updateMany
+   */
+  export type TreasuryAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TreasuryAccounts.
+     */
+    data: XOR<TreasuryAccountUpdateManyMutationInput, TreasuryAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which TreasuryAccounts to update
+     */
+    where?: TreasuryAccountWhereInput
+  }
+
+
+  /**
+   * TreasuryAccount upsert
+   */
+  export type TreasuryAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TreasuryAccount to update in case it exists.
+     */
+    where: TreasuryAccountWhereUniqueInput
+    /**
+     * In case the TreasuryAccount found by the `where` argument doesn't exist, create a new TreasuryAccount with this data.
+     */
+    create: XOR<TreasuryAccountCreateInput, TreasuryAccountUncheckedCreateInput>
+    /**
+     * In case the TreasuryAccount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TreasuryAccountUpdateInput, TreasuryAccountUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TreasuryAccount delete
+   */
+  export type TreasuryAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    /**
+     * Filter which TreasuryAccount to delete.
+     */
+    where: TreasuryAccountWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryAccount deleteMany
+   */
+  export type TreasuryAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryAccounts to delete
+     */
+    where?: TreasuryAccountWhereInput
+  }
+
+
+  /**
+   * TreasuryAccount.parentAccount
+   */
+  export type TreasuryAccount$parentAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    where?: TreasuryAccountWhereInput
+  }
+
+
+  /**
+   * TreasuryAccount.children
+   */
+  export type TreasuryAccount$childrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+    where?: TreasuryAccountWhereInput
+    orderBy?: TreasuryAccountOrderByWithRelationInput | TreasuryAccountOrderByWithRelationInput[]
+    cursor?: TreasuryAccountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TreasuryAccountScalarFieldEnum | TreasuryAccountScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryAccount.entries
+   */
+  export type TreasuryAccount$entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    where?: TreasuryEntryWhereInput
+    orderBy?: TreasuryEntryOrderByWithRelationInput | TreasuryEntryOrderByWithRelationInput[]
+    cursor?: TreasuryEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TreasuryEntryScalarFieldEnum | TreasuryEntryScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryAccount without action
+   */
+  export type TreasuryAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryAccount
+     */
+    select?: TreasuryAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryAccountInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model TreasuryLedger
+   */
+
+  export type AggregateTreasuryLedger = {
+    _count: TreasuryLedgerCountAggregateOutputType | null
+    _min: TreasuryLedgerMinAggregateOutputType | null
+    _max: TreasuryLedgerMaxAggregateOutputType | null
+  }
+
+  export type TreasuryLedgerMinAggregateOutputType = {
+    id: string | null
+    referenceType: $Enums.TreasuryLedgerReferenceType | null
+    referenceId: string | null
+    description: string | null
+    network: string | null
+    currency: string | null
+    createdByAdminId: string | null
+    locked: boolean | null
+    createdAt: Date | null
+  }
+
+  export type TreasuryLedgerMaxAggregateOutputType = {
+    id: string | null
+    referenceType: $Enums.TreasuryLedgerReferenceType | null
+    referenceId: string | null
+    description: string | null
+    network: string | null
+    currency: string | null
+    createdByAdminId: string | null
+    locked: boolean | null
+    createdAt: Date | null
+  }
+
+  export type TreasuryLedgerCountAggregateOutputType = {
+    id: number
+    referenceType: number
+    referenceId: number
+    description: number
+    network: number
+    currency: number
+    createdByAdminId: number
+    locked: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type TreasuryLedgerMinAggregateInputType = {
+    id?: true
+    referenceType?: true
+    referenceId?: true
+    description?: true
+    network?: true
+    currency?: true
+    createdByAdminId?: true
+    locked?: true
+    createdAt?: true
+  }
+
+  export type TreasuryLedgerMaxAggregateInputType = {
+    id?: true
+    referenceType?: true
+    referenceId?: true
+    description?: true
+    network?: true
+    currency?: true
+    createdByAdminId?: true
+    locked?: true
+    createdAt?: true
+  }
+
+  export type TreasuryLedgerCountAggregateInputType = {
+    id?: true
+    referenceType?: true
+    referenceId?: true
+    description?: true
+    network?: true
+    currency?: true
+    createdByAdminId?: true
+    locked?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type TreasuryLedgerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryLedger to aggregate.
+     */
+    where?: TreasuryLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryLedgers to fetch.
+     */
+    orderBy?: TreasuryLedgerOrderByWithRelationInput | TreasuryLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TreasuryLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryLedgers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TreasuryLedgers
+    **/
+    _count?: true | TreasuryLedgerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TreasuryLedgerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TreasuryLedgerMaxAggregateInputType
+  }
+
+  export type GetTreasuryLedgerAggregateType<T extends TreasuryLedgerAggregateArgs> = {
+        [P in keyof T & keyof AggregateTreasuryLedger]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTreasuryLedger[P]>
+      : GetScalarType<T[P], AggregateTreasuryLedger[P]>
+  }
+
+
+
+
+  export type TreasuryLedgerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TreasuryLedgerWhereInput
+    orderBy?: TreasuryLedgerOrderByWithAggregationInput | TreasuryLedgerOrderByWithAggregationInput[]
+    by: TreasuryLedgerScalarFieldEnum[] | TreasuryLedgerScalarFieldEnum
+    having?: TreasuryLedgerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TreasuryLedgerCountAggregateInputType | true
+    _min?: TreasuryLedgerMinAggregateInputType
+    _max?: TreasuryLedgerMaxAggregateInputType
+  }
+
+  export type TreasuryLedgerGroupByOutputType = {
+    id: string
+    referenceType: $Enums.TreasuryLedgerReferenceType
+    referenceId: string | null
+    description: string
+    network: string
+    currency: string
+    createdByAdminId: string | null
+    locked: boolean
+    createdAt: Date
+    _count: TreasuryLedgerCountAggregateOutputType | null
+    _min: TreasuryLedgerMinAggregateOutputType | null
+    _max: TreasuryLedgerMaxAggregateOutputType | null
+  }
+
+  type GetTreasuryLedgerGroupByPayload<T extends TreasuryLedgerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TreasuryLedgerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TreasuryLedgerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TreasuryLedgerGroupByOutputType[P]>
+            : GetScalarType<T[P], TreasuryLedgerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TreasuryLedgerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    description?: boolean
+    network?: boolean
+    currency?: boolean
+    createdByAdminId?: boolean
+    locked?: boolean
+    createdAt?: boolean
+    entries?: boolean | TreasuryLedger$entriesArgs<ExtArgs>
+    _count?: boolean | TreasuryLedgerCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["treasuryLedger"]>
+
+  export type TreasuryLedgerSelectScalar = {
+    id?: boolean
+    referenceType?: boolean
+    referenceId?: boolean
+    description?: boolean
+    network?: boolean
+    currency?: boolean
+    createdByAdminId?: boolean
+    locked?: boolean
+    createdAt?: boolean
+  }
+
+  export type TreasuryLedgerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    entries?: boolean | TreasuryLedger$entriesArgs<ExtArgs>
+    _count?: boolean | TreasuryLedgerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+
+  export type $TreasuryLedgerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TreasuryLedger"
+    objects: {
+      entries: Prisma.$TreasuryEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      referenceType: $Enums.TreasuryLedgerReferenceType
+      referenceId: string | null
+      description: string
+      network: string
+      currency: string
+      createdByAdminId: string | null
+      locked: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["treasuryLedger"]>
+    composites: {}
+  }
+
+
+  type TreasuryLedgerGetPayload<S extends boolean | null | undefined | TreasuryLedgerDefaultArgs> = $Result.GetResult<Prisma.$TreasuryLedgerPayload, S>
+
+  type TreasuryLedgerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TreasuryLedgerFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TreasuryLedgerCountAggregateInputType | true
+    }
+
+  export interface TreasuryLedgerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TreasuryLedger'], meta: { name: 'TreasuryLedger' } }
+    /**
+     * Find zero or one TreasuryLedger that matches the filter.
+     * @param {TreasuryLedgerFindUniqueArgs} args - Arguments to find a TreasuryLedger
+     * @example
+     * // Get one TreasuryLedger
+     * const treasuryLedger = await prisma.treasuryLedger.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TreasuryLedgerFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryLedgerFindUniqueArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one TreasuryLedger that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TreasuryLedgerFindUniqueOrThrowArgs} args - Arguments to find a TreasuryLedger
+     * @example
+     * // Get one TreasuryLedger
+     * const treasuryLedger = await prisma.treasuryLedger.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TreasuryLedgerFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryLedgerFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first TreasuryLedger that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryLedgerFindFirstArgs} args - Arguments to find a TreasuryLedger
+     * @example
+     * // Get one TreasuryLedger
+     * const treasuryLedger = await prisma.treasuryLedger.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TreasuryLedgerFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryLedgerFindFirstArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first TreasuryLedger that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryLedgerFindFirstOrThrowArgs} args - Arguments to find a TreasuryLedger
+     * @example
+     * // Get one TreasuryLedger
+     * const treasuryLedger = await prisma.treasuryLedger.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TreasuryLedgerFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryLedgerFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more TreasuryLedgers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryLedgerFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TreasuryLedgers
+     * const treasuryLedgers = await prisma.treasuryLedger.findMany()
+     * 
+     * // Get first 10 TreasuryLedgers
+     * const treasuryLedgers = await prisma.treasuryLedger.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const treasuryLedgerWithIdOnly = await prisma.treasuryLedger.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends TreasuryLedgerFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryLedgerFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a TreasuryLedger.
+     * @param {TreasuryLedgerCreateArgs} args - Arguments to create a TreasuryLedger.
+     * @example
+     * // Create one TreasuryLedger
+     * const TreasuryLedger = await prisma.treasuryLedger.create({
+     *   data: {
+     *     // ... data to create a TreasuryLedger
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TreasuryLedgerCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryLedgerCreateArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many TreasuryLedgers.
+     *     @param {TreasuryLedgerCreateManyArgs} args - Arguments to create many TreasuryLedgers.
+     *     @example
+     *     // Create many TreasuryLedgers
+     *     const treasuryLedger = await prisma.treasuryLedger.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends TreasuryLedgerCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryLedgerCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a TreasuryLedger.
+     * @param {TreasuryLedgerDeleteArgs} args - Arguments to delete one TreasuryLedger.
+     * @example
+     * // Delete one TreasuryLedger
+     * const TreasuryLedger = await prisma.treasuryLedger.delete({
+     *   where: {
+     *     // ... filter to delete one TreasuryLedger
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TreasuryLedgerDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryLedgerDeleteArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one TreasuryLedger.
+     * @param {TreasuryLedgerUpdateArgs} args - Arguments to update one TreasuryLedger.
+     * @example
+     * // Update one TreasuryLedger
+     * const treasuryLedger = await prisma.treasuryLedger.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TreasuryLedgerUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryLedgerUpdateArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more TreasuryLedgers.
+     * @param {TreasuryLedgerDeleteManyArgs} args - Arguments to filter TreasuryLedgers to delete.
+     * @example
+     * // Delete a few TreasuryLedgers
+     * const { count } = await prisma.treasuryLedger.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TreasuryLedgerDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryLedgerDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TreasuryLedgers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryLedgerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TreasuryLedgers
+     * const treasuryLedger = await prisma.treasuryLedger.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TreasuryLedgerUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryLedgerUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TreasuryLedger.
+     * @param {TreasuryLedgerUpsertArgs} args - Arguments to update or create a TreasuryLedger.
+     * @example
+     * // Update or create a TreasuryLedger
+     * const treasuryLedger = await prisma.treasuryLedger.upsert({
+     *   create: {
+     *     // ... data to create a TreasuryLedger
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TreasuryLedger we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TreasuryLedgerUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryLedgerUpsertArgs<ExtArgs>>
+    ): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of TreasuryLedgers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryLedgerCountArgs} args - Arguments to filter TreasuryLedgers to count.
+     * @example
+     * // Count the number of TreasuryLedgers
+     * const count = await prisma.treasuryLedger.count({
+     *   where: {
+     *     // ... the filter for the TreasuryLedgers we want to count
+     *   }
+     * })
+    **/
+    count<T extends TreasuryLedgerCountArgs>(
+      args?: Subset<T, TreasuryLedgerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TreasuryLedgerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TreasuryLedger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryLedgerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TreasuryLedgerAggregateArgs>(args: Subset<T, TreasuryLedgerAggregateArgs>): Prisma.PrismaPromise<GetTreasuryLedgerAggregateType<T>>
+
+    /**
+     * Group by TreasuryLedger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryLedgerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TreasuryLedgerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TreasuryLedgerGroupByArgs['orderBy'] }
+        : { orderBy?: TreasuryLedgerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TreasuryLedgerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTreasuryLedgerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TreasuryLedger model
+   */
+  readonly fields: TreasuryLedgerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TreasuryLedger.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TreasuryLedgerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    entries<T extends TreasuryLedger$entriesArgs<ExtArgs> = {}>(args?: Subset<T, TreasuryLedger$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the TreasuryLedger model
+   */ 
+  interface TreasuryLedgerFieldRefs {
+    readonly id: FieldRef<"TreasuryLedger", 'String'>
+    readonly referenceType: FieldRef<"TreasuryLedger", 'TreasuryLedgerReferenceType'>
+    readonly referenceId: FieldRef<"TreasuryLedger", 'String'>
+    readonly description: FieldRef<"TreasuryLedger", 'String'>
+    readonly network: FieldRef<"TreasuryLedger", 'String'>
+    readonly currency: FieldRef<"TreasuryLedger", 'String'>
+    readonly createdByAdminId: FieldRef<"TreasuryLedger", 'String'>
+    readonly locked: FieldRef<"TreasuryLedger", 'Boolean'>
+    readonly createdAt: FieldRef<"TreasuryLedger", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * TreasuryLedger findUnique
+   */
+  export type TreasuryLedgerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryLedger to fetch.
+     */
+    where: TreasuryLedgerWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryLedger findUniqueOrThrow
+   */
+  export type TreasuryLedgerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryLedger to fetch.
+     */
+    where: TreasuryLedgerWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryLedger findFirst
+   */
+  export type TreasuryLedgerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryLedger to fetch.
+     */
+    where?: TreasuryLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryLedgers to fetch.
+     */
+    orderBy?: TreasuryLedgerOrderByWithRelationInput | TreasuryLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryLedgers.
+     */
+    cursor?: TreasuryLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryLedgers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryLedgers.
+     */
+    distinct?: TreasuryLedgerScalarFieldEnum | TreasuryLedgerScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryLedger findFirstOrThrow
+   */
+  export type TreasuryLedgerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryLedger to fetch.
+     */
+    where?: TreasuryLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryLedgers to fetch.
+     */
+    orderBy?: TreasuryLedgerOrderByWithRelationInput | TreasuryLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryLedgers.
+     */
+    cursor?: TreasuryLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryLedgers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryLedgers.
+     */
+    distinct?: TreasuryLedgerScalarFieldEnum | TreasuryLedgerScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryLedger findMany
+   */
+  export type TreasuryLedgerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryLedgers to fetch.
+     */
+    where?: TreasuryLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryLedgers to fetch.
+     */
+    orderBy?: TreasuryLedgerOrderByWithRelationInput | TreasuryLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TreasuryLedgers.
+     */
+    cursor?: TreasuryLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryLedgers.
+     */
+    skip?: number
+    distinct?: TreasuryLedgerScalarFieldEnum | TreasuryLedgerScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryLedger create
+   */
+  export type TreasuryLedgerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TreasuryLedger.
+     */
+    data: XOR<TreasuryLedgerCreateInput, TreasuryLedgerUncheckedCreateInput>
+  }
+
+
+  /**
+   * TreasuryLedger createMany
+   */
+  export type TreasuryLedgerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TreasuryLedgers.
+     */
+    data: TreasuryLedgerCreateManyInput | TreasuryLedgerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * TreasuryLedger update
+   */
+  export type TreasuryLedgerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TreasuryLedger.
+     */
+    data: XOR<TreasuryLedgerUpdateInput, TreasuryLedgerUncheckedUpdateInput>
+    /**
+     * Choose, which TreasuryLedger to update.
+     */
+    where: TreasuryLedgerWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryLedger updateMany
+   */
+  export type TreasuryLedgerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TreasuryLedgers.
+     */
+    data: XOR<TreasuryLedgerUpdateManyMutationInput, TreasuryLedgerUncheckedUpdateManyInput>
+    /**
+     * Filter which TreasuryLedgers to update
+     */
+    where?: TreasuryLedgerWhereInput
+  }
+
+
+  /**
+   * TreasuryLedger upsert
+   */
+  export type TreasuryLedgerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TreasuryLedger to update in case it exists.
+     */
+    where: TreasuryLedgerWhereUniqueInput
+    /**
+     * In case the TreasuryLedger found by the `where` argument doesn't exist, create a new TreasuryLedger with this data.
+     */
+    create: XOR<TreasuryLedgerCreateInput, TreasuryLedgerUncheckedCreateInput>
+    /**
+     * In case the TreasuryLedger was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TreasuryLedgerUpdateInput, TreasuryLedgerUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TreasuryLedger delete
+   */
+  export type TreasuryLedgerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+    /**
+     * Filter which TreasuryLedger to delete.
+     */
+    where: TreasuryLedgerWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryLedger deleteMany
+   */
+  export type TreasuryLedgerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryLedgers to delete
+     */
+    where?: TreasuryLedgerWhereInput
+  }
+
+
+  /**
+   * TreasuryLedger.entries
+   */
+  export type TreasuryLedger$entriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    where?: TreasuryEntryWhereInput
+    orderBy?: TreasuryEntryOrderByWithRelationInput | TreasuryEntryOrderByWithRelationInput[]
+    cursor?: TreasuryEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TreasuryEntryScalarFieldEnum | TreasuryEntryScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryLedger without action
+   */
+  export type TreasuryLedgerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryLedger
+     */
+    select?: TreasuryLedgerSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryLedgerInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model TreasuryEntry
+   */
+
+  export type AggregateTreasuryEntry = {
+    _count: TreasuryEntryCountAggregateOutputType | null
+    _avg: TreasuryEntryAvgAggregateOutputType | null
+    _sum: TreasuryEntrySumAggregateOutputType | null
+    _min: TreasuryEntryMinAggregateOutputType | null
+    _max: TreasuryEntryMaxAggregateOutputType | null
+  }
+
+  export type TreasuryEntryAvgAggregateOutputType = {
+    debitAmount: number | null
+    creditAmount: number | null
+  }
+
+  export type TreasuryEntrySumAggregateOutputType = {
+    debitAmount: bigint | null
+    creditAmount: bigint | null
+  }
+
+  export type TreasuryEntryMinAggregateOutputType = {
+    id: string | null
+    ledgerId: string | null
+    accountId: string | null
+    debitAmount: bigint | null
+    creditAmount: bigint | null
+    currency: string | null
+    network: string | null
+    createdAt: Date | null
+  }
+
+  export type TreasuryEntryMaxAggregateOutputType = {
+    id: string | null
+    ledgerId: string | null
+    accountId: string | null
+    debitAmount: bigint | null
+    creditAmount: bigint | null
+    currency: string | null
+    network: string | null
+    createdAt: Date | null
+  }
+
+  export type TreasuryEntryCountAggregateOutputType = {
+    id: number
+    ledgerId: number
+    accountId: number
+    debitAmount: number
+    creditAmount: number
+    currency: number
+    network: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type TreasuryEntryAvgAggregateInputType = {
+    debitAmount?: true
+    creditAmount?: true
+  }
+
+  export type TreasuryEntrySumAggregateInputType = {
+    debitAmount?: true
+    creditAmount?: true
+  }
+
+  export type TreasuryEntryMinAggregateInputType = {
+    id?: true
+    ledgerId?: true
+    accountId?: true
+    debitAmount?: true
+    creditAmount?: true
+    currency?: true
+    network?: true
+    createdAt?: true
+  }
+
+  export type TreasuryEntryMaxAggregateInputType = {
+    id?: true
+    ledgerId?: true
+    accountId?: true
+    debitAmount?: true
+    creditAmount?: true
+    currency?: true
+    network?: true
+    createdAt?: true
+  }
+
+  export type TreasuryEntryCountAggregateInputType = {
+    id?: true
+    ledgerId?: true
+    accountId?: true
+    debitAmount?: true
+    creditAmount?: true
+    currency?: true
+    network?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type TreasuryEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryEntry to aggregate.
+     */
+    where?: TreasuryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryEntries to fetch.
+     */
+    orderBy?: TreasuryEntryOrderByWithRelationInput | TreasuryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TreasuryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TreasuryEntries
+    **/
+    _count?: true | TreasuryEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TreasuryEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TreasuryEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TreasuryEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TreasuryEntryMaxAggregateInputType
+  }
+
+  export type GetTreasuryEntryAggregateType<T extends TreasuryEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateTreasuryEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTreasuryEntry[P]>
+      : GetScalarType<T[P], AggregateTreasuryEntry[P]>
+  }
+
+
+
+
+  export type TreasuryEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TreasuryEntryWhereInput
+    orderBy?: TreasuryEntryOrderByWithAggregationInput | TreasuryEntryOrderByWithAggregationInput[]
+    by: TreasuryEntryScalarFieldEnum[] | TreasuryEntryScalarFieldEnum
+    having?: TreasuryEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TreasuryEntryCountAggregateInputType | true
+    _avg?: TreasuryEntryAvgAggregateInputType
+    _sum?: TreasuryEntrySumAggregateInputType
+    _min?: TreasuryEntryMinAggregateInputType
+    _max?: TreasuryEntryMaxAggregateInputType
+  }
+
+  export type TreasuryEntryGroupByOutputType = {
+    id: string
+    ledgerId: string
+    accountId: string
+    debitAmount: bigint
+    creditAmount: bigint
+    currency: string
+    network: string
+    createdAt: Date
+    _count: TreasuryEntryCountAggregateOutputType | null
+    _avg: TreasuryEntryAvgAggregateOutputType | null
+    _sum: TreasuryEntrySumAggregateOutputType | null
+    _min: TreasuryEntryMinAggregateOutputType | null
+    _max: TreasuryEntryMaxAggregateOutputType | null
+  }
+
+  type GetTreasuryEntryGroupByPayload<T extends TreasuryEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TreasuryEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TreasuryEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TreasuryEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], TreasuryEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TreasuryEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ledgerId?: boolean
+    accountId?: boolean
+    debitAmount?: boolean
+    creditAmount?: boolean
+    currency?: boolean
+    network?: boolean
+    createdAt?: boolean
+    ledger?: boolean | TreasuryLedgerDefaultArgs<ExtArgs>
+    account?: boolean | TreasuryAccountDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["treasuryEntry"]>
+
+  export type TreasuryEntrySelectScalar = {
+    id?: boolean
+    ledgerId?: boolean
+    accountId?: boolean
+    debitAmount?: boolean
+    creditAmount?: boolean
+    currency?: boolean
+    network?: boolean
+    createdAt?: boolean
+  }
+
+  export type TreasuryEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ledger?: boolean | TreasuryLedgerDefaultArgs<ExtArgs>
+    account?: boolean | TreasuryAccountDefaultArgs<ExtArgs>
+  }
+
+
+  export type $TreasuryEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TreasuryEntry"
+    objects: {
+      ledger: Prisma.$TreasuryLedgerPayload<ExtArgs>
+      account: Prisma.$TreasuryAccountPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      ledgerId: string
+      accountId: string
+      debitAmount: bigint
+      creditAmount: bigint
+      currency: string
+      network: string
+      createdAt: Date
+    }, ExtArgs["result"]["treasuryEntry"]>
+    composites: {}
+  }
+
+
+  type TreasuryEntryGetPayload<S extends boolean | null | undefined | TreasuryEntryDefaultArgs> = $Result.GetResult<Prisma.$TreasuryEntryPayload, S>
+
+  type TreasuryEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TreasuryEntryFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TreasuryEntryCountAggregateInputType | true
+    }
+
+  export interface TreasuryEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TreasuryEntry'], meta: { name: 'TreasuryEntry' } }
+    /**
+     * Find zero or one TreasuryEntry that matches the filter.
+     * @param {TreasuryEntryFindUniqueArgs} args - Arguments to find a TreasuryEntry
+     * @example
+     * // Get one TreasuryEntry
+     * const treasuryEntry = await prisma.treasuryEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TreasuryEntryFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryEntryFindUniqueArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one TreasuryEntry that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TreasuryEntryFindUniqueOrThrowArgs} args - Arguments to find a TreasuryEntry
+     * @example
+     * // Get one TreasuryEntry
+     * const treasuryEntry = await prisma.treasuryEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TreasuryEntryFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryEntryFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first TreasuryEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryEntryFindFirstArgs} args - Arguments to find a TreasuryEntry
+     * @example
+     * // Get one TreasuryEntry
+     * const treasuryEntry = await prisma.treasuryEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TreasuryEntryFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryEntryFindFirstArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first TreasuryEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryEntryFindFirstOrThrowArgs} args - Arguments to find a TreasuryEntry
+     * @example
+     * // Get one TreasuryEntry
+     * const treasuryEntry = await prisma.treasuryEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TreasuryEntryFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryEntryFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more TreasuryEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryEntryFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TreasuryEntries
+     * const treasuryEntries = await prisma.treasuryEntry.findMany()
+     * 
+     * // Get first 10 TreasuryEntries
+     * const treasuryEntries = await prisma.treasuryEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const treasuryEntryWithIdOnly = await prisma.treasuryEntry.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends TreasuryEntryFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryEntryFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a TreasuryEntry.
+     * @param {TreasuryEntryCreateArgs} args - Arguments to create a TreasuryEntry.
+     * @example
+     * // Create one TreasuryEntry
+     * const TreasuryEntry = await prisma.treasuryEntry.create({
+     *   data: {
+     *     // ... data to create a TreasuryEntry
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TreasuryEntryCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryEntryCreateArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many TreasuryEntries.
+     *     @param {TreasuryEntryCreateManyArgs} args - Arguments to create many TreasuryEntries.
+     *     @example
+     *     // Create many TreasuryEntries
+     *     const treasuryEntry = await prisma.treasuryEntry.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends TreasuryEntryCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryEntryCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a TreasuryEntry.
+     * @param {TreasuryEntryDeleteArgs} args - Arguments to delete one TreasuryEntry.
+     * @example
+     * // Delete one TreasuryEntry
+     * const TreasuryEntry = await prisma.treasuryEntry.delete({
+     *   where: {
+     *     // ... filter to delete one TreasuryEntry
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TreasuryEntryDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryEntryDeleteArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one TreasuryEntry.
+     * @param {TreasuryEntryUpdateArgs} args - Arguments to update one TreasuryEntry.
+     * @example
+     * // Update one TreasuryEntry
+     * const treasuryEntry = await prisma.treasuryEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TreasuryEntryUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryEntryUpdateArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more TreasuryEntries.
+     * @param {TreasuryEntryDeleteManyArgs} args - Arguments to filter TreasuryEntries to delete.
+     * @example
+     * // Delete a few TreasuryEntries
+     * const { count } = await prisma.treasuryEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TreasuryEntryDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryEntryDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TreasuryEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TreasuryEntries
+     * const treasuryEntry = await prisma.treasuryEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TreasuryEntryUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryEntryUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TreasuryEntry.
+     * @param {TreasuryEntryUpsertArgs} args - Arguments to update or create a TreasuryEntry.
+     * @example
+     * // Update or create a TreasuryEntry
+     * const treasuryEntry = await prisma.treasuryEntry.upsert({
+     *   create: {
+     *     // ... data to create a TreasuryEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TreasuryEntry we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TreasuryEntryUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryEntryUpsertArgs<ExtArgs>>
+    ): Prisma__TreasuryEntryClient<$Result.GetResult<Prisma.$TreasuryEntryPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of TreasuryEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryEntryCountArgs} args - Arguments to filter TreasuryEntries to count.
+     * @example
+     * // Count the number of TreasuryEntries
+     * const count = await prisma.treasuryEntry.count({
+     *   where: {
+     *     // ... the filter for the TreasuryEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends TreasuryEntryCountArgs>(
+      args?: Subset<T, TreasuryEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TreasuryEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TreasuryEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TreasuryEntryAggregateArgs>(args: Subset<T, TreasuryEntryAggregateArgs>): Prisma.PrismaPromise<GetTreasuryEntryAggregateType<T>>
+
+    /**
+     * Group by TreasuryEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TreasuryEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TreasuryEntryGroupByArgs['orderBy'] }
+        : { orderBy?: TreasuryEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TreasuryEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTreasuryEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TreasuryEntry model
+   */
+  readonly fields: TreasuryEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TreasuryEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TreasuryEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    ledger<T extends TreasuryLedgerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TreasuryLedgerDefaultArgs<ExtArgs>>): Prisma__TreasuryLedgerClient<$Result.GetResult<Prisma.$TreasuryLedgerPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+
+    account<T extends TreasuryAccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TreasuryAccountDefaultArgs<ExtArgs>>): Prisma__TreasuryAccountClient<$Result.GetResult<Prisma.$TreasuryAccountPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the TreasuryEntry model
+   */ 
+  interface TreasuryEntryFieldRefs {
+    readonly id: FieldRef<"TreasuryEntry", 'String'>
+    readonly ledgerId: FieldRef<"TreasuryEntry", 'String'>
+    readonly accountId: FieldRef<"TreasuryEntry", 'String'>
+    readonly debitAmount: FieldRef<"TreasuryEntry", 'BigInt'>
+    readonly creditAmount: FieldRef<"TreasuryEntry", 'BigInt'>
+    readonly currency: FieldRef<"TreasuryEntry", 'String'>
+    readonly network: FieldRef<"TreasuryEntry", 'String'>
+    readonly createdAt: FieldRef<"TreasuryEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * TreasuryEntry findUnique
+   */
+  export type TreasuryEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryEntry to fetch.
+     */
+    where: TreasuryEntryWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryEntry findUniqueOrThrow
+   */
+  export type TreasuryEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryEntry to fetch.
+     */
+    where: TreasuryEntryWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryEntry findFirst
+   */
+  export type TreasuryEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryEntry to fetch.
+     */
+    where?: TreasuryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryEntries to fetch.
+     */
+    orderBy?: TreasuryEntryOrderByWithRelationInput | TreasuryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryEntries.
+     */
+    cursor?: TreasuryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryEntries.
+     */
+    distinct?: TreasuryEntryScalarFieldEnum | TreasuryEntryScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryEntry findFirstOrThrow
+   */
+  export type TreasuryEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryEntry to fetch.
+     */
+    where?: TreasuryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryEntries to fetch.
+     */
+    orderBy?: TreasuryEntryOrderByWithRelationInput | TreasuryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryEntries.
+     */
+    cursor?: TreasuryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryEntries.
+     */
+    distinct?: TreasuryEntryScalarFieldEnum | TreasuryEntryScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryEntry findMany
+   */
+  export type TreasuryEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which TreasuryEntries to fetch.
+     */
+    where?: TreasuryEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryEntries to fetch.
+     */
+    orderBy?: TreasuryEntryOrderByWithRelationInput | TreasuryEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TreasuryEntries.
+     */
+    cursor?: TreasuryEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryEntries.
+     */
+    skip?: number
+    distinct?: TreasuryEntryScalarFieldEnum | TreasuryEntryScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryEntry create
+   */
+  export type TreasuryEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TreasuryEntry.
+     */
+    data: XOR<TreasuryEntryCreateInput, TreasuryEntryUncheckedCreateInput>
+  }
+
+
+  /**
+   * TreasuryEntry createMany
+   */
+  export type TreasuryEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TreasuryEntries.
+     */
+    data: TreasuryEntryCreateManyInput | TreasuryEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * TreasuryEntry update
+   */
+  export type TreasuryEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TreasuryEntry.
+     */
+    data: XOR<TreasuryEntryUpdateInput, TreasuryEntryUncheckedUpdateInput>
+    /**
+     * Choose, which TreasuryEntry to update.
+     */
+    where: TreasuryEntryWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryEntry updateMany
+   */
+  export type TreasuryEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TreasuryEntries.
+     */
+    data: XOR<TreasuryEntryUpdateManyMutationInput, TreasuryEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which TreasuryEntries to update
+     */
+    where?: TreasuryEntryWhereInput
+  }
+
+
+  /**
+   * TreasuryEntry upsert
+   */
+  export type TreasuryEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TreasuryEntry to update in case it exists.
+     */
+    where: TreasuryEntryWhereUniqueInput
+    /**
+     * In case the TreasuryEntry found by the `where` argument doesn't exist, create a new TreasuryEntry with this data.
+     */
+    create: XOR<TreasuryEntryCreateInput, TreasuryEntryUncheckedCreateInput>
+    /**
+     * In case the TreasuryEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TreasuryEntryUpdateInput, TreasuryEntryUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TreasuryEntry delete
+   */
+  export type TreasuryEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+    /**
+     * Filter which TreasuryEntry to delete.
+     */
+    where: TreasuryEntryWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryEntry deleteMany
+   */
+  export type TreasuryEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryEntries to delete
+     */
+    where?: TreasuryEntryWhereInput
+  }
+
+
+  /**
+   * TreasuryEntry without action
+   */
+  export type TreasuryEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryEntry
+     */
+    select?: TreasuryEntrySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TreasuryEntryInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model BalanceSnapshot
+   */
+
+  export type AggregateBalanceSnapshot = {
+    _count: BalanceSnapshotCountAggregateOutputType | null
+    _avg: BalanceSnapshotAvgAggregateOutputType | null
+    _sum: BalanceSnapshotSumAggregateOutputType | null
+    _min: BalanceSnapshotMinAggregateOutputType | null
+    _max: BalanceSnapshotMaxAggregateOutputType | null
+  }
+
+  export type BalanceSnapshotAvgAggregateOutputType = {
+    totalAssets: number | null
+    totalLiabilities: number | null
+    totalEquity: number | null
+  }
+
+  export type BalanceSnapshotSumAggregateOutputType = {
+    totalAssets: bigint | null
+    totalLiabilities: bigint | null
+    totalEquity: bigint | null
+  }
+
+  export type BalanceSnapshotMinAggregateOutputType = {
+    id: string | null
+    snapshotTime: Date | null
+    network: string | null
+    currency: string | null
+    totalAssets: bigint | null
+    totalLiabilities: bigint | null
+    totalEquity: bigint | null
+  }
+
+  export type BalanceSnapshotMaxAggregateOutputType = {
+    id: string | null
+    snapshotTime: Date | null
+    network: string | null
+    currency: string | null
+    totalAssets: bigint | null
+    totalLiabilities: bigint | null
+    totalEquity: bigint | null
+  }
+
+  export type BalanceSnapshotCountAggregateOutputType = {
+    id: number
+    snapshotTime: number
+    network: number
+    currency: number
+    totalAssets: number
+    totalLiabilities: number
+    totalEquity: number
+    _all: number
+  }
+
+
+  export type BalanceSnapshotAvgAggregateInputType = {
+    totalAssets?: true
+    totalLiabilities?: true
+    totalEquity?: true
+  }
+
+  export type BalanceSnapshotSumAggregateInputType = {
+    totalAssets?: true
+    totalLiabilities?: true
+    totalEquity?: true
+  }
+
+  export type BalanceSnapshotMinAggregateInputType = {
+    id?: true
+    snapshotTime?: true
+    network?: true
+    currency?: true
+    totalAssets?: true
+    totalLiabilities?: true
+    totalEquity?: true
+  }
+
+  export type BalanceSnapshotMaxAggregateInputType = {
+    id?: true
+    snapshotTime?: true
+    network?: true
+    currency?: true
+    totalAssets?: true
+    totalLiabilities?: true
+    totalEquity?: true
+  }
+
+  export type BalanceSnapshotCountAggregateInputType = {
+    id?: true
+    snapshotTime?: true
+    network?: true
+    currency?: true
+    totalAssets?: true
+    totalLiabilities?: true
+    totalEquity?: true
+    _all?: true
+  }
+
+  export type BalanceSnapshotAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BalanceSnapshot to aggregate.
+     */
+    where?: BalanceSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BalanceSnapshots to fetch.
+     */
+    orderBy?: BalanceSnapshotOrderByWithRelationInput | BalanceSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BalanceSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BalanceSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BalanceSnapshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BalanceSnapshots
+    **/
+    _count?: true | BalanceSnapshotCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BalanceSnapshotAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BalanceSnapshotSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BalanceSnapshotMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BalanceSnapshotMaxAggregateInputType
+  }
+
+  export type GetBalanceSnapshotAggregateType<T extends BalanceSnapshotAggregateArgs> = {
+        [P in keyof T & keyof AggregateBalanceSnapshot]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBalanceSnapshot[P]>
+      : GetScalarType<T[P], AggregateBalanceSnapshot[P]>
+  }
+
+
+
+
+  export type BalanceSnapshotGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BalanceSnapshotWhereInput
+    orderBy?: BalanceSnapshotOrderByWithAggregationInput | BalanceSnapshotOrderByWithAggregationInput[]
+    by: BalanceSnapshotScalarFieldEnum[] | BalanceSnapshotScalarFieldEnum
+    having?: BalanceSnapshotScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BalanceSnapshotCountAggregateInputType | true
+    _avg?: BalanceSnapshotAvgAggregateInputType
+    _sum?: BalanceSnapshotSumAggregateInputType
+    _min?: BalanceSnapshotMinAggregateInputType
+    _max?: BalanceSnapshotMaxAggregateInputType
+  }
+
+  export type BalanceSnapshotGroupByOutputType = {
+    id: string
+    snapshotTime: Date
+    network: string
+    currency: string
+    totalAssets: bigint
+    totalLiabilities: bigint
+    totalEquity: bigint
+    _count: BalanceSnapshotCountAggregateOutputType | null
+    _avg: BalanceSnapshotAvgAggregateOutputType | null
+    _sum: BalanceSnapshotSumAggregateOutputType | null
+    _min: BalanceSnapshotMinAggregateOutputType | null
+    _max: BalanceSnapshotMaxAggregateOutputType | null
+  }
+
+  type GetBalanceSnapshotGroupByPayload<T extends BalanceSnapshotGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BalanceSnapshotGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BalanceSnapshotGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BalanceSnapshotGroupByOutputType[P]>
+            : GetScalarType<T[P], BalanceSnapshotGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BalanceSnapshotSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    snapshotTime?: boolean
+    network?: boolean
+    currency?: boolean
+    totalAssets?: boolean
+    totalLiabilities?: boolean
+    totalEquity?: boolean
+  }, ExtArgs["result"]["balanceSnapshot"]>
+
+  export type BalanceSnapshotSelectScalar = {
+    id?: boolean
+    snapshotTime?: boolean
+    network?: boolean
+    currency?: boolean
+    totalAssets?: boolean
+    totalLiabilities?: boolean
+    totalEquity?: boolean
+  }
+
+
+  export type $BalanceSnapshotPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BalanceSnapshot"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      snapshotTime: Date
+      network: string
+      currency: string
+      totalAssets: bigint
+      totalLiabilities: bigint
+      totalEquity: bigint
+    }, ExtArgs["result"]["balanceSnapshot"]>
+    composites: {}
+  }
+
+
+  type BalanceSnapshotGetPayload<S extends boolean | null | undefined | BalanceSnapshotDefaultArgs> = $Result.GetResult<Prisma.$BalanceSnapshotPayload, S>
+
+  type BalanceSnapshotCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BalanceSnapshotFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BalanceSnapshotCountAggregateInputType | true
+    }
+
+  export interface BalanceSnapshotDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BalanceSnapshot'], meta: { name: 'BalanceSnapshot' } }
+    /**
+     * Find zero or one BalanceSnapshot that matches the filter.
+     * @param {BalanceSnapshotFindUniqueArgs} args - Arguments to find a BalanceSnapshot
+     * @example
+     * // Get one BalanceSnapshot
+     * const balanceSnapshot = await prisma.balanceSnapshot.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends BalanceSnapshotFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, BalanceSnapshotFindUniqueArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one BalanceSnapshot that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {BalanceSnapshotFindUniqueOrThrowArgs} args - Arguments to find a BalanceSnapshot
+     * @example
+     * // Get one BalanceSnapshot
+     * const balanceSnapshot = await prisma.balanceSnapshot.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends BalanceSnapshotFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, BalanceSnapshotFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first BalanceSnapshot that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BalanceSnapshotFindFirstArgs} args - Arguments to find a BalanceSnapshot
+     * @example
+     * // Get one BalanceSnapshot
+     * const balanceSnapshot = await prisma.balanceSnapshot.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends BalanceSnapshotFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, BalanceSnapshotFindFirstArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first BalanceSnapshot that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BalanceSnapshotFindFirstOrThrowArgs} args - Arguments to find a BalanceSnapshot
+     * @example
+     * // Get one BalanceSnapshot
+     * const balanceSnapshot = await prisma.balanceSnapshot.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends BalanceSnapshotFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, BalanceSnapshotFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more BalanceSnapshots that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BalanceSnapshotFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BalanceSnapshots
+     * const balanceSnapshots = await prisma.balanceSnapshot.findMany()
+     * 
+     * // Get first 10 BalanceSnapshots
+     * const balanceSnapshots = await prisma.balanceSnapshot.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const balanceSnapshotWithIdOnly = await prisma.balanceSnapshot.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends BalanceSnapshotFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, BalanceSnapshotFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a BalanceSnapshot.
+     * @param {BalanceSnapshotCreateArgs} args - Arguments to create a BalanceSnapshot.
+     * @example
+     * // Create one BalanceSnapshot
+     * const BalanceSnapshot = await prisma.balanceSnapshot.create({
+     *   data: {
+     *     // ... data to create a BalanceSnapshot
+     *   }
+     * })
+     * 
+    **/
+    create<T extends BalanceSnapshotCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, BalanceSnapshotCreateArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many BalanceSnapshots.
+     *     @param {BalanceSnapshotCreateManyArgs} args - Arguments to create many BalanceSnapshots.
+     *     @example
+     *     // Create many BalanceSnapshots
+     *     const balanceSnapshot = await prisma.balanceSnapshot.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends BalanceSnapshotCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, BalanceSnapshotCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a BalanceSnapshot.
+     * @param {BalanceSnapshotDeleteArgs} args - Arguments to delete one BalanceSnapshot.
+     * @example
+     * // Delete one BalanceSnapshot
+     * const BalanceSnapshot = await prisma.balanceSnapshot.delete({
+     *   where: {
+     *     // ... filter to delete one BalanceSnapshot
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends BalanceSnapshotDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, BalanceSnapshotDeleteArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one BalanceSnapshot.
+     * @param {BalanceSnapshotUpdateArgs} args - Arguments to update one BalanceSnapshot.
+     * @example
+     * // Update one BalanceSnapshot
+     * const balanceSnapshot = await prisma.balanceSnapshot.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends BalanceSnapshotUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, BalanceSnapshotUpdateArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more BalanceSnapshots.
+     * @param {BalanceSnapshotDeleteManyArgs} args - Arguments to filter BalanceSnapshots to delete.
+     * @example
+     * // Delete a few BalanceSnapshots
+     * const { count } = await prisma.balanceSnapshot.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends BalanceSnapshotDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, BalanceSnapshotDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BalanceSnapshots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BalanceSnapshotUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BalanceSnapshots
+     * const balanceSnapshot = await prisma.balanceSnapshot.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends BalanceSnapshotUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, BalanceSnapshotUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BalanceSnapshot.
+     * @param {BalanceSnapshotUpsertArgs} args - Arguments to update or create a BalanceSnapshot.
+     * @example
+     * // Update or create a BalanceSnapshot
+     * const balanceSnapshot = await prisma.balanceSnapshot.upsert({
+     *   create: {
+     *     // ... data to create a BalanceSnapshot
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BalanceSnapshot we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends BalanceSnapshotUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, BalanceSnapshotUpsertArgs<ExtArgs>>
+    ): Prisma__BalanceSnapshotClient<$Result.GetResult<Prisma.$BalanceSnapshotPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of BalanceSnapshots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BalanceSnapshotCountArgs} args - Arguments to filter BalanceSnapshots to count.
+     * @example
+     * // Count the number of BalanceSnapshots
+     * const count = await prisma.balanceSnapshot.count({
+     *   where: {
+     *     // ... the filter for the BalanceSnapshots we want to count
+     *   }
+     * })
+    **/
+    count<T extends BalanceSnapshotCountArgs>(
+      args?: Subset<T, BalanceSnapshotCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BalanceSnapshotCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BalanceSnapshot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BalanceSnapshotAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BalanceSnapshotAggregateArgs>(args: Subset<T, BalanceSnapshotAggregateArgs>): Prisma.PrismaPromise<GetBalanceSnapshotAggregateType<T>>
+
+    /**
+     * Group by BalanceSnapshot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BalanceSnapshotGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BalanceSnapshotGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BalanceSnapshotGroupByArgs['orderBy'] }
+        : { orderBy?: BalanceSnapshotGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BalanceSnapshotGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBalanceSnapshotGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BalanceSnapshot model
+   */
+  readonly fields: BalanceSnapshotFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BalanceSnapshot.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BalanceSnapshotClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the BalanceSnapshot model
+   */ 
+  interface BalanceSnapshotFieldRefs {
+    readonly id: FieldRef<"BalanceSnapshot", 'String'>
+    readonly snapshotTime: FieldRef<"BalanceSnapshot", 'DateTime'>
+    readonly network: FieldRef<"BalanceSnapshot", 'String'>
+    readonly currency: FieldRef<"BalanceSnapshot", 'String'>
+    readonly totalAssets: FieldRef<"BalanceSnapshot", 'BigInt'>
+    readonly totalLiabilities: FieldRef<"BalanceSnapshot", 'BigInt'>
+    readonly totalEquity: FieldRef<"BalanceSnapshot", 'BigInt'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * BalanceSnapshot findUnique
+   */
+  export type BalanceSnapshotFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * Filter, which BalanceSnapshot to fetch.
+     */
+    where: BalanceSnapshotWhereUniqueInput
+  }
+
+
+  /**
+   * BalanceSnapshot findUniqueOrThrow
+   */
+  export type BalanceSnapshotFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * Filter, which BalanceSnapshot to fetch.
+     */
+    where: BalanceSnapshotWhereUniqueInput
+  }
+
+
+  /**
+   * BalanceSnapshot findFirst
+   */
+  export type BalanceSnapshotFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * Filter, which BalanceSnapshot to fetch.
+     */
+    where?: BalanceSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BalanceSnapshots to fetch.
+     */
+    orderBy?: BalanceSnapshotOrderByWithRelationInput | BalanceSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BalanceSnapshots.
+     */
+    cursor?: BalanceSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BalanceSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BalanceSnapshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BalanceSnapshots.
+     */
+    distinct?: BalanceSnapshotScalarFieldEnum | BalanceSnapshotScalarFieldEnum[]
+  }
+
+
+  /**
+   * BalanceSnapshot findFirstOrThrow
+   */
+  export type BalanceSnapshotFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * Filter, which BalanceSnapshot to fetch.
+     */
+    where?: BalanceSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BalanceSnapshots to fetch.
+     */
+    orderBy?: BalanceSnapshotOrderByWithRelationInput | BalanceSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BalanceSnapshots.
+     */
+    cursor?: BalanceSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BalanceSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BalanceSnapshots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BalanceSnapshots.
+     */
+    distinct?: BalanceSnapshotScalarFieldEnum | BalanceSnapshotScalarFieldEnum[]
+  }
+
+
+  /**
+   * BalanceSnapshot findMany
+   */
+  export type BalanceSnapshotFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * Filter, which BalanceSnapshots to fetch.
+     */
+    where?: BalanceSnapshotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BalanceSnapshots to fetch.
+     */
+    orderBy?: BalanceSnapshotOrderByWithRelationInput | BalanceSnapshotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BalanceSnapshots.
+     */
+    cursor?: BalanceSnapshotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BalanceSnapshots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BalanceSnapshots.
+     */
+    skip?: number
+    distinct?: BalanceSnapshotScalarFieldEnum | BalanceSnapshotScalarFieldEnum[]
+  }
+
+
+  /**
+   * BalanceSnapshot create
+   */
+  export type BalanceSnapshotCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * The data needed to create a BalanceSnapshot.
+     */
+    data: XOR<BalanceSnapshotCreateInput, BalanceSnapshotUncheckedCreateInput>
+  }
+
+
+  /**
+   * BalanceSnapshot createMany
+   */
+  export type BalanceSnapshotCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BalanceSnapshots.
+     */
+    data: BalanceSnapshotCreateManyInput | BalanceSnapshotCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * BalanceSnapshot update
+   */
+  export type BalanceSnapshotUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * The data needed to update a BalanceSnapshot.
+     */
+    data: XOR<BalanceSnapshotUpdateInput, BalanceSnapshotUncheckedUpdateInput>
+    /**
+     * Choose, which BalanceSnapshot to update.
+     */
+    where: BalanceSnapshotWhereUniqueInput
+  }
+
+
+  /**
+   * BalanceSnapshot updateMany
+   */
+  export type BalanceSnapshotUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BalanceSnapshots.
+     */
+    data: XOR<BalanceSnapshotUpdateManyMutationInput, BalanceSnapshotUncheckedUpdateManyInput>
+    /**
+     * Filter which BalanceSnapshots to update
+     */
+    where?: BalanceSnapshotWhereInput
+  }
+
+
+  /**
+   * BalanceSnapshot upsert
+   */
+  export type BalanceSnapshotUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * The filter to search for the BalanceSnapshot to update in case it exists.
+     */
+    where: BalanceSnapshotWhereUniqueInput
+    /**
+     * In case the BalanceSnapshot found by the `where` argument doesn't exist, create a new BalanceSnapshot with this data.
+     */
+    create: XOR<BalanceSnapshotCreateInput, BalanceSnapshotUncheckedCreateInput>
+    /**
+     * In case the BalanceSnapshot was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BalanceSnapshotUpdateInput, BalanceSnapshotUncheckedUpdateInput>
+  }
+
+
+  /**
+   * BalanceSnapshot delete
+   */
+  export type BalanceSnapshotDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+    /**
+     * Filter which BalanceSnapshot to delete.
+     */
+    where: BalanceSnapshotWhereUniqueInput
+  }
+
+
+  /**
+   * BalanceSnapshot deleteMany
+   */
+  export type BalanceSnapshotDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BalanceSnapshots to delete
+     */
+    where?: BalanceSnapshotWhereInput
+  }
+
+
+  /**
+   * BalanceSnapshot without action
+   */
+  export type BalanceSnapshotDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BalanceSnapshot
+     */
+    select?: BalanceSnapshotSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model TreasuryState
+   */
+
+  export type AggregateTreasuryState = {
+    _count: TreasuryStateCountAggregateOutputType | null
+    _min: TreasuryStateMinAggregateOutputType | null
+    _max: TreasuryStateMaxAggregateOutputType | null
+  }
+
+  export type TreasuryStateMinAggregateOutputType = {
+    chain: string | null
+    totalOnchainBalance: string | null
+    totalUserLiabilities: string | null
+    sweepableBalance: string | null
+    lastSyncedAt: Date | null
+    locked: boolean | null
+    lockedAt: Date | null
+    lockedBy: string | null
+  }
+
+  export type TreasuryStateMaxAggregateOutputType = {
+    chain: string | null
+    totalOnchainBalance: string | null
+    totalUserLiabilities: string | null
+    sweepableBalance: string | null
+    lastSyncedAt: Date | null
+    locked: boolean | null
+    lockedAt: Date | null
+    lockedBy: string | null
+  }
+
+  export type TreasuryStateCountAggregateOutputType = {
+    chain: number
+    totalOnchainBalance: number
+    totalUserLiabilities: number
+    sweepableBalance: number
+    lastSyncedAt: number
+    locked: number
+    lockedAt: number
+    lockedBy: number
+    _all: number
+  }
+
+
+  export type TreasuryStateMinAggregateInputType = {
+    chain?: true
+    totalOnchainBalance?: true
+    totalUserLiabilities?: true
+    sweepableBalance?: true
+    lastSyncedAt?: true
+    locked?: true
+    lockedAt?: true
+    lockedBy?: true
+  }
+
+  export type TreasuryStateMaxAggregateInputType = {
+    chain?: true
+    totalOnchainBalance?: true
+    totalUserLiabilities?: true
+    sweepableBalance?: true
+    lastSyncedAt?: true
+    locked?: true
+    lockedAt?: true
+    lockedBy?: true
+  }
+
+  export type TreasuryStateCountAggregateInputType = {
+    chain?: true
+    totalOnchainBalance?: true
+    totalUserLiabilities?: true
+    sweepableBalance?: true
+    lastSyncedAt?: true
+    locked?: true
+    lockedAt?: true
+    lockedBy?: true
+    _all?: true
+  }
+
+  export type TreasuryStateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryState to aggregate.
+     */
+    where?: TreasuryStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryStates to fetch.
+     */
+    orderBy?: TreasuryStateOrderByWithRelationInput | TreasuryStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TreasuryStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TreasuryStates
+    **/
+    _count?: true | TreasuryStateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TreasuryStateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TreasuryStateMaxAggregateInputType
+  }
+
+  export type GetTreasuryStateAggregateType<T extends TreasuryStateAggregateArgs> = {
+        [P in keyof T & keyof AggregateTreasuryState]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTreasuryState[P]>
+      : GetScalarType<T[P], AggregateTreasuryState[P]>
+  }
+
+
+
+
+  export type TreasuryStateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TreasuryStateWhereInput
+    orderBy?: TreasuryStateOrderByWithAggregationInput | TreasuryStateOrderByWithAggregationInput[]
+    by: TreasuryStateScalarFieldEnum[] | TreasuryStateScalarFieldEnum
+    having?: TreasuryStateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TreasuryStateCountAggregateInputType | true
+    _min?: TreasuryStateMinAggregateInputType
+    _max?: TreasuryStateMaxAggregateInputType
+  }
+
+  export type TreasuryStateGroupByOutputType = {
+    chain: string
+    totalOnchainBalance: string
+    totalUserLiabilities: string
+    sweepableBalance: string
+    lastSyncedAt: Date
+    locked: boolean
+    lockedAt: Date | null
+    lockedBy: string | null
+    _count: TreasuryStateCountAggregateOutputType | null
+    _min: TreasuryStateMinAggregateOutputType | null
+    _max: TreasuryStateMaxAggregateOutputType | null
+  }
+
+  type GetTreasuryStateGroupByPayload<T extends TreasuryStateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TreasuryStateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TreasuryStateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TreasuryStateGroupByOutputType[P]>
+            : GetScalarType<T[P], TreasuryStateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TreasuryStateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    chain?: boolean
+    totalOnchainBalance?: boolean
+    totalUserLiabilities?: boolean
+    sweepableBalance?: boolean
+    lastSyncedAt?: boolean
+    locked?: boolean
+    lockedAt?: boolean
+    lockedBy?: boolean
+  }, ExtArgs["result"]["treasuryState"]>
+
+  export type TreasuryStateSelectScalar = {
+    chain?: boolean
+    totalOnchainBalance?: boolean
+    totalUserLiabilities?: boolean
+    sweepableBalance?: boolean
+    lastSyncedAt?: boolean
+    locked?: boolean
+    lockedAt?: boolean
+    lockedBy?: boolean
+  }
+
+
+  export type $TreasuryStatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TreasuryState"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      chain: string
+      totalOnchainBalance: string
+      totalUserLiabilities: string
+      sweepableBalance: string
+      lastSyncedAt: Date
+      locked: boolean
+      lockedAt: Date | null
+      lockedBy: string | null
+    }, ExtArgs["result"]["treasuryState"]>
+    composites: {}
+  }
+
+
+  type TreasuryStateGetPayload<S extends boolean | null | undefined | TreasuryStateDefaultArgs> = $Result.GetResult<Prisma.$TreasuryStatePayload, S>
+
+  type TreasuryStateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TreasuryStateFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TreasuryStateCountAggregateInputType | true
+    }
+
+  export interface TreasuryStateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TreasuryState'], meta: { name: 'TreasuryState' } }
+    /**
+     * Find zero or one TreasuryState that matches the filter.
+     * @param {TreasuryStateFindUniqueArgs} args - Arguments to find a TreasuryState
+     * @example
+     * // Get one TreasuryState
+     * const treasuryState = await prisma.treasuryState.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TreasuryStateFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryStateFindUniqueArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one TreasuryState that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TreasuryStateFindUniqueOrThrowArgs} args - Arguments to find a TreasuryState
+     * @example
+     * // Get one TreasuryState
+     * const treasuryState = await prisma.treasuryState.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TreasuryStateFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryStateFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first TreasuryState that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryStateFindFirstArgs} args - Arguments to find a TreasuryState
+     * @example
+     * // Get one TreasuryState
+     * const treasuryState = await prisma.treasuryState.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TreasuryStateFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryStateFindFirstArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first TreasuryState that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryStateFindFirstOrThrowArgs} args - Arguments to find a TreasuryState
+     * @example
+     * // Get one TreasuryState
+     * const treasuryState = await prisma.treasuryState.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TreasuryStateFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryStateFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more TreasuryStates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryStateFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TreasuryStates
+     * const treasuryStates = await prisma.treasuryState.findMany()
+     * 
+     * // Get first 10 TreasuryStates
+     * const treasuryStates = await prisma.treasuryState.findMany({ take: 10 })
+     * 
+     * // Only select the `chain`
+     * const treasuryStateWithChainOnly = await prisma.treasuryState.findMany({ select: { chain: true } })
+     * 
+    **/
+    findMany<T extends TreasuryStateFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryStateFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a TreasuryState.
+     * @param {TreasuryStateCreateArgs} args - Arguments to create a TreasuryState.
+     * @example
+     * // Create one TreasuryState
+     * const TreasuryState = await prisma.treasuryState.create({
+     *   data: {
+     *     // ... data to create a TreasuryState
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TreasuryStateCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryStateCreateArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many TreasuryStates.
+     *     @param {TreasuryStateCreateManyArgs} args - Arguments to create many TreasuryStates.
+     *     @example
+     *     // Create many TreasuryStates
+     *     const treasuryState = await prisma.treasuryState.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends TreasuryStateCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryStateCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a TreasuryState.
+     * @param {TreasuryStateDeleteArgs} args - Arguments to delete one TreasuryState.
+     * @example
+     * // Delete one TreasuryState
+     * const TreasuryState = await prisma.treasuryState.delete({
+     *   where: {
+     *     // ... filter to delete one TreasuryState
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TreasuryStateDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryStateDeleteArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one TreasuryState.
+     * @param {TreasuryStateUpdateArgs} args - Arguments to update one TreasuryState.
+     * @example
+     * // Update one TreasuryState
+     * const treasuryState = await prisma.treasuryState.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TreasuryStateUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryStateUpdateArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more TreasuryStates.
+     * @param {TreasuryStateDeleteManyArgs} args - Arguments to filter TreasuryStates to delete.
+     * @example
+     * // Delete a few TreasuryStates
+     * const { count } = await prisma.treasuryState.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TreasuryStateDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, TreasuryStateDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TreasuryStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryStateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TreasuryStates
+     * const treasuryState = await prisma.treasuryState.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TreasuryStateUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryStateUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TreasuryState.
+     * @param {TreasuryStateUpsertArgs} args - Arguments to update or create a TreasuryState.
+     * @example
+     * // Update or create a TreasuryState
+     * const treasuryState = await prisma.treasuryState.upsert({
+     *   create: {
+     *     // ... data to create a TreasuryState
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TreasuryState we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TreasuryStateUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, TreasuryStateUpsertArgs<ExtArgs>>
+    ): Prisma__TreasuryStateClient<$Result.GetResult<Prisma.$TreasuryStatePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of TreasuryStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryStateCountArgs} args - Arguments to filter TreasuryStates to count.
+     * @example
+     * // Count the number of TreasuryStates
+     * const count = await prisma.treasuryState.count({
+     *   where: {
+     *     // ... the filter for the TreasuryStates we want to count
+     *   }
+     * })
+    **/
+    count<T extends TreasuryStateCountArgs>(
+      args?: Subset<T, TreasuryStateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TreasuryStateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TreasuryState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryStateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TreasuryStateAggregateArgs>(args: Subset<T, TreasuryStateAggregateArgs>): Prisma.PrismaPromise<GetTreasuryStateAggregateType<T>>
+
+    /**
+     * Group by TreasuryState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TreasuryStateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TreasuryStateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TreasuryStateGroupByArgs['orderBy'] }
+        : { orderBy?: TreasuryStateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TreasuryStateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTreasuryStateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TreasuryState model
+   */
+  readonly fields: TreasuryStateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TreasuryState.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TreasuryStateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the TreasuryState model
+   */ 
+  interface TreasuryStateFieldRefs {
+    readonly chain: FieldRef<"TreasuryState", 'String'>
+    readonly totalOnchainBalance: FieldRef<"TreasuryState", 'String'>
+    readonly totalUserLiabilities: FieldRef<"TreasuryState", 'String'>
+    readonly sweepableBalance: FieldRef<"TreasuryState", 'String'>
+    readonly lastSyncedAt: FieldRef<"TreasuryState", 'DateTime'>
+    readonly locked: FieldRef<"TreasuryState", 'Boolean'>
+    readonly lockedAt: FieldRef<"TreasuryState", 'DateTime'>
+    readonly lockedBy: FieldRef<"TreasuryState", 'String'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * TreasuryState findUnique
+   */
+  export type TreasuryStateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * Filter, which TreasuryState to fetch.
+     */
+    where: TreasuryStateWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryState findUniqueOrThrow
+   */
+  export type TreasuryStateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * Filter, which TreasuryState to fetch.
+     */
+    where: TreasuryStateWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryState findFirst
+   */
+  export type TreasuryStateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * Filter, which TreasuryState to fetch.
+     */
+    where?: TreasuryStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryStates to fetch.
+     */
+    orderBy?: TreasuryStateOrderByWithRelationInput | TreasuryStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryStates.
+     */
+    cursor?: TreasuryStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryStates.
+     */
+    distinct?: TreasuryStateScalarFieldEnum | TreasuryStateScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryState findFirstOrThrow
+   */
+  export type TreasuryStateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * Filter, which TreasuryState to fetch.
+     */
+    where?: TreasuryStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryStates to fetch.
+     */
+    orderBy?: TreasuryStateOrderByWithRelationInput | TreasuryStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TreasuryStates.
+     */
+    cursor?: TreasuryStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TreasuryStates.
+     */
+    distinct?: TreasuryStateScalarFieldEnum | TreasuryStateScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryState findMany
+   */
+  export type TreasuryStateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * Filter, which TreasuryStates to fetch.
+     */
+    where?: TreasuryStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TreasuryStates to fetch.
+     */
+    orderBy?: TreasuryStateOrderByWithRelationInput | TreasuryStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TreasuryStates.
+     */
+    cursor?: TreasuryStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TreasuryStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TreasuryStates.
+     */
+    skip?: number
+    distinct?: TreasuryStateScalarFieldEnum | TreasuryStateScalarFieldEnum[]
+  }
+
+
+  /**
+   * TreasuryState create
+   */
+  export type TreasuryStateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * The data needed to create a TreasuryState.
+     */
+    data: XOR<TreasuryStateCreateInput, TreasuryStateUncheckedCreateInput>
+  }
+
+
+  /**
+   * TreasuryState createMany
+   */
+  export type TreasuryStateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TreasuryStates.
+     */
+    data: TreasuryStateCreateManyInput | TreasuryStateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * TreasuryState update
+   */
+  export type TreasuryStateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * The data needed to update a TreasuryState.
+     */
+    data: XOR<TreasuryStateUpdateInput, TreasuryStateUncheckedUpdateInput>
+    /**
+     * Choose, which TreasuryState to update.
+     */
+    where: TreasuryStateWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryState updateMany
+   */
+  export type TreasuryStateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TreasuryStates.
+     */
+    data: XOR<TreasuryStateUpdateManyMutationInput, TreasuryStateUncheckedUpdateManyInput>
+    /**
+     * Filter which TreasuryStates to update
+     */
+    where?: TreasuryStateWhereInput
+  }
+
+
+  /**
+   * TreasuryState upsert
+   */
+  export type TreasuryStateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * The filter to search for the TreasuryState to update in case it exists.
+     */
+    where: TreasuryStateWhereUniqueInput
+    /**
+     * In case the TreasuryState found by the `where` argument doesn't exist, create a new TreasuryState with this data.
+     */
+    create: XOR<TreasuryStateCreateInput, TreasuryStateUncheckedCreateInput>
+    /**
+     * In case the TreasuryState was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TreasuryStateUpdateInput, TreasuryStateUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TreasuryState delete
+   */
+  export type TreasuryStateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+    /**
+     * Filter which TreasuryState to delete.
+     */
+    where: TreasuryStateWhereUniqueInput
+  }
+
+
+  /**
+   * TreasuryState deleteMany
+   */
+  export type TreasuryStateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TreasuryStates to delete
+     */
+    where?: TreasuryStateWhereInput
+  }
+
+
+  /**
+   * TreasuryState without action
+   */
+  export type TreasuryStateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TreasuryState
+     */
+    select?: TreasuryStateSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model Sweep
+   */
+
+  export type AggregateSweep = {
+    _count: SweepCountAggregateOutputType | null
+    _min: SweepMinAggregateOutputType | null
+    _max: SweepMaxAggregateOutputType | null
+  }
+
+  export type SweepMinAggregateOutputType = {
+    id: string | null
+    chain: string | null
+    amount: string | null
+    amountRaw: string | null
+    fromWallet: string | null
+    toWallet: string | null
+    txHash: string | null
+    status: $Enums.SweepStatus | null
+    initiatedBy: string | null
+    error: string | null
+    createdAt: Date | null
+    confirmedAt: Date | null
+  }
+
+  export type SweepMaxAggregateOutputType = {
+    id: string | null
+    chain: string | null
+    amount: string | null
+    amountRaw: string | null
+    fromWallet: string | null
+    toWallet: string | null
+    txHash: string | null
+    status: $Enums.SweepStatus | null
+    initiatedBy: string | null
+    error: string | null
+    createdAt: Date | null
+    confirmedAt: Date | null
+  }
+
+  export type SweepCountAggregateOutputType = {
+    id: number
+    chain: number
+    amount: number
+    amountRaw: number
+    fromWallet: number
+    toWallet: number
+    txHash: number
+    status: number
+    initiatedBy: number
+    error: number
+    createdAt: number
+    confirmedAt: number
+    _all: number
+  }
+
+
+  export type SweepMinAggregateInputType = {
+    id?: true
+    chain?: true
+    amount?: true
+    amountRaw?: true
+    fromWallet?: true
+    toWallet?: true
+    txHash?: true
+    status?: true
+    initiatedBy?: true
+    error?: true
+    createdAt?: true
+    confirmedAt?: true
+  }
+
+  export type SweepMaxAggregateInputType = {
+    id?: true
+    chain?: true
+    amount?: true
+    amountRaw?: true
+    fromWallet?: true
+    toWallet?: true
+    txHash?: true
+    status?: true
+    initiatedBy?: true
+    error?: true
+    createdAt?: true
+    confirmedAt?: true
+  }
+
+  export type SweepCountAggregateInputType = {
+    id?: true
+    chain?: true
+    amount?: true
+    amountRaw?: true
+    fromWallet?: true
+    toWallet?: true
+    txHash?: true
+    status?: true
+    initiatedBy?: true
+    error?: true
+    createdAt?: true
+    confirmedAt?: true
+    _all?: true
+  }
+
+  export type SweepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Sweep to aggregate.
+     */
+    where?: SweepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sweeps to fetch.
+     */
+    orderBy?: SweepOrderByWithRelationInput | SweepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SweepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sweeps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sweeps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Sweeps
+    **/
+    _count?: true | SweepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SweepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SweepMaxAggregateInputType
+  }
+
+  export type GetSweepAggregateType<T extends SweepAggregateArgs> = {
+        [P in keyof T & keyof AggregateSweep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSweep[P]>
+      : GetScalarType<T[P], AggregateSweep[P]>
+  }
+
+
+
+
+  export type SweepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SweepWhereInput
+    orderBy?: SweepOrderByWithAggregationInput | SweepOrderByWithAggregationInput[]
+    by: SweepScalarFieldEnum[] | SweepScalarFieldEnum
+    having?: SweepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SweepCountAggregateInputType | true
+    _min?: SweepMinAggregateInputType
+    _max?: SweepMaxAggregateInputType
+  }
+
+  export type SweepGroupByOutputType = {
+    id: string
+    chain: string
+    amount: string
+    amountRaw: string
+    fromWallet: string
+    toWallet: string
+    txHash: string | null
+    status: $Enums.SweepStatus
+    initiatedBy: string
+    error: string | null
+    createdAt: Date
+    confirmedAt: Date | null
+    _count: SweepCountAggregateOutputType | null
+    _min: SweepMinAggregateOutputType | null
+    _max: SweepMaxAggregateOutputType | null
+  }
+
+  type GetSweepGroupByPayload<T extends SweepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SweepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SweepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SweepGroupByOutputType[P]>
+            : GetScalarType<T[P], SweepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SweepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    chain?: boolean
+    amount?: boolean
+    amountRaw?: boolean
+    fromWallet?: boolean
+    toWallet?: boolean
+    txHash?: boolean
+    status?: boolean
+    initiatedBy?: boolean
+    error?: boolean
+    createdAt?: boolean
+    confirmedAt?: boolean
+  }, ExtArgs["result"]["sweep"]>
+
+  export type SweepSelectScalar = {
+    id?: boolean
+    chain?: boolean
+    amount?: boolean
+    amountRaw?: boolean
+    fromWallet?: boolean
+    toWallet?: boolean
+    txHash?: boolean
+    status?: boolean
+    initiatedBy?: boolean
+    error?: boolean
+    createdAt?: boolean
+    confirmedAt?: boolean
+  }
+
+
+  export type $SweepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Sweep"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      chain: string
+      amount: string
+      amountRaw: string
+      fromWallet: string
+      toWallet: string
+      txHash: string | null
+      status: $Enums.SweepStatus
+      initiatedBy: string
+      error: string | null
+      createdAt: Date
+      confirmedAt: Date | null
+    }, ExtArgs["result"]["sweep"]>
+    composites: {}
+  }
+
+
+  type SweepGetPayload<S extends boolean | null | undefined | SweepDefaultArgs> = $Result.GetResult<Prisma.$SweepPayload, S>
+
+  type SweepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SweepFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SweepCountAggregateInputType | true
+    }
+
+  export interface SweepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Sweep'], meta: { name: 'Sweep' } }
+    /**
+     * Find zero or one Sweep that matches the filter.
+     * @param {SweepFindUniqueArgs} args - Arguments to find a Sweep
+     * @example
+     * // Get one Sweep
+     * const sweep = await prisma.sweep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends SweepFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, SweepFindUniqueArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one Sweep that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {SweepFindUniqueOrThrowArgs} args - Arguments to find a Sweep
+     * @example
+     * // Get one Sweep
+     * const sweep = await prisma.sweep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends SweepFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, SweepFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first Sweep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SweepFindFirstArgs} args - Arguments to find a Sweep
+     * @example
+     * // Get one Sweep
+     * const sweep = await prisma.sweep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends SweepFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, SweepFindFirstArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first Sweep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SweepFindFirstOrThrowArgs} args - Arguments to find a Sweep
+     * @example
+     * // Get one Sweep
+     * const sweep = await prisma.sweep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends SweepFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, SweepFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more Sweeps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SweepFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Sweeps
+     * const sweeps = await prisma.sweep.findMany()
+     * 
+     * // Get first 10 Sweeps
+     * const sweeps = await prisma.sweep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sweepWithIdOnly = await prisma.sweep.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends SweepFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SweepFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a Sweep.
+     * @param {SweepCreateArgs} args - Arguments to create a Sweep.
+     * @example
+     * // Create one Sweep
+     * const Sweep = await prisma.sweep.create({
+     *   data: {
+     *     // ... data to create a Sweep
+     *   }
+     * })
+     * 
+    **/
+    create<T extends SweepCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, SweepCreateArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many Sweeps.
+     *     @param {SweepCreateManyArgs} args - Arguments to create many Sweeps.
+     *     @example
+     *     // Create many Sweeps
+     *     const sweep = await prisma.sweep.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends SweepCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SweepCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Sweep.
+     * @param {SweepDeleteArgs} args - Arguments to delete one Sweep.
+     * @example
+     * // Delete one Sweep
+     * const Sweep = await prisma.sweep.delete({
+     *   where: {
+     *     // ... filter to delete one Sweep
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends SweepDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, SweepDeleteArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one Sweep.
+     * @param {SweepUpdateArgs} args - Arguments to update one Sweep.
+     * @example
+     * // Update one Sweep
+     * const sweep = await prisma.sweep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends SweepUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, SweepUpdateArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more Sweeps.
+     * @param {SweepDeleteManyArgs} args - Arguments to filter Sweeps to delete.
+     * @example
+     * // Delete a few Sweeps
+     * const { count } = await prisma.sweep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends SweepDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, SweepDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Sweeps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SweepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Sweeps
+     * const sweep = await prisma.sweep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends SweepUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, SweepUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Sweep.
+     * @param {SweepUpsertArgs} args - Arguments to update or create a Sweep.
+     * @example
+     * // Update or create a Sweep
+     * const sweep = await prisma.sweep.upsert({
+     *   create: {
+     *     // ... data to create a Sweep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Sweep we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends SweepUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, SweepUpsertArgs<ExtArgs>>
+    ): Prisma__SweepClient<$Result.GetResult<Prisma.$SweepPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of Sweeps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SweepCountArgs} args - Arguments to filter Sweeps to count.
+     * @example
+     * // Count the number of Sweeps
+     * const count = await prisma.sweep.count({
+     *   where: {
+     *     // ... the filter for the Sweeps we want to count
+     *   }
+     * })
+    **/
+    count<T extends SweepCountArgs>(
+      args?: Subset<T, SweepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SweepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Sweep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SweepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SweepAggregateArgs>(args: Subset<T, SweepAggregateArgs>): Prisma.PrismaPromise<GetSweepAggregateType<T>>
+
+    /**
+     * Group by Sweep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SweepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SweepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SweepGroupByArgs['orderBy'] }
+        : { orderBy?: SweepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SweepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSweepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Sweep model
+   */
+  readonly fields: SweepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Sweep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SweepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the Sweep model
+   */ 
+  interface SweepFieldRefs {
+    readonly id: FieldRef<"Sweep", 'String'>
+    readonly chain: FieldRef<"Sweep", 'String'>
+    readonly amount: FieldRef<"Sweep", 'String'>
+    readonly amountRaw: FieldRef<"Sweep", 'String'>
+    readonly fromWallet: FieldRef<"Sweep", 'String'>
+    readonly toWallet: FieldRef<"Sweep", 'String'>
+    readonly txHash: FieldRef<"Sweep", 'String'>
+    readonly status: FieldRef<"Sweep", 'SweepStatus'>
+    readonly initiatedBy: FieldRef<"Sweep", 'String'>
+    readonly error: FieldRef<"Sweep", 'String'>
+    readonly createdAt: FieldRef<"Sweep", 'DateTime'>
+    readonly confirmedAt: FieldRef<"Sweep", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * Sweep findUnique
+   */
+  export type SweepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * Filter, which Sweep to fetch.
+     */
+    where: SweepWhereUniqueInput
+  }
+
+
+  /**
+   * Sweep findUniqueOrThrow
+   */
+  export type SweepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * Filter, which Sweep to fetch.
+     */
+    where: SweepWhereUniqueInput
+  }
+
+
+  /**
+   * Sweep findFirst
+   */
+  export type SweepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * Filter, which Sweep to fetch.
+     */
+    where?: SweepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sweeps to fetch.
+     */
+    orderBy?: SweepOrderByWithRelationInput | SweepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sweeps.
+     */
+    cursor?: SweepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sweeps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sweeps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sweeps.
+     */
+    distinct?: SweepScalarFieldEnum | SweepScalarFieldEnum[]
+  }
+
+
+  /**
+   * Sweep findFirstOrThrow
+   */
+  export type SweepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * Filter, which Sweep to fetch.
+     */
+    where?: SweepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sweeps to fetch.
+     */
+    orderBy?: SweepOrderByWithRelationInput | SweepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Sweeps.
+     */
+    cursor?: SweepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sweeps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sweeps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sweeps.
+     */
+    distinct?: SweepScalarFieldEnum | SweepScalarFieldEnum[]
+  }
+
+
+  /**
+   * Sweep findMany
+   */
+  export type SweepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * Filter, which Sweeps to fetch.
+     */
+    where?: SweepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Sweeps to fetch.
+     */
+    orderBy?: SweepOrderByWithRelationInput | SweepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Sweeps.
+     */
+    cursor?: SweepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Sweeps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Sweeps.
+     */
+    skip?: number
+    distinct?: SweepScalarFieldEnum | SweepScalarFieldEnum[]
+  }
+
+
+  /**
+   * Sweep create
+   */
+  export type SweepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * The data needed to create a Sweep.
+     */
+    data: XOR<SweepCreateInput, SweepUncheckedCreateInput>
+  }
+
+
+  /**
+   * Sweep createMany
+   */
+  export type SweepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Sweeps.
+     */
+    data: SweepCreateManyInput | SweepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Sweep update
+   */
+  export type SweepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * The data needed to update a Sweep.
+     */
+    data: XOR<SweepUpdateInput, SweepUncheckedUpdateInput>
+    /**
+     * Choose, which Sweep to update.
+     */
+    where: SweepWhereUniqueInput
+  }
+
+
+  /**
+   * Sweep updateMany
+   */
+  export type SweepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Sweeps.
+     */
+    data: XOR<SweepUpdateManyMutationInput, SweepUncheckedUpdateManyInput>
+    /**
+     * Filter which Sweeps to update
+     */
+    where?: SweepWhereInput
+  }
+
+
+  /**
+   * Sweep upsert
+   */
+  export type SweepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * The filter to search for the Sweep to update in case it exists.
+     */
+    where: SweepWhereUniqueInput
+    /**
+     * In case the Sweep found by the `where` argument doesn't exist, create a new Sweep with this data.
+     */
+    create: XOR<SweepCreateInput, SweepUncheckedCreateInput>
+    /**
+     * In case the Sweep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SweepUpdateInput, SweepUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Sweep delete
+   */
+  export type SweepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+    /**
+     * Filter which Sweep to delete.
+     */
+    where: SweepWhereUniqueInput
+  }
+
+
+  /**
+   * Sweep deleteMany
+   */
+  export type SweepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Sweeps to delete
+     */
+    where?: SweepWhereInput
+  }
+
+
+  /**
+   * Sweep without action
+   */
+  export type SweepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sweep
+     */
+    select?: SweepSelect<ExtArgs> | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -10203,11 +16611,11 @@ export namespace Prisma {
     to: 'to',
     amount: 'amount',
     txHash: 'txHash',
-    blockNumber: 'blockNumber',
-    direction: 'direction',
     status: 'status',
     createdAt: 'createdAt',
-    confirmedAt: 'confirmedAt'
+    confirmedAt: 'confirmedAt',
+    blockNumber: 'blockNumber',
+    direction: 'direction'
   };
 
   export type ChainTransactionScalarFieldEnum = (typeof ChainTransactionScalarFieldEnum)[keyof typeof ChainTransactionScalarFieldEnum]
@@ -10262,8 +16670,8 @@ export namespace Prisma {
     chain: 'chain',
     derivationIndex: 'derivationIndex',
     address: 'address',
-    lastKnownBalance: 'lastKnownBalance',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    lastKnownBalance: 'lastKnownBalance'
   };
 
   export type UserWalletScalarFieldEnum = (typeof UserWalletScalarFieldEnum)[keyof typeof UserWalletScalarFieldEnum]
@@ -10276,6 +16684,95 @@ export namespace Prisma {
   };
 
   export type ChainScanStateScalarFieldEnum = (typeof ChainScanStateScalarFieldEnum)[keyof typeof ChainScanStateScalarFieldEnum]
+
+
+  export const TreasuryAccountScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    type: 'type',
+    network: 'network',
+    currency: 'currency',
+    walletAddress: 'walletAddress',
+    parentAccountId: 'parentAccountId',
+    isActive: 'isActive',
+    createdAt: 'createdAt'
+  };
+
+  export type TreasuryAccountScalarFieldEnum = (typeof TreasuryAccountScalarFieldEnum)[keyof typeof TreasuryAccountScalarFieldEnum]
+
+
+  export const TreasuryLedgerScalarFieldEnum: {
+    id: 'id',
+    referenceType: 'referenceType',
+    referenceId: 'referenceId',
+    description: 'description',
+    network: 'network',
+    currency: 'currency',
+    createdByAdminId: 'createdByAdminId',
+    locked: 'locked',
+    createdAt: 'createdAt'
+  };
+
+  export type TreasuryLedgerScalarFieldEnum = (typeof TreasuryLedgerScalarFieldEnum)[keyof typeof TreasuryLedgerScalarFieldEnum]
+
+
+  export const TreasuryEntryScalarFieldEnum: {
+    id: 'id',
+    ledgerId: 'ledgerId',
+    accountId: 'accountId',
+    debitAmount: 'debitAmount',
+    creditAmount: 'creditAmount',
+    currency: 'currency',
+    network: 'network',
+    createdAt: 'createdAt'
+  };
+
+  export type TreasuryEntryScalarFieldEnum = (typeof TreasuryEntryScalarFieldEnum)[keyof typeof TreasuryEntryScalarFieldEnum]
+
+
+  export const BalanceSnapshotScalarFieldEnum: {
+    id: 'id',
+    snapshotTime: 'snapshotTime',
+    network: 'network',
+    currency: 'currency',
+    totalAssets: 'totalAssets',
+    totalLiabilities: 'totalLiabilities',
+    totalEquity: 'totalEquity'
+  };
+
+  export type BalanceSnapshotScalarFieldEnum = (typeof BalanceSnapshotScalarFieldEnum)[keyof typeof BalanceSnapshotScalarFieldEnum]
+
+
+  export const TreasuryStateScalarFieldEnum: {
+    chain: 'chain',
+    totalOnchainBalance: 'totalOnchainBalance',
+    totalUserLiabilities: 'totalUserLiabilities',
+    sweepableBalance: 'sweepableBalance',
+    lastSyncedAt: 'lastSyncedAt',
+    locked: 'locked',
+    lockedAt: 'lockedAt',
+    lockedBy: 'lockedBy'
+  };
+
+  export type TreasuryStateScalarFieldEnum = (typeof TreasuryStateScalarFieldEnum)[keyof typeof TreasuryStateScalarFieldEnum]
+
+
+  export const SweepScalarFieldEnum: {
+    id: 'id',
+    chain: 'chain',
+    amount: 'amount',
+    amountRaw: 'amountRaw',
+    fromWallet: 'fromWallet',
+    toWallet: 'toWallet',
+    txHash: 'txHash',
+    status: 'status',
+    initiatedBy: 'initiatedBy',
+    error: 'error',
+    createdAt: 'createdAt',
+    confirmedAt: 'confirmedAt'
+  };
+
+  export type SweepScalarFieldEnum = (typeof SweepScalarFieldEnum)[keyof typeof SweepScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10406,6 +16903,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ChainTxStatus'
+   */
+  export type EnumChainTxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChainTxStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChainTxStatus[]'
+   */
+  export type ListEnumChainTxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChainTxStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'BigInt'
    */
   export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
@@ -10430,20 +16941,6 @@ export namespace Prisma {
    * Reference to a field of type 'TxDirection[]'
    */
   export type ListEnumTxDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TxDirection[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'ChainTxStatus'
-   */
-  export type EnumChainTxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChainTxStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'ChainTxStatus[]'
-   */
-  export type ListEnumChainTxStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChainTxStatus[]'>
     
 
 
@@ -10473,6 +16970,55 @@ export namespace Prisma {
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
+
+
+  /**
+   * Reference to a field of type 'TreasuryAccountType'
+   */
+  export type EnumTreasuryAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TreasuryAccountType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TreasuryAccountType[]'
+   */
+  export type ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TreasuryAccountType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'TreasuryLedgerReferenceType'
+   */
+  export type EnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TreasuryLedgerReferenceType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TreasuryLedgerReferenceType[]'
+   */
+  export type ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TreasuryLedgerReferenceType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SweepStatus'
+   */
+  export type EnumSweepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SweepStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SweepStatus[]'
+   */
+  export type ListEnumSweepStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SweepStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -10490,10 +17036,10 @@ export namespace Prisma {
     balance?: FloatFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    transactions?: TransactionListRelationFilter
     chainTransactions?: ChainTransactionListRelationFilter
-    withdrawals?: WithdrawalListRelationFilter
+    transactions?: TransactionListRelationFilter
     wallets?: UserWalletListRelationFilter
+    withdrawals?: WithdrawalListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -10505,10 +17051,10 @@ export namespace Prisma {
     balance?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    transactions?: TransactionOrderByRelationAggregateInput
     chainTransactions?: ChainTransactionOrderByRelationAggregateInput
-    withdrawals?: WithdrawalOrderByRelationAggregateInput
+    transactions?: TransactionOrderByRelationAggregateInput
     wallets?: UserWalletOrderByRelationAggregateInput
+    withdrawals?: WithdrawalOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -10523,10 +17069,10 @@ export namespace Prisma {
     balance?: FloatFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    transactions?: TransactionListRelationFilter
     chainTransactions?: ChainTransactionListRelationFilter
-    withdrawals?: WithdrawalListRelationFilter
+    transactions?: TransactionListRelationFilter
     wallets?: UserWalletListRelationFilter
+    withdrawals?: WithdrawalListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -10631,11 +17177,11 @@ export namespace Prisma {
     to?: StringFilter<"ChainTransaction"> | string
     amount?: StringFilter<"ChainTransaction"> | string
     txHash?: StringNullableFilter<"ChainTransaction"> | string | null
-    blockNumber?: BigIntNullableFilter<"ChainTransaction"> | bigint | number | null
-    direction?: EnumTxDirectionFilter<"ChainTransaction"> | $Enums.TxDirection
     status?: EnumChainTxStatusFilter<"ChainTransaction"> | $Enums.ChainTxStatus
     createdAt?: DateTimeFilter<"ChainTransaction"> | Date | string
     confirmedAt?: DateTimeNullableFilter<"ChainTransaction"> | Date | string | null
+    blockNumber?: BigIntNullableFilter<"ChainTransaction"> | bigint | number | null
+    direction?: EnumTxDirectionFilter<"ChainTransaction"> | $Enums.TxDirection
     user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
@@ -10646,11 +17192,11 @@ export namespace Prisma {
     to?: SortOrder
     amount?: SortOrder
     txHash?: SortOrderInput | SortOrder
-    blockNumber?: SortOrderInput | SortOrder
-    direction?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     confirmedAt?: SortOrderInput | SortOrder
+    blockNumber?: SortOrderInput | SortOrder
+    direction?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -10664,11 +17210,11 @@ export namespace Prisma {
     chain?: StringFilter<"ChainTransaction"> | string
     to?: StringFilter<"ChainTransaction"> | string
     amount?: StringFilter<"ChainTransaction"> | string
-    blockNumber?: BigIntNullableFilter<"ChainTransaction"> | bigint | number | null
-    direction?: EnumTxDirectionFilter<"ChainTransaction"> | $Enums.TxDirection
     status?: EnumChainTxStatusFilter<"ChainTransaction"> | $Enums.ChainTxStatus
     createdAt?: DateTimeFilter<"ChainTransaction"> | Date | string
     confirmedAt?: DateTimeNullableFilter<"ChainTransaction"> | Date | string | null
+    blockNumber?: BigIntNullableFilter<"ChainTransaction"> | bigint | number | null
+    direction?: EnumTxDirectionFilter<"ChainTransaction"> | $Enums.TxDirection
     user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id" | "txHash">
 
@@ -10679,11 +17225,11 @@ export namespace Prisma {
     to?: SortOrder
     amount?: SortOrder
     txHash?: SortOrderInput | SortOrder
-    blockNumber?: SortOrderInput | SortOrder
-    direction?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     confirmedAt?: SortOrderInput | SortOrder
+    blockNumber?: SortOrderInput | SortOrder
+    direction?: SortOrder
     _count?: ChainTransactionCountOrderByAggregateInput
     _avg?: ChainTransactionAvgOrderByAggregateInput
     _max?: ChainTransactionMaxOrderByAggregateInput
@@ -10701,11 +17247,11 @@ export namespace Prisma {
     to?: StringWithAggregatesFilter<"ChainTransaction"> | string
     amount?: StringWithAggregatesFilter<"ChainTransaction"> | string
     txHash?: StringNullableWithAggregatesFilter<"ChainTransaction"> | string | null
-    blockNumber?: BigIntNullableWithAggregatesFilter<"ChainTransaction"> | bigint | number | null
-    direction?: EnumTxDirectionWithAggregatesFilter<"ChainTransaction"> | $Enums.TxDirection
     status?: EnumChainTxStatusWithAggregatesFilter<"ChainTransaction"> | $Enums.ChainTxStatus
     createdAt?: DateTimeWithAggregatesFilter<"ChainTransaction"> | Date | string
     confirmedAt?: DateTimeNullableWithAggregatesFilter<"ChainTransaction"> | Date | string | null
+    blockNumber?: BigIntNullableWithAggregatesFilter<"ChainTransaction"> | bigint | number | null
+    direction?: EnumTxDirectionWithAggregatesFilter<"ChainTransaction"> | $Enums.TxDirection
   }
 
   export type LedgerEntryWhereInput = {
@@ -10926,8 +17472,8 @@ export namespace Prisma {
     chain?: StringFilter<"UserWallet"> | string
     derivationIndex?: IntFilter<"UserWallet"> | number
     address?: StringFilter<"UserWallet"> | string
-    lastKnownBalance?: StringFilter<"UserWallet"> | string
     createdAt?: DateTimeFilter<"UserWallet"> | Date | string
+    lastKnownBalance?: StringFilter<"UserWallet"> | string
     user?: XOR<UserRelationFilter, UserWhereInput>
   }
 
@@ -10937,14 +17483,14 @@ export namespace Prisma {
     chain?: SortOrder
     derivationIndex?: SortOrder
     address?: SortOrder
-    lastKnownBalance?: SortOrder
     createdAt?: SortOrder
+    lastKnownBalance?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
   export type UserWalletWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    userId_chain_derivationIndex?: UserWalletUserIdChainDerivationIndexCompoundUniqueInput
+    chain_derivationIndex?: UserWalletChainDerivationIndexCompoundUniqueInput
     userId_chain?: UserWalletUserIdChainCompoundUniqueInput
     AND?: UserWalletWhereInput | UserWalletWhereInput[]
     OR?: UserWalletWhereInput[]
@@ -10953,10 +17499,10 @@ export namespace Prisma {
     chain?: StringFilter<"UserWallet"> | string
     derivationIndex?: IntFilter<"UserWallet"> | number
     address?: StringFilter<"UserWallet"> | string
-    lastKnownBalance?: StringFilter<"UserWallet"> | string
     createdAt?: DateTimeFilter<"UserWallet"> | Date | string
+    lastKnownBalance?: StringFilter<"UserWallet"> | string
     user?: XOR<UserRelationFilter, UserWhereInput>
-  }, "id" | "userId_chain_derivationIndex" | "userId_chain">
+  }, "id" | "chain_derivationIndex" | "userId_chain">
 
   export type UserWalletOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10964,8 +17510,8 @@ export namespace Prisma {
     chain?: SortOrder
     derivationIndex?: SortOrder
     address?: SortOrder
-    lastKnownBalance?: SortOrder
     createdAt?: SortOrder
+    lastKnownBalance?: SortOrder
     _count?: UserWalletCountOrderByAggregateInput
     _avg?: UserWalletAvgOrderByAggregateInput
     _max?: UserWalletMaxOrderByAggregateInput
@@ -10982,8 +17528,8 @@ export namespace Prisma {
     chain?: StringWithAggregatesFilter<"UserWallet"> | string
     derivationIndex?: IntWithAggregatesFilter<"UserWallet"> | number
     address?: StringWithAggregatesFilter<"UserWallet"> | string
-    lastKnownBalance?: StringWithAggregatesFilter<"UserWallet"> | string
     createdAt?: DateTimeWithAggregatesFilter<"UserWallet"> | Date | string
+    lastKnownBalance?: StringWithAggregatesFilter<"UserWallet"> | string
   }
 
   export type ChainScanStateWhereInput = {
@@ -11030,6 +17576,456 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ChainScanState"> | Date | string
   }
 
+  export type TreasuryAccountWhereInput = {
+    AND?: TreasuryAccountWhereInput | TreasuryAccountWhereInput[]
+    OR?: TreasuryAccountWhereInput[]
+    NOT?: TreasuryAccountWhereInput | TreasuryAccountWhereInput[]
+    id?: StringFilter<"TreasuryAccount"> | string
+    name?: StringFilter<"TreasuryAccount"> | string
+    type?: EnumTreasuryAccountTypeFilter<"TreasuryAccount"> | $Enums.TreasuryAccountType
+    network?: StringNullableFilter<"TreasuryAccount"> | string | null
+    currency?: StringFilter<"TreasuryAccount"> | string
+    walletAddress?: StringNullableFilter<"TreasuryAccount"> | string | null
+    parentAccountId?: StringNullableFilter<"TreasuryAccount"> | string | null
+    isActive?: BoolFilter<"TreasuryAccount"> | boolean
+    createdAt?: DateTimeFilter<"TreasuryAccount"> | Date | string
+    parentAccount?: XOR<TreasuryAccountNullableRelationFilter, TreasuryAccountWhereInput> | null
+    children?: TreasuryAccountListRelationFilter
+    entries?: TreasuryEntryListRelationFilter
+  }
+
+  export type TreasuryAccountOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    network?: SortOrderInput | SortOrder
+    currency?: SortOrder
+    walletAddress?: SortOrderInput | SortOrder
+    parentAccountId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    parentAccount?: TreasuryAccountOrderByWithRelationInput
+    children?: TreasuryAccountOrderByRelationAggregateInput
+    entries?: TreasuryEntryOrderByRelationAggregateInput
+  }
+
+  export type TreasuryAccountWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    walletAddress?: string
+    name_currency_network?: TreasuryAccountNameCurrencyNetworkCompoundUniqueInput
+    AND?: TreasuryAccountWhereInput | TreasuryAccountWhereInput[]
+    OR?: TreasuryAccountWhereInput[]
+    NOT?: TreasuryAccountWhereInput | TreasuryAccountWhereInput[]
+    name?: StringFilter<"TreasuryAccount"> | string
+    type?: EnumTreasuryAccountTypeFilter<"TreasuryAccount"> | $Enums.TreasuryAccountType
+    network?: StringNullableFilter<"TreasuryAccount"> | string | null
+    currency?: StringFilter<"TreasuryAccount"> | string
+    parentAccountId?: StringNullableFilter<"TreasuryAccount"> | string | null
+    isActive?: BoolFilter<"TreasuryAccount"> | boolean
+    createdAt?: DateTimeFilter<"TreasuryAccount"> | Date | string
+    parentAccount?: XOR<TreasuryAccountNullableRelationFilter, TreasuryAccountWhereInput> | null
+    children?: TreasuryAccountListRelationFilter
+    entries?: TreasuryEntryListRelationFilter
+  }, "id" | "walletAddress" | "name_currency_network">
+
+  export type TreasuryAccountOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    network?: SortOrderInput | SortOrder
+    currency?: SortOrder
+    walletAddress?: SortOrderInput | SortOrder
+    parentAccountId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    _count?: TreasuryAccountCountOrderByAggregateInput
+    _max?: TreasuryAccountMaxOrderByAggregateInput
+    _min?: TreasuryAccountMinOrderByAggregateInput
+  }
+
+  export type TreasuryAccountScalarWhereWithAggregatesInput = {
+    AND?: TreasuryAccountScalarWhereWithAggregatesInput | TreasuryAccountScalarWhereWithAggregatesInput[]
+    OR?: TreasuryAccountScalarWhereWithAggregatesInput[]
+    NOT?: TreasuryAccountScalarWhereWithAggregatesInput | TreasuryAccountScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TreasuryAccount"> | string
+    name?: StringWithAggregatesFilter<"TreasuryAccount"> | string
+    type?: EnumTreasuryAccountTypeWithAggregatesFilter<"TreasuryAccount"> | $Enums.TreasuryAccountType
+    network?: StringNullableWithAggregatesFilter<"TreasuryAccount"> | string | null
+    currency?: StringWithAggregatesFilter<"TreasuryAccount"> | string
+    walletAddress?: StringNullableWithAggregatesFilter<"TreasuryAccount"> | string | null
+    parentAccountId?: StringNullableWithAggregatesFilter<"TreasuryAccount"> | string | null
+    isActive?: BoolWithAggregatesFilter<"TreasuryAccount"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"TreasuryAccount"> | Date | string
+  }
+
+  export type TreasuryLedgerWhereInput = {
+    AND?: TreasuryLedgerWhereInput | TreasuryLedgerWhereInput[]
+    OR?: TreasuryLedgerWhereInput[]
+    NOT?: TreasuryLedgerWhereInput | TreasuryLedgerWhereInput[]
+    id?: StringFilter<"TreasuryLedger"> | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeFilter<"TreasuryLedger"> | $Enums.TreasuryLedgerReferenceType
+    referenceId?: StringNullableFilter<"TreasuryLedger"> | string | null
+    description?: StringFilter<"TreasuryLedger"> | string
+    network?: StringFilter<"TreasuryLedger"> | string
+    currency?: StringFilter<"TreasuryLedger"> | string
+    createdByAdminId?: StringNullableFilter<"TreasuryLedger"> | string | null
+    locked?: BoolFilter<"TreasuryLedger"> | boolean
+    createdAt?: DateTimeFilter<"TreasuryLedger"> | Date | string
+    entries?: TreasuryEntryListRelationFilter
+  }
+
+  export type TreasuryLedgerOrderByWithRelationInput = {
+    id?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrderInput | SortOrder
+    description?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    createdByAdminId?: SortOrderInput | SortOrder
+    locked?: SortOrder
+    createdAt?: SortOrder
+    entries?: TreasuryEntryOrderByRelationAggregateInput
+  }
+
+  export type TreasuryLedgerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TreasuryLedgerWhereInput | TreasuryLedgerWhereInput[]
+    OR?: TreasuryLedgerWhereInput[]
+    NOT?: TreasuryLedgerWhereInput | TreasuryLedgerWhereInput[]
+    referenceType?: EnumTreasuryLedgerReferenceTypeFilter<"TreasuryLedger"> | $Enums.TreasuryLedgerReferenceType
+    referenceId?: StringNullableFilter<"TreasuryLedger"> | string | null
+    description?: StringFilter<"TreasuryLedger"> | string
+    network?: StringFilter<"TreasuryLedger"> | string
+    currency?: StringFilter<"TreasuryLedger"> | string
+    createdByAdminId?: StringNullableFilter<"TreasuryLedger"> | string | null
+    locked?: BoolFilter<"TreasuryLedger"> | boolean
+    createdAt?: DateTimeFilter<"TreasuryLedger"> | Date | string
+    entries?: TreasuryEntryListRelationFilter
+  }, "id">
+
+  export type TreasuryLedgerOrderByWithAggregationInput = {
+    id?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrderInput | SortOrder
+    description?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    createdByAdminId?: SortOrderInput | SortOrder
+    locked?: SortOrder
+    createdAt?: SortOrder
+    _count?: TreasuryLedgerCountOrderByAggregateInput
+    _max?: TreasuryLedgerMaxOrderByAggregateInput
+    _min?: TreasuryLedgerMinOrderByAggregateInput
+  }
+
+  export type TreasuryLedgerScalarWhereWithAggregatesInput = {
+    AND?: TreasuryLedgerScalarWhereWithAggregatesInput | TreasuryLedgerScalarWhereWithAggregatesInput[]
+    OR?: TreasuryLedgerScalarWhereWithAggregatesInput[]
+    NOT?: TreasuryLedgerScalarWhereWithAggregatesInput | TreasuryLedgerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TreasuryLedger"> | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeWithAggregatesFilter<"TreasuryLedger"> | $Enums.TreasuryLedgerReferenceType
+    referenceId?: StringNullableWithAggregatesFilter<"TreasuryLedger"> | string | null
+    description?: StringWithAggregatesFilter<"TreasuryLedger"> | string
+    network?: StringWithAggregatesFilter<"TreasuryLedger"> | string
+    currency?: StringWithAggregatesFilter<"TreasuryLedger"> | string
+    createdByAdminId?: StringNullableWithAggregatesFilter<"TreasuryLedger"> | string | null
+    locked?: BoolWithAggregatesFilter<"TreasuryLedger"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"TreasuryLedger"> | Date | string
+  }
+
+  export type TreasuryEntryWhereInput = {
+    AND?: TreasuryEntryWhereInput | TreasuryEntryWhereInput[]
+    OR?: TreasuryEntryWhereInput[]
+    NOT?: TreasuryEntryWhereInput | TreasuryEntryWhereInput[]
+    id?: StringFilter<"TreasuryEntry"> | string
+    ledgerId?: StringFilter<"TreasuryEntry"> | string
+    accountId?: StringFilter<"TreasuryEntry"> | string
+    debitAmount?: BigIntFilter<"TreasuryEntry"> | bigint | number
+    creditAmount?: BigIntFilter<"TreasuryEntry"> | bigint | number
+    currency?: StringFilter<"TreasuryEntry"> | string
+    network?: StringFilter<"TreasuryEntry"> | string
+    createdAt?: DateTimeFilter<"TreasuryEntry"> | Date | string
+    ledger?: XOR<TreasuryLedgerRelationFilter, TreasuryLedgerWhereInput>
+    account?: XOR<TreasuryAccountRelationFilter, TreasuryAccountWhereInput>
+  }
+
+  export type TreasuryEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    ledgerId?: SortOrder
+    accountId?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    currency?: SortOrder
+    network?: SortOrder
+    createdAt?: SortOrder
+    ledger?: TreasuryLedgerOrderByWithRelationInput
+    account?: TreasuryAccountOrderByWithRelationInput
+  }
+
+  export type TreasuryEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TreasuryEntryWhereInput | TreasuryEntryWhereInput[]
+    OR?: TreasuryEntryWhereInput[]
+    NOT?: TreasuryEntryWhereInput | TreasuryEntryWhereInput[]
+    ledgerId?: StringFilter<"TreasuryEntry"> | string
+    accountId?: StringFilter<"TreasuryEntry"> | string
+    debitAmount?: BigIntFilter<"TreasuryEntry"> | bigint | number
+    creditAmount?: BigIntFilter<"TreasuryEntry"> | bigint | number
+    currency?: StringFilter<"TreasuryEntry"> | string
+    network?: StringFilter<"TreasuryEntry"> | string
+    createdAt?: DateTimeFilter<"TreasuryEntry"> | Date | string
+    ledger?: XOR<TreasuryLedgerRelationFilter, TreasuryLedgerWhereInput>
+    account?: XOR<TreasuryAccountRelationFilter, TreasuryAccountWhereInput>
+  }, "id">
+
+  export type TreasuryEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    ledgerId?: SortOrder
+    accountId?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    currency?: SortOrder
+    network?: SortOrder
+    createdAt?: SortOrder
+    _count?: TreasuryEntryCountOrderByAggregateInput
+    _avg?: TreasuryEntryAvgOrderByAggregateInput
+    _max?: TreasuryEntryMaxOrderByAggregateInput
+    _min?: TreasuryEntryMinOrderByAggregateInput
+    _sum?: TreasuryEntrySumOrderByAggregateInput
+  }
+
+  export type TreasuryEntryScalarWhereWithAggregatesInput = {
+    AND?: TreasuryEntryScalarWhereWithAggregatesInput | TreasuryEntryScalarWhereWithAggregatesInput[]
+    OR?: TreasuryEntryScalarWhereWithAggregatesInput[]
+    NOT?: TreasuryEntryScalarWhereWithAggregatesInput | TreasuryEntryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TreasuryEntry"> | string
+    ledgerId?: StringWithAggregatesFilter<"TreasuryEntry"> | string
+    accountId?: StringWithAggregatesFilter<"TreasuryEntry"> | string
+    debitAmount?: BigIntWithAggregatesFilter<"TreasuryEntry"> | bigint | number
+    creditAmount?: BigIntWithAggregatesFilter<"TreasuryEntry"> | bigint | number
+    currency?: StringWithAggregatesFilter<"TreasuryEntry"> | string
+    network?: StringWithAggregatesFilter<"TreasuryEntry"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"TreasuryEntry"> | Date | string
+  }
+
+  export type BalanceSnapshotWhereInput = {
+    AND?: BalanceSnapshotWhereInput | BalanceSnapshotWhereInput[]
+    OR?: BalanceSnapshotWhereInput[]
+    NOT?: BalanceSnapshotWhereInput | BalanceSnapshotWhereInput[]
+    id?: StringFilter<"BalanceSnapshot"> | string
+    snapshotTime?: DateTimeFilter<"BalanceSnapshot"> | Date | string
+    network?: StringFilter<"BalanceSnapshot"> | string
+    currency?: StringFilter<"BalanceSnapshot"> | string
+    totalAssets?: BigIntFilter<"BalanceSnapshot"> | bigint | number
+    totalLiabilities?: BigIntFilter<"BalanceSnapshot"> | bigint | number
+    totalEquity?: BigIntFilter<"BalanceSnapshot"> | bigint | number
+  }
+
+  export type BalanceSnapshotOrderByWithRelationInput = {
+    id?: SortOrder
+    snapshotTime?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    totalAssets?: SortOrder
+    totalLiabilities?: SortOrder
+    totalEquity?: SortOrder
+  }
+
+  export type BalanceSnapshotWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BalanceSnapshotWhereInput | BalanceSnapshotWhereInput[]
+    OR?: BalanceSnapshotWhereInput[]
+    NOT?: BalanceSnapshotWhereInput | BalanceSnapshotWhereInput[]
+    snapshotTime?: DateTimeFilter<"BalanceSnapshot"> | Date | string
+    network?: StringFilter<"BalanceSnapshot"> | string
+    currency?: StringFilter<"BalanceSnapshot"> | string
+    totalAssets?: BigIntFilter<"BalanceSnapshot"> | bigint | number
+    totalLiabilities?: BigIntFilter<"BalanceSnapshot"> | bigint | number
+    totalEquity?: BigIntFilter<"BalanceSnapshot"> | bigint | number
+  }, "id">
+
+  export type BalanceSnapshotOrderByWithAggregationInput = {
+    id?: SortOrder
+    snapshotTime?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    totalAssets?: SortOrder
+    totalLiabilities?: SortOrder
+    totalEquity?: SortOrder
+    _count?: BalanceSnapshotCountOrderByAggregateInput
+    _avg?: BalanceSnapshotAvgOrderByAggregateInput
+    _max?: BalanceSnapshotMaxOrderByAggregateInput
+    _min?: BalanceSnapshotMinOrderByAggregateInput
+    _sum?: BalanceSnapshotSumOrderByAggregateInput
+  }
+
+  export type BalanceSnapshotScalarWhereWithAggregatesInput = {
+    AND?: BalanceSnapshotScalarWhereWithAggregatesInput | BalanceSnapshotScalarWhereWithAggregatesInput[]
+    OR?: BalanceSnapshotScalarWhereWithAggregatesInput[]
+    NOT?: BalanceSnapshotScalarWhereWithAggregatesInput | BalanceSnapshotScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BalanceSnapshot"> | string
+    snapshotTime?: DateTimeWithAggregatesFilter<"BalanceSnapshot"> | Date | string
+    network?: StringWithAggregatesFilter<"BalanceSnapshot"> | string
+    currency?: StringWithAggregatesFilter<"BalanceSnapshot"> | string
+    totalAssets?: BigIntWithAggregatesFilter<"BalanceSnapshot"> | bigint | number
+    totalLiabilities?: BigIntWithAggregatesFilter<"BalanceSnapshot"> | bigint | number
+    totalEquity?: BigIntWithAggregatesFilter<"BalanceSnapshot"> | bigint | number
+  }
+
+  export type TreasuryStateWhereInput = {
+    AND?: TreasuryStateWhereInput | TreasuryStateWhereInput[]
+    OR?: TreasuryStateWhereInput[]
+    NOT?: TreasuryStateWhereInput | TreasuryStateWhereInput[]
+    chain?: StringFilter<"TreasuryState"> | string
+    totalOnchainBalance?: StringFilter<"TreasuryState"> | string
+    totalUserLiabilities?: StringFilter<"TreasuryState"> | string
+    sweepableBalance?: StringFilter<"TreasuryState"> | string
+    lastSyncedAt?: DateTimeFilter<"TreasuryState"> | Date | string
+    locked?: BoolFilter<"TreasuryState"> | boolean
+    lockedAt?: DateTimeNullableFilter<"TreasuryState"> | Date | string | null
+    lockedBy?: StringNullableFilter<"TreasuryState"> | string | null
+  }
+
+  export type TreasuryStateOrderByWithRelationInput = {
+    chain?: SortOrder
+    totalOnchainBalance?: SortOrder
+    totalUserLiabilities?: SortOrder
+    sweepableBalance?: SortOrder
+    lastSyncedAt?: SortOrder
+    locked?: SortOrder
+    lockedAt?: SortOrderInput | SortOrder
+    lockedBy?: SortOrderInput | SortOrder
+  }
+
+  export type TreasuryStateWhereUniqueInput = Prisma.AtLeast<{
+    chain?: string
+    AND?: TreasuryStateWhereInput | TreasuryStateWhereInput[]
+    OR?: TreasuryStateWhereInput[]
+    NOT?: TreasuryStateWhereInput | TreasuryStateWhereInput[]
+    totalOnchainBalance?: StringFilter<"TreasuryState"> | string
+    totalUserLiabilities?: StringFilter<"TreasuryState"> | string
+    sweepableBalance?: StringFilter<"TreasuryState"> | string
+    lastSyncedAt?: DateTimeFilter<"TreasuryState"> | Date | string
+    locked?: BoolFilter<"TreasuryState"> | boolean
+    lockedAt?: DateTimeNullableFilter<"TreasuryState"> | Date | string | null
+    lockedBy?: StringNullableFilter<"TreasuryState"> | string | null
+  }, "chain">
+
+  export type TreasuryStateOrderByWithAggregationInput = {
+    chain?: SortOrder
+    totalOnchainBalance?: SortOrder
+    totalUserLiabilities?: SortOrder
+    sweepableBalance?: SortOrder
+    lastSyncedAt?: SortOrder
+    locked?: SortOrder
+    lockedAt?: SortOrderInput | SortOrder
+    lockedBy?: SortOrderInput | SortOrder
+    _count?: TreasuryStateCountOrderByAggregateInput
+    _max?: TreasuryStateMaxOrderByAggregateInput
+    _min?: TreasuryStateMinOrderByAggregateInput
+  }
+
+  export type TreasuryStateScalarWhereWithAggregatesInput = {
+    AND?: TreasuryStateScalarWhereWithAggregatesInput | TreasuryStateScalarWhereWithAggregatesInput[]
+    OR?: TreasuryStateScalarWhereWithAggregatesInput[]
+    NOT?: TreasuryStateScalarWhereWithAggregatesInput | TreasuryStateScalarWhereWithAggregatesInput[]
+    chain?: StringWithAggregatesFilter<"TreasuryState"> | string
+    totalOnchainBalance?: StringWithAggregatesFilter<"TreasuryState"> | string
+    totalUserLiabilities?: StringWithAggregatesFilter<"TreasuryState"> | string
+    sweepableBalance?: StringWithAggregatesFilter<"TreasuryState"> | string
+    lastSyncedAt?: DateTimeWithAggregatesFilter<"TreasuryState"> | Date | string
+    locked?: BoolWithAggregatesFilter<"TreasuryState"> | boolean
+    lockedAt?: DateTimeNullableWithAggregatesFilter<"TreasuryState"> | Date | string | null
+    lockedBy?: StringNullableWithAggregatesFilter<"TreasuryState"> | string | null
+  }
+
+  export type SweepWhereInput = {
+    AND?: SweepWhereInput | SweepWhereInput[]
+    OR?: SweepWhereInput[]
+    NOT?: SweepWhereInput | SweepWhereInput[]
+    id?: StringFilter<"Sweep"> | string
+    chain?: StringFilter<"Sweep"> | string
+    amount?: StringFilter<"Sweep"> | string
+    amountRaw?: StringFilter<"Sweep"> | string
+    fromWallet?: StringFilter<"Sweep"> | string
+    toWallet?: StringFilter<"Sweep"> | string
+    txHash?: StringNullableFilter<"Sweep"> | string | null
+    status?: EnumSweepStatusFilter<"Sweep"> | $Enums.SweepStatus
+    initiatedBy?: StringFilter<"Sweep"> | string
+    error?: StringNullableFilter<"Sweep"> | string | null
+    createdAt?: DateTimeFilter<"Sweep"> | Date | string
+    confirmedAt?: DateTimeNullableFilter<"Sweep"> | Date | string | null
+  }
+
+  export type SweepOrderByWithRelationInput = {
+    id?: SortOrder
+    chain?: SortOrder
+    amount?: SortOrder
+    amountRaw?: SortOrder
+    fromWallet?: SortOrder
+    toWallet?: SortOrder
+    txHash?: SortOrderInput | SortOrder
+    status?: SortOrder
+    initiatedBy?: SortOrder
+    error?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    confirmedAt?: SortOrderInput | SortOrder
+  }
+
+  export type SweepWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    txHash?: string
+    AND?: SweepWhereInput | SweepWhereInput[]
+    OR?: SweepWhereInput[]
+    NOT?: SweepWhereInput | SweepWhereInput[]
+    chain?: StringFilter<"Sweep"> | string
+    amount?: StringFilter<"Sweep"> | string
+    amountRaw?: StringFilter<"Sweep"> | string
+    fromWallet?: StringFilter<"Sweep"> | string
+    toWallet?: StringFilter<"Sweep"> | string
+    status?: EnumSweepStatusFilter<"Sweep"> | $Enums.SweepStatus
+    initiatedBy?: StringFilter<"Sweep"> | string
+    error?: StringNullableFilter<"Sweep"> | string | null
+    createdAt?: DateTimeFilter<"Sweep"> | Date | string
+    confirmedAt?: DateTimeNullableFilter<"Sweep"> | Date | string | null
+  }, "id" | "txHash">
+
+  export type SweepOrderByWithAggregationInput = {
+    id?: SortOrder
+    chain?: SortOrder
+    amount?: SortOrder
+    amountRaw?: SortOrder
+    fromWallet?: SortOrder
+    toWallet?: SortOrder
+    txHash?: SortOrderInput | SortOrder
+    status?: SortOrder
+    initiatedBy?: SortOrder
+    error?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    confirmedAt?: SortOrderInput | SortOrder
+    _count?: SweepCountOrderByAggregateInput
+    _max?: SweepMaxOrderByAggregateInput
+    _min?: SweepMinOrderByAggregateInput
+  }
+
+  export type SweepScalarWhereWithAggregatesInput = {
+    AND?: SweepScalarWhereWithAggregatesInput | SweepScalarWhereWithAggregatesInput[]
+    OR?: SweepScalarWhereWithAggregatesInput[]
+    NOT?: SweepScalarWhereWithAggregatesInput | SweepScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Sweep"> | string
+    chain?: StringWithAggregatesFilter<"Sweep"> | string
+    amount?: StringWithAggregatesFilter<"Sweep"> | string
+    amountRaw?: StringWithAggregatesFilter<"Sweep"> | string
+    fromWallet?: StringWithAggregatesFilter<"Sweep"> | string
+    toWallet?: StringWithAggregatesFilter<"Sweep"> | string
+    txHash?: StringNullableWithAggregatesFilter<"Sweep"> | string | null
+    status?: EnumSweepStatusWithAggregatesFilter<"Sweep"> | $Enums.SweepStatus
+    initiatedBy?: StringWithAggregatesFilter<"Sweep"> | string
+    error?: StringNullableWithAggregatesFilter<"Sweep"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Sweep"> | Date | string
+    confirmedAt?: DateTimeNullableWithAggregatesFilter<"Sweep"> | Date | string | null
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -11039,10 +18035,10 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    transactions?: TransactionCreateNestedManyWithoutUserInput
     chainTransactions?: ChainTransactionCreateNestedManyWithoutUserInput
-    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
     wallets?: UserWalletCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -11054,10 +18050,10 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     chainTransactions?: ChainTransactionUncheckedCreateNestedManyWithoutUserInput
-    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     wallets?: UserWalletUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -11069,10 +18065,10 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    transactions?: TransactionUpdateManyWithoutUserNestedInput
     chainTransactions?: ChainTransactionUpdateManyWithoutUserNestedInput
-    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -11084,10 +18080,10 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     chainTransactions?: ChainTransactionUncheckedUpdateManyWithoutUserNestedInput
-    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -11191,11 +18187,11 @@ export namespace Prisma {
     to: string
     amount: string
     txHash?: string | null
-    blockNumber?: bigint | number | null
-    direction?: $Enums.TxDirection
     status?: $Enums.ChainTxStatus
     createdAt?: Date | string
     confirmedAt?: Date | string | null
+    blockNumber?: bigint | number | null
+    direction?: $Enums.TxDirection
     user: UserCreateNestedOneWithoutChainTransactionsInput
   }
 
@@ -11206,11 +18202,11 @@ export namespace Prisma {
     to: string
     amount: string
     txHash?: string | null
-    blockNumber?: bigint | number | null
-    direction?: $Enums.TxDirection
     status?: $Enums.ChainTxStatus
     createdAt?: Date | string
     confirmedAt?: Date | string | null
+    blockNumber?: bigint | number | null
+    direction?: $Enums.TxDirection
   }
 
   export type ChainTransactionUpdateInput = {
@@ -11219,11 +18215,11 @@ export namespace Prisma {
     to?: StringFieldUpdateOperationsInput | string
     amount?: StringFieldUpdateOperationsInput | string
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
-    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
     status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
     user?: UserUpdateOneRequiredWithoutChainTransactionsNestedInput
   }
 
@@ -11234,11 +18230,11 @@ export namespace Prisma {
     to?: StringFieldUpdateOperationsInput | string
     amount?: StringFieldUpdateOperationsInput | string
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
-    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
     status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
   }
 
   export type ChainTransactionCreateManyInput = {
@@ -11248,11 +18244,11 @@ export namespace Prisma {
     to: string
     amount: string
     txHash?: string | null
-    blockNumber?: bigint | number | null
-    direction?: $Enums.TxDirection
     status?: $Enums.ChainTxStatus
     createdAt?: Date | string
     confirmedAt?: Date | string | null
+    blockNumber?: bigint | number | null
+    direction?: $Enums.TxDirection
   }
 
   export type ChainTransactionUpdateManyMutationInput = {
@@ -11261,11 +18257,11 @@ export namespace Prisma {
     to?: StringFieldUpdateOperationsInput | string
     amount?: StringFieldUpdateOperationsInput | string
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
-    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
     status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
   }
 
   export type ChainTransactionUncheckedUpdateManyInput = {
@@ -11275,11 +18271,11 @@ export namespace Prisma {
     to?: StringFieldUpdateOperationsInput | string
     amount?: StringFieldUpdateOperationsInput | string
     txHash?: NullableStringFieldUpdateOperationsInput | string | null
-    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
     status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
   }
 
   export type LedgerEntryCreateInput = {
@@ -11503,8 +18499,8 @@ export namespace Prisma {
     chain: string
     derivationIndex: number
     address: string
-    lastKnownBalance?: string
     createdAt?: Date | string
+    lastKnownBalance?: string
     user: UserCreateNestedOneWithoutWalletsInput
   }
 
@@ -11514,8 +18510,8 @@ export namespace Prisma {
     chain: string
     derivationIndex: number
     address: string
-    lastKnownBalance?: string
     createdAt?: Date | string
+    lastKnownBalance?: string
   }
 
   export type UserWalletUpdateInput = {
@@ -11523,8 +18519,8 @@ export namespace Prisma {
     chain?: StringFieldUpdateOperationsInput | string
     derivationIndex?: IntFieldUpdateOperationsInput | number
     address?: StringFieldUpdateOperationsInput | string
-    lastKnownBalance?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastKnownBalance?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutWalletsNestedInput
   }
 
@@ -11534,8 +18530,8 @@ export namespace Prisma {
     chain?: StringFieldUpdateOperationsInput | string
     derivationIndex?: IntFieldUpdateOperationsInput | number
     address?: StringFieldUpdateOperationsInput | string
-    lastKnownBalance?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastKnownBalance?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserWalletCreateManyInput = {
@@ -11544,8 +18540,8 @@ export namespace Prisma {
     chain: string
     derivationIndex: number
     address: string
-    lastKnownBalance?: string
     createdAt?: Date | string
+    lastKnownBalance?: string
   }
 
   export type UserWalletUpdateManyMutationInput = {
@@ -11553,8 +18549,8 @@ export namespace Prisma {
     chain?: StringFieldUpdateOperationsInput | string
     derivationIndex?: IntFieldUpdateOperationsInput | number
     address?: StringFieldUpdateOperationsInput | string
-    lastKnownBalance?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastKnownBalance?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserWalletUncheckedUpdateManyInput = {
@@ -11563,8 +18559,8 @@ export namespace Prisma {
     chain?: StringFieldUpdateOperationsInput | string
     derivationIndex?: IntFieldUpdateOperationsInput | number
     address?: StringFieldUpdateOperationsInput | string
-    lastKnownBalance?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastKnownBalance?: StringFieldUpdateOperationsInput | string
   }
 
   export type ChainScanStateCreateInput = {
@@ -11607,6 +18603,512 @@ export namespace Prisma {
     chain?: StringFieldUpdateOperationsInput | string
     lastScannedBlock?: BigIntFieldUpdateOperationsInput | bigint | number
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryAccountCreateInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    parentAccount?: TreasuryAccountCreateNestedOneWithoutChildrenInput
+    children?: TreasuryAccountCreateNestedManyWithoutParentAccountInput
+    entries?: TreasuryEntryCreateNestedManyWithoutAccountInput
+  }
+
+  export type TreasuryAccountUncheckedCreateInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    parentAccountId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    children?: TreasuryAccountUncheckedCreateNestedManyWithoutParentAccountInput
+    entries?: TreasuryEntryUncheckedCreateNestedManyWithoutAccountInput
+  }
+
+  export type TreasuryAccountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentAccount?: TreasuryAccountUpdateOneWithoutChildrenNestedInput
+    children?: TreasuryAccountUpdateManyWithoutParentAccountNestedInput
+    entries?: TreasuryEntryUpdateManyWithoutAccountNestedInput
+  }
+
+  export type TreasuryAccountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    parentAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: TreasuryAccountUncheckedUpdateManyWithoutParentAccountNestedInput
+    entries?: TreasuryEntryUncheckedUpdateManyWithoutAccountNestedInput
+  }
+
+  export type TreasuryAccountCreateManyInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    parentAccountId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type TreasuryAccountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryAccountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    parentAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryLedgerCreateInput = {
+    id?: string
+    referenceType: $Enums.TreasuryLedgerReferenceType
+    referenceId?: string | null
+    description: string
+    network: string
+    currency: string
+    createdByAdminId?: string | null
+    locked?: boolean
+    createdAt?: Date | string
+    entries?: TreasuryEntryCreateNestedManyWithoutLedgerInput
+  }
+
+  export type TreasuryLedgerUncheckedCreateInput = {
+    id?: string
+    referenceType: $Enums.TreasuryLedgerReferenceType
+    referenceId?: string | null
+    description: string
+    network: string
+    currency: string
+    createdByAdminId?: string | null
+    locked?: boolean
+    createdAt?: Date | string
+    entries?: TreasuryEntryUncheckedCreateNestedManyWithoutLedgerInput
+  }
+
+  export type TreasuryLedgerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeFieldUpdateOperationsInput | $Enums.TreasuryLedgerReferenceType
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: TreasuryEntryUpdateManyWithoutLedgerNestedInput
+  }
+
+  export type TreasuryLedgerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeFieldUpdateOperationsInput | $Enums.TreasuryLedgerReferenceType
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: TreasuryEntryUncheckedUpdateManyWithoutLedgerNestedInput
+  }
+
+  export type TreasuryLedgerCreateManyInput = {
+    id?: string
+    referenceType: $Enums.TreasuryLedgerReferenceType
+    referenceId?: string | null
+    description: string
+    network: string
+    currency: string
+    createdByAdminId?: string | null
+    locked?: boolean
+    createdAt?: Date | string
+  }
+
+  export type TreasuryLedgerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeFieldUpdateOperationsInput | $Enums.TreasuryLedgerReferenceType
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryLedgerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeFieldUpdateOperationsInput | $Enums.TreasuryLedgerReferenceType
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryEntryCreateInput = {
+    id?: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+    ledger: TreasuryLedgerCreateNestedOneWithoutEntriesInput
+    account: TreasuryAccountCreateNestedOneWithoutEntriesInput
+  }
+
+  export type TreasuryEntryUncheckedCreateInput = {
+    id?: string
+    ledgerId: string
+    accountId: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+  }
+
+  export type TreasuryEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ledger?: TreasuryLedgerUpdateOneRequiredWithoutEntriesNestedInput
+    account?: TreasuryAccountUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type TreasuryEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ledgerId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryEntryCreateManyInput = {
+    id?: string
+    ledgerId: string
+    accountId: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+  }
+
+  export type TreasuryEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ledgerId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BalanceSnapshotCreateInput = {
+    id?: string
+    snapshotTime?: Date | string
+    network: string
+    currency: string
+    totalAssets: bigint | number
+    totalLiabilities: bigint | number
+    totalEquity: bigint | number
+  }
+
+  export type BalanceSnapshotUncheckedCreateInput = {
+    id?: string
+    snapshotTime?: Date | string
+    network: string
+    currency: string
+    totalAssets: bigint | number
+    totalLiabilities: bigint | number
+    totalEquity: bigint | number
+  }
+
+  export type BalanceSnapshotUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    snapshotTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    totalAssets?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalLiabilities?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalEquity?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type BalanceSnapshotUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    snapshotTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    totalAssets?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalLiabilities?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalEquity?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type BalanceSnapshotCreateManyInput = {
+    id?: string
+    snapshotTime?: Date | string
+    network: string
+    currency: string
+    totalAssets: bigint | number
+    totalLiabilities: bigint | number
+    totalEquity: bigint | number
+  }
+
+  export type BalanceSnapshotUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    snapshotTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    totalAssets?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalLiabilities?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalEquity?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type BalanceSnapshotUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    snapshotTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    totalAssets?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalLiabilities?: BigIntFieldUpdateOperationsInput | bigint | number
+    totalEquity?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type TreasuryStateCreateInput = {
+    chain: string
+    totalOnchainBalance?: string
+    totalUserLiabilities?: string
+    sweepableBalance?: string
+    lastSyncedAt?: Date | string
+    locked?: boolean
+    lockedAt?: Date | string | null
+    lockedBy?: string | null
+  }
+
+  export type TreasuryStateUncheckedCreateInput = {
+    chain: string
+    totalOnchainBalance?: string
+    totalUserLiabilities?: string
+    sweepableBalance?: string
+    lastSyncedAt?: Date | string
+    locked?: boolean
+    lockedAt?: Date | string | null
+    lockedBy?: string | null
+  }
+
+  export type TreasuryStateUpdateInput = {
+    chain?: StringFieldUpdateOperationsInput | string
+    totalOnchainBalance?: StringFieldUpdateOperationsInput | string
+    totalUserLiabilities?: StringFieldUpdateOperationsInput | string
+    sweepableBalance?: StringFieldUpdateOperationsInput | string
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TreasuryStateUncheckedUpdateInput = {
+    chain?: StringFieldUpdateOperationsInput | string
+    totalOnchainBalance?: StringFieldUpdateOperationsInput | string
+    totalUserLiabilities?: StringFieldUpdateOperationsInput | string
+    sweepableBalance?: StringFieldUpdateOperationsInput | string
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TreasuryStateCreateManyInput = {
+    chain: string
+    totalOnchainBalance?: string
+    totalUserLiabilities?: string
+    sweepableBalance?: string
+    lastSyncedAt?: Date | string
+    locked?: boolean
+    lockedAt?: Date | string | null
+    lockedBy?: string | null
+  }
+
+  export type TreasuryStateUpdateManyMutationInput = {
+    chain?: StringFieldUpdateOperationsInput | string
+    totalOnchainBalance?: StringFieldUpdateOperationsInput | string
+    totalUserLiabilities?: StringFieldUpdateOperationsInput | string
+    sweepableBalance?: StringFieldUpdateOperationsInput | string
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TreasuryStateUncheckedUpdateManyInput = {
+    chain?: StringFieldUpdateOperationsInput | string
+    totalOnchainBalance?: StringFieldUpdateOperationsInput | string
+    totalUserLiabilities?: StringFieldUpdateOperationsInput | string
+    sweepableBalance?: StringFieldUpdateOperationsInput | string
+    lastSyncedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lockedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SweepCreateInput = {
+    id?: string
+    chain: string
+    amount: string
+    amountRaw: string
+    fromWallet: string
+    toWallet: string
+    txHash?: string | null
+    status?: $Enums.SweepStatus
+    initiatedBy: string
+    error?: string | null
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+  }
+
+  export type SweepUncheckedCreateInput = {
+    id?: string
+    chain: string
+    amount: string
+    amountRaw: string
+    fromWallet: string
+    toWallet: string
+    txHash?: string | null
+    status?: $Enums.SweepStatus
+    initiatedBy: string
+    error?: string | null
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+  }
+
+  export type SweepUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chain?: StringFieldUpdateOperationsInput | string
+    amount?: StringFieldUpdateOperationsInput | string
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    fromWallet?: StringFieldUpdateOperationsInput | string
+    toWallet?: StringFieldUpdateOperationsInput | string
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSweepStatusFieldUpdateOperationsInput | $Enums.SweepStatus
+    initiatedBy?: StringFieldUpdateOperationsInput | string
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SweepUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chain?: StringFieldUpdateOperationsInput | string
+    amount?: StringFieldUpdateOperationsInput | string
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    fromWallet?: StringFieldUpdateOperationsInput | string
+    toWallet?: StringFieldUpdateOperationsInput | string
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSweepStatusFieldUpdateOperationsInput | $Enums.SweepStatus
+    initiatedBy?: StringFieldUpdateOperationsInput | string
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SweepCreateManyInput = {
+    id?: string
+    chain: string
+    amount: string
+    amountRaw: string
+    fromWallet: string
+    toWallet: string
+    txHash?: string | null
+    status?: $Enums.SweepStatus
+    initiatedBy: string
+    error?: string | null
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+  }
+
+  export type SweepUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chain?: StringFieldUpdateOperationsInput | string
+    amount?: StringFieldUpdateOperationsInput | string
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    fromWallet?: StringFieldUpdateOperationsInput | string
+    toWallet?: StringFieldUpdateOperationsInput | string
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSweepStatusFieldUpdateOperationsInput | $Enums.SweepStatus
+    initiatedBy?: StringFieldUpdateOperationsInput | string
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SweepUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chain?: StringFieldUpdateOperationsInput | string
+    amount?: StringFieldUpdateOperationsInput | string
+    amountRaw?: StringFieldUpdateOperationsInput | string
+    fromWallet?: StringFieldUpdateOperationsInput | string
+    toWallet?: StringFieldUpdateOperationsInput | string
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumSweepStatusFieldUpdateOperationsInput | $Enums.SweepStatus
+    initiatedBy?: StringFieldUpdateOperationsInput | string
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -11660,22 +19162,16 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type TransactionListRelationFilter = {
-    every?: TransactionWhereInput
-    some?: TransactionWhereInput
-    none?: TransactionWhereInput
-  }
-
   export type ChainTransactionListRelationFilter = {
     every?: ChainTransactionWhereInput
     some?: ChainTransactionWhereInput
     none?: ChainTransactionWhereInput
   }
 
-  export type WithdrawalListRelationFilter = {
-    every?: WithdrawalWhereInput
-    some?: WithdrawalWhereInput
-    none?: WithdrawalWhereInput
+  export type TransactionListRelationFilter = {
+    every?: TransactionWhereInput
+    some?: TransactionWhereInput
+    none?: TransactionWhereInput
   }
 
   export type UserWalletListRelationFilter = {
@@ -11684,19 +19180,25 @@ export namespace Prisma {
     none?: UserWalletWhereInput
   }
 
-  export type TransactionOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type WithdrawalListRelationFilter = {
+    every?: WithdrawalWhereInput
+    some?: WithdrawalWhereInput
+    none?: WithdrawalWhereInput
   }
 
   export type ChainTransactionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type WithdrawalOrderByRelationAggregateInput = {
+  export type TransactionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type UserWalletOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WithdrawalOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11898,24 +19400,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type BigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
-  }
-
-  export type EnumTxDirectionFilter<$PrismaModel = never> = {
-    equals?: $Enums.TxDirection | EnumTxDirectionFieldRefInput<$PrismaModel>
-    in?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumTxDirectionFilter<$PrismaModel> | $Enums.TxDirection
-  }
-
   export type EnumChainTxStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ChainTxStatus | EnumChainTxStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
@@ -11934,6 +19418,24 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type BigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type EnumTxDirectionFilter<$PrismaModel = never> = {
+    equals?: $Enums.TxDirection | EnumTxDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTxDirectionFilter<$PrismaModel> | $Enums.TxDirection
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -11946,11 +19448,11 @@ export namespace Prisma {
     to?: SortOrder
     amount?: SortOrder
     txHash?: SortOrder
-    blockNumber?: SortOrder
-    direction?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     confirmedAt?: SortOrder
+    blockNumber?: SortOrder
+    direction?: SortOrder
   }
 
   export type ChainTransactionAvgOrderByAggregateInput = {
@@ -11964,11 +19466,11 @@ export namespace Prisma {
     to?: SortOrder
     amount?: SortOrder
     txHash?: SortOrder
-    blockNumber?: SortOrder
-    direction?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     confirmedAt?: SortOrder
+    blockNumber?: SortOrder
+    direction?: SortOrder
   }
 
   export type ChainTransactionMinOrderByAggregateInput = {
@@ -11978,11 +19480,11 @@ export namespace Prisma {
     to?: SortOrder
     amount?: SortOrder
     txHash?: SortOrder
-    blockNumber?: SortOrder
-    direction?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     confirmedAt?: SortOrder
+    blockNumber?: SortOrder
+    direction?: SortOrder
   }
 
   export type ChainTransactionSumOrderByAggregateInput = {
@@ -12005,6 +19507,30 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EnumChainTxStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChainTxStatus | EnumChainTxStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChainTxStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChainTxStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChainTxStatusFilter<$PrismaModel>
+    _max?: NestedEnumChainTxStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12031,30 +19557,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTxDirectionFilter<$PrismaModel>
     _max?: NestedEnumTxDirectionFilter<$PrismaModel>
-  }
-
-  export type EnumChainTxStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ChainTxStatus | EnumChainTxStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumChainTxStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChainTxStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumChainTxStatusFilter<$PrismaModel>
-    _max?: NestedEnumChainTxStatusFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumLedgerTypeFilter<$PrismaModel = never> = {
@@ -12191,8 +19693,7 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type UserWalletUserIdChainDerivationIndexCompoundUniqueInput = {
-    userId: string
+  export type UserWalletChainDerivationIndexCompoundUniqueInput = {
     chain: string
     derivationIndex: number
   }
@@ -12208,8 +19709,8 @@ export namespace Prisma {
     chain?: SortOrder
     derivationIndex?: SortOrder
     address?: SortOrder
-    lastKnownBalance?: SortOrder
     createdAt?: SortOrder
+    lastKnownBalance?: SortOrder
   }
 
   export type UserWalletAvgOrderByAggregateInput = {
@@ -12222,8 +19723,8 @@ export namespace Prisma {
     chain?: SortOrder
     derivationIndex?: SortOrder
     address?: SortOrder
-    lastKnownBalance?: SortOrder
     createdAt?: SortOrder
+    lastKnownBalance?: SortOrder
   }
 
   export type UserWalletMinOrderByAggregateInput = {
@@ -12232,8 +19733,8 @@ export namespace Prisma {
     chain?: SortOrder
     derivationIndex?: SortOrder
     address?: SortOrder
-    lastKnownBalance?: SortOrder
     createdAt?: SortOrder
+    lastKnownBalance?: SortOrder
   }
 
   export type UserWalletSumOrderByAggregateInput = {
@@ -12309,11 +19810,344 @@ export namespace Prisma {
     _max?: NestedBigIntFilter<$PrismaModel>
   }
 
-  export type TransactionCreateNestedManyWithoutUserInput = {
-    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
-    createMany?: TransactionCreateManyUserInputEnvelope
-    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  export type EnumTreasuryAccountTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryAccountType | EnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryAccountTypeFilter<$PrismaModel> | $Enums.TreasuryAccountType
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type TreasuryAccountNullableRelationFilter = {
+    is?: TreasuryAccountWhereInput | null
+    isNot?: TreasuryAccountWhereInput | null
+  }
+
+  export type TreasuryAccountListRelationFilter = {
+    every?: TreasuryAccountWhereInput
+    some?: TreasuryAccountWhereInput
+    none?: TreasuryAccountWhereInput
+  }
+
+  export type TreasuryEntryListRelationFilter = {
+    every?: TreasuryEntryWhereInput
+    some?: TreasuryEntryWhereInput
+    none?: TreasuryEntryWhereInput
+  }
+
+  export type TreasuryAccountOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TreasuryEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TreasuryAccountNameCurrencyNetworkCompoundUniqueInput = {
+    name: string
+    currency: string
+    network: string
+  }
+
+  export type TreasuryAccountCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    walletAddress?: SortOrder
+    parentAccountId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TreasuryAccountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    walletAddress?: SortOrder
+    parentAccountId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TreasuryAccountMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    walletAddress?: SortOrder
+    parentAccountId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumTreasuryAccountTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryAccountType | EnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryAccountTypeWithAggregatesFilter<$PrismaModel> | $Enums.TreasuryAccountType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTreasuryAccountTypeFilter<$PrismaModel>
+    _max?: NestedEnumTreasuryAccountTypeFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type EnumTreasuryLedgerReferenceTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryLedgerReferenceType | EnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryLedgerReferenceTypeFilter<$PrismaModel> | $Enums.TreasuryLedgerReferenceType
+  }
+
+  export type TreasuryLedgerCountOrderByAggregateInput = {
+    id?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    description?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    createdByAdminId?: SortOrder
+    locked?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TreasuryLedgerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    description?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    createdByAdminId?: SortOrder
+    locked?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TreasuryLedgerMinOrderByAggregateInput = {
+    id?: SortOrder
+    referenceType?: SortOrder
+    referenceId?: SortOrder
+    description?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    createdByAdminId?: SortOrder
+    locked?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumTreasuryLedgerReferenceTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryLedgerReferenceType | EnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryLedgerReferenceTypeWithAggregatesFilter<$PrismaModel> | $Enums.TreasuryLedgerReferenceType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTreasuryLedgerReferenceTypeFilter<$PrismaModel>
+    _max?: NestedEnumTreasuryLedgerReferenceTypeFilter<$PrismaModel>
+  }
+
+  export type TreasuryLedgerRelationFilter = {
+    is?: TreasuryLedgerWhereInput
+    isNot?: TreasuryLedgerWhereInput
+  }
+
+  export type TreasuryAccountRelationFilter = {
+    is?: TreasuryAccountWhereInput
+    isNot?: TreasuryAccountWhereInput
+  }
+
+  export type TreasuryEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    ledgerId?: SortOrder
+    accountId?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    currency?: SortOrder
+    network?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TreasuryEntryAvgOrderByAggregateInput = {
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+  }
+
+  export type TreasuryEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ledgerId?: SortOrder
+    accountId?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    currency?: SortOrder
+    network?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TreasuryEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    ledgerId?: SortOrder
+    accountId?: SortOrder
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+    currency?: SortOrder
+    network?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TreasuryEntrySumOrderByAggregateInput = {
+    debitAmount?: SortOrder
+    creditAmount?: SortOrder
+  }
+
+  export type BalanceSnapshotCountOrderByAggregateInput = {
+    id?: SortOrder
+    snapshotTime?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    totalAssets?: SortOrder
+    totalLiabilities?: SortOrder
+    totalEquity?: SortOrder
+  }
+
+  export type BalanceSnapshotAvgOrderByAggregateInput = {
+    totalAssets?: SortOrder
+    totalLiabilities?: SortOrder
+    totalEquity?: SortOrder
+  }
+
+  export type BalanceSnapshotMaxOrderByAggregateInput = {
+    id?: SortOrder
+    snapshotTime?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    totalAssets?: SortOrder
+    totalLiabilities?: SortOrder
+    totalEquity?: SortOrder
+  }
+
+  export type BalanceSnapshotMinOrderByAggregateInput = {
+    id?: SortOrder
+    snapshotTime?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    totalAssets?: SortOrder
+    totalLiabilities?: SortOrder
+    totalEquity?: SortOrder
+  }
+
+  export type BalanceSnapshotSumOrderByAggregateInput = {
+    totalAssets?: SortOrder
+    totalLiabilities?: SortOrder
+    totalEquity?: SortOrder
+  }
+
+  export type TreasuryStateCountOrderByAggregateInput = {
+    chain?: SortOrder
+    totalOnchainBalance?: SortOrder
+    totalUserLiabilities?: SortOrder
+    sweepableBalance?: SortOrder
+    lastSyncedAt?: SortOrder
+    locked?: SortOrder
+    lockedAt?: SortOrder
+    lockedBy?: SortOrder
+  }
+
+  export type TreasuryStateMaxOrderByAggregateInput = {
+    chain?: SortOrder
+    totalOnchainBalance?: SortOrder
+    totalUserLiabilities?: SortOrder
+    sweepableBalance?: SortOrder
+    lastSyncedAt?: SortOrder
+    locked?: SortOrder
+    lockedAt?: SortOrder
+    lockedBy?: SortOrder
+  }
+
+  export type TreasuryStateMinOrderByAggregateInput = {
+    chain?: SortOrder
+    totalOnchainBalance?: SortOrder
+    totalUserLiabilities?: SortOrder
+    sweepableBalance?: SortOrder
+    lastSyncedAt?: SortOrder
+    locked?: SortOrder
+    lockedAt?: SortOrder
+    lockedBy?: SortOrder
+  }
+
+  export type EnumSweepStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SweepStatus | EnumSweepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSweepStatusFilter<$PrismaModel> | $Enums.SweepStatus
+  }
+
+  export type SweepCountOrderByAggregateInput = {
+    id?: SortOrder
+    chain?: SortOrder
+    amount?: SortOrder
+    amountRaw?: SortOrder
+    fromWallet?: SortOrder
+    toWallet?: SortOrder
+    txHash?: SortOrder
+    status?: SortOrder
+    initiatedBy?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    confirmedAt?: SortOrder
+  }
+
+  export type SweepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    chain?: SortOrder
+    amount?: SortOrder
+    amountRaw?: SortOrder
+    fromWallet?: SortOrder
+    toWallet?: SortOrder
+    txHash?: SortOrder
+    status?: SortOrder
+    initiatedBy?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    confirmedAt?: SortOrder
+  }
+
+  export type SweepMinOrderByAggregateInput = {
+    id?: SortOrder
+    chain?: SortOrder
+    amount?: SortOrder
+    amountRaw?: SortOrder
+    fromWallet?: SortOrder
+    toWallet?: SortOrder
+    txHash?: SortOrder
+    status?: SortOrder
+    initiatedBy?: SortOrder
+    error?: SortOrder
+    createdAt?: SortOrder
+    confirmedAt?: SortOrder
+  }
+
+  export type EnumSweepStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SweepStatus | EnumSweepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSweepStatusWithAggregatesFilter<$PrismaModel> | $Enums.SweepStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSweepStatusFilter<$PrismaModel>
+    _max?: NestedEnumSweepStatusFilter<$PrismaModel>
   }
 
   export type ChainTransactionCreateNestedManyWithoutUserInput = {
@@ -12323,11 +20157,11 @@ export namespace Prisma {
     connect?: ChainTransactionWhereUniqueInput | ChainTransactionWhereUniqueInput[]
   }
 
-  export type WithdrawalCreateNestedManyWithoutUserInput = {
-    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
-    createMany?: WithdrawalCreateManyUserInputEnvelope
-    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  export type TransactionCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
   export type UserWalletCreateNestedManyWithoutUserInput = {
@@ -12337,11 +20171,11 @@ export namespace Prisma {
     connect?: UserWalletWhereUniqueInput | UserWalletWhereUniqueInput[]
   }
 
-  export type TransactionUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
-    createMany?: TransactionCreateManyUserInputEnvelope
-    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  export type WithdrawalCreateNestedManyWithoutUserInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
   }
 
   export type ChainTransactionUncheckedCreateNestedManyWithoutUserInput = {
@@ -12351,11 +20185,11 @@ export namespace Prisma {
     connect?: ChainTransactionWhereUniqueInput | ChainTransactionWhereUniqueInput[]
   }
 
-  export type WithdrawalUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
-    createMany?: WithdrawalCreateManyUserInputEnvelope
-    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  export type TransactionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
   export type UserWalletUncheckedCreateNestedManyWithoutUserInput = {
@@ -12363,6 +20197,13 @@ export namespace Prisma {
     connectOrCreate?: UserWalletCreateOrConnectWithoutUserInput | UserWalletCreateOrConnectWithoutUserInput[]
     createMany?: UserWalletCreateManyUserInputEnvelope
     connect?: UserWalletWhereUniqueInput | UserWalletWhereUniqueInput[]
+  }
+
+  export type WithdrawalUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -12389,20 +20230,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type TransactionUpdateManyWithoutUserNestedInput = {
-    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
-    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: TransactionCreateManyUserInputEnvelope
-    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
-  }
-
   export type ChainTransactionUpdateManyWithoutUserNestedInput = {
     create?: XOR<ChainTransactionCreateWithoutUserInput, ChainTransactionUncheckedCreateWithoutUserInput> | ChainTransactionCreateWithoutUserInput[] | ChainTransactionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ChainTransactionCreateOrConnectWithoutUserInput | ChainTransactionCreateOrConnectWithoutUserInput[]
@@ -12417,18 +20244,18 @@ export namespace Prisma {
     deleteMany?: ChainTransactionScalarWhereInput | ChainTransactionScalarWhereInput[]
   }
 
-  export type WithdrawalUpdateManyWithoutUserNestedInput = {
-    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
-    upsert?: WithdrawalUpsertWithWhereUniqueWithoutUserInput | WithdrawalUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: WithdrawalCreateManyUserInputEnvelope
-    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    update?: WithdrawalUpdateWithWhereUniqueWithoutUserInput | WithdrawalUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: WithdrawalUpdateManyWithWhereWithoutUserInput | WithdrawalUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  export type TransactionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
   export type UserWalletUpdateManyWithoutUserNestedInput = {
@@ -12445,18 +20272,18 @@ export namespace Prisma {
     deleteMany?: UserWalletScalarWhereInput | UserWalletScalarWhereInput[]
   }
 
-  export type TransactionUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
-    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: TransactionCreateManyUserInputEnvelope
-    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
-    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  export type WithdrawalUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutUserInput | WithdrawalUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutUserInput | WithdrawalUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutUserInput | WithdrawalUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
   }
 
   export type ChainTransactionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -12473,18 +20300,18 @@ export namespace Prisma {
     deleteMany?: ChainTransactionScalarWhereInput | ChainTransactionScalarWhereInput[]
   }
 
-  export type WithdrawalUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
-    upsert?: WithdrawalUpsertWithWhereUniqueWithoutUserInput | WithdrawalUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: WithdrawalCreateManyUserInputEnvelope
-    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
-    update?: WithdrawalUpdateWithWhereUniqueWithoutUserInput | WithdrawalUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: WithdrawalUpdateManyWithWhereWithoutUserInput | WithdrawalUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  export type TransactionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
   export type UserWalletUncheckedUpdateManyWithoutUserNestedInput = {
@@ -12499,6 +20326,20 @@ export namespace Prisma {
     update?: UserWalletUpdateWithWhereUniqueWithoutUserInput | UserWalletUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserWalletUpdateManyWithWhereWithoutUserInput | UserWalletUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserWalletScalarWhereInput | UserWalletScalarWhereInput[]
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutUserInput | WithdrawalUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutUserInput | WithdrawalUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutUserInput | WithdrawalUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutTransactionsInput = {
@@ -12533,6 +20374,14 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type EnumChainTxStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ChainTxStatus
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type NullableBigIntFieldUpdateOperationsInput = {
     set?: bigint | number | null
     increment?: bigint | number
@@ -12543,14 +20392,6 @@ export namespace Prisma {
 
   export type EnumTxDirectionFieldUpdateOperationsInput = {
     set?: $Enums.TxDirection
-  }
-
-  export type EnumChainTxStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ChainTxStatus
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutChainTransactionsNestedInput = {
@@ -12607,6 +20448,192 @@ export namespace Prisma {
     decrement?: bigint | number
     multiply?: bigint | number
     divide?: bigint | number
+  }
+
+  export type TreasuryAccountCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<TreasuryAccountCreateWithoutChildrenInput, TreasuryAccountUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutChildrenInput
+    connect?: TreasuryAccountWhereUniqueInput
+  }
+
+  export type TreasuryAccountCreateNestedManyWithoutParentAccountInput = {
+    create?: XOR<TreasuryAccountCreateWithoutParentAccountInput, TreasuryAccountUncheckedCreateWithoutParentAccountInput> | TreasuryAccountCreateWithoutParentAccountInput[] | TreasuryAccountUncheckedCreateWithoutParentAccountInput[]
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutParentAccountInput | TreasuryAccountCreateOrConnectWithoutParentAccountInput[]
+    createMany?: TreasuryAccountCreateManyParentAccountInputEnvelope
+    connect?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+  }
+
+  export type TreasuryEntryCreateNestedManyWithoutAccountInput = {
+    create?: XOR<TreasuryEntryCreateWithoutAccountInput, TreasuryEntryUncheckedCreateWithoutAccountInput> | TreasuryEntryCreateWithoutAccountInput[] | TreasuryEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutAccountInput | TreasuryEntryCreateOrConnectWithoutAccountInput[]
+    createMany?: TreasuryEntryCreateManyAccountInputEnvelope
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+  }
+
+  export type TreasuryAccountUncheckedCreateNestedManyWithoutParentAccountInput = {
+    create?: XOR<TreasuryAccountCreateWithoutParentAccountInput, TreasuryAccountUncheckedCreateWithoutParentAccountInput> | TreasuryAccountCreateWithoutParentAccountInput[] | TreasuryAccountUncheckedCreateWithoutParentAccountInput[]
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutParentAccountInput | TreasuryAccountCreateOrConnectWithoutParentAccountInput[]
+    createMany?: TreasuryAccountCreateManyParentAccountInputEnvelope
+    connect?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+  }
+
+  export type TreasuryEntryUncheckedCreateNestedManyWithoutAccountInput = {
+    create?: XOR<TreasuryEntryCreateWithoutAccountInput, TreasuryEntryUncheckedCreateWithoutAccountInput> | TreasuryEntryCreateWithoutAccountInput[] | TreasuryEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutAccountInput | TreasuryEntryCreateOrConnectWithoutAccountInput[]
+    createMany?: TreasuryEntryCreateManyAccountInputEnvelope
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+  }
+
+  export type EnumTreasuryAccountTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TreasuryAccountType
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type TreasuryAccountUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<TreasuryAccountCreateWithoutChildrenInput, TreasuryAccountUncheckedCreateWithoutChildrenInput>
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutChildrenInput
+    upsert?: TreasuryAccountUpsertWithoutChildrenInput
+    disconnect?: TreasuryAccountWhereInput | boolean
+    delete?: TreasuryAccountWhereInput | boolean
+    connect?: TreasuryAccountWhereUniqueInput
+    update?: XOR<XOR<TreasuryAccountUpdateToOneWithWhereWithoutChildrenInput, TreasuryAccountUpdateWithoutChildrenInput>, TreasuryAccountUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type TreasuryAccountUpdateManyWithoutParentAccountNestedInput = {
+    create?: XOR<TreasuryAccountCreateWithoutParentAccountInput, TreasuryAccountUncheckedCreateWithoutParentAccountInput> | TreasuryAccountCreateWithoutParentAccountInput[] | TreasuryAccountUncheckedCreateWithoutParentAccountInput[]
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutParentAccountInput | TreasuryAccountCreateOrConnectWithoutParentAccountInput[]
+    upsert?: TreasuryAccountUpsertWithWhereUniqueWithoutParentAccountInput | TreasuryAccountUpsertWithWhereUniqueWithoutParentAccountInput[]
+    createMany?: TreasuryAccountCreateManyParentAccountInputEnvelope
+    set?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    disconnect?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    delete?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    connect?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    update?: TreasuryAccountUpdateWithWhereUniqueWithoutParentAccountInput | TreasuryAccountUpdateWithWhereUniqueWithoutParentAccountInput[]
+    updateMany?: TreasuryAccountUpdateManyWithWhereWithoutParentAccountInput | TreasuryAccountUpdateManyWithWhereWithoutParentAccountInput[]
+    deleteMany?: TreasuryAccountScalarWhereInput | TreasuryAccountScalarWhereInput[]
+  }
+
+  export type TreasuryEntryUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<TreasuryEntryCreateWithoutAccountInput, TreasuryEntryUncheckedCreateWithoutAccountInput> | TreasuryEntryCreateWithoutAccountInput[] | TreasuryEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutAccountInput | TreasuryEntryCreateOrConnectWithoutAccountInput[]
+    upsert?: TreasuryEntryUpsertWithWhereUniqueWithoutAccountInput | TreasuryEntryUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: TreasuryEntryCreateManyAccountInputEnvelope
+    set?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    disconnect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    delete?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    update?: TreasuryEntryUpdateWithWhereUniqueWithoutAccountInput | TreasuryEntryUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: TreasuryEntryUpdateManyWithWhereWithoutAccountInput | TreasuryEntryUpdateManyWithWhereWithoutAccountInput[]
+    deleteMany?: TreasuryEntryScalarWhereInput | TreasuryEntryScalarWhereInput[]
+  }
+
+  export type TreasuryAccountUncheckedUpdateManyWithoutParentAccountNestedInput = {
+    create?: XOR<TreasuryAccountCreateWithoutParentAccountInput, TreasuryAccountUncheckedCreateWithoutParentAccountInput> | TreasuryAccountCreateWithoutParentAccountInput[] | TreasuryAccountUncheckedCreateWithoutParentAccountInput[]
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutParentAccountInput | TreasuryAccountCreateOrConnectWithoutParentAccountInput[]
+    upsert?: TreasuryAccountUpsertWithWhereUniqueWithoutParentAccountInput | TreasuryAccountUpsertWithWhereUniqueWithoutParentAccountInput[]
+    createMany?: TreasuryAccountCreateManyParentAccountInputEnvelope
+    set?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    disconnect?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    delete?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    connect?: TreasuryAccountWhereUniqueInput | TreasuryAccountWhereUniqueInput[]
+    update?: TreasuryAccountUpdateWithWhereUniqueWithoutParentAccountInput | TreasuryAccountUpdateWithWhereUniqueWithoutParentAccountInput[]
+    updateMany?: TreasuryAccountUpdateManyWithWhereWithoutParentAccountInput | TreasuryAccountUpdateManyWithWhereWithoutParentAccountInput[]
+    deleteMany?: TreasuryAccountScalarWhereInput | TreasuryAccountScalarWhereInput[]
+  }
+
+  export type TreasuryEntryUncheckedUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<TreasuryEntryCreateWithoutAccountInput, TreasuryEntryUncheckedCreateWithoutAccountInput> | TreasuryEntryCreateWithoutAccountInput[] | TreasuryEntryUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutAccountInput | TreasuryEntryCreateOrConnectWithoutAccountInput[]
+    upsert?: TreasuryEntryUpsertWithWhereUniqueWithoutAccountInput | TreasuryEntryUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: TreasuryEntryCreateManyAccountInputEnvelope
+    set?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    disconnect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    delete?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    update?: TreasuryEntryUpdateWithWhereUniqueWithoutAccountInput | TreasuryEntryUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: TreasuryEntryUpdateManyWithWhereWithoutAccountInput | TreasuryEntryUpdateManyWithWhereWithoutAccountInput[]
+    deleteMany?: TreasuryEntryScalarWhereInput | TreasuryEntryScalarWhereInput[]
+  }
+
+  export type TreasuryEntryCreateNestedManyWithoutLedgerInput = {
+    create?: XOR<TreasuryEntryCreateWithoutLedgerInput, TreasuryEntryUncheckedCreateWithoutLedgerInput> | TreasuryEntryCreateWithoutLedgerInput[] | TreasuryEntryUncheckedCreateWithoutLedgerInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutLedgerInput | TreasuryEntryCreateOrConnectWithoutLedgerInput[]
+    createMany?: TreasuryEntryCreateManyLedgerInputEnvelope
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+  }
+
+  export type TreasuryEntryUncheckedCreateNestedManyWithoutLedgerInput = {
+    create?: XOR<TreasuryEntryCreateWithoutLedgerInput, TreasuryEntryUncheckedCreateWithoutLedgerInput> | TreasuryEntryCreateWithoutLedgerInput[] | TreasuryEntryUncheckedCreateWithoutLedgerInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutLedgerInput | TreasuryEntryCreateOrConnectWithoutLedgerInput[]
+    createMany?: TreasuryEntryCreateManyLedgerInputEnvelope
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+  }
+
+  export type EnumTreasuryLedgerReferenceTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TreasuryLedgerReferenceType
+  }
+
+  export type TreasuryEntryUpdateManyWithoutLedgerNestedInput = {
+    create?: XOR<TreasuryEntryCreateWithoutLedgerInput, TreasuryEntryUncheckedCreateWithoutLedgerInput> | TreasuryEntryCreateWithoutLedgerInput[] | TreasuryEntryUncheckedCreateWithoutLedgerInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutLedgerInput | TreasuryEntryCreateOrConnectWithoutLedgerInput[]
+    upsert?: TreasuryEntryUpsertWithWhereUniqueWithoutLedgerInput | TreasuryEntryUpsertWithWhereUniqueWithoutLedgerInput[]
+    createMany?: TreasuryEntryCreateManyLedgerInputEnvelope
+    set?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    disconnect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    delete?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    update?: TreasuryEntryUpdateWithWhereUniqueWithoutLedgerInput | TreasuryEntryUpdateWithWhereUniqueWithoutLedgerInput[]
+    updateMany?: TreasuryEntryUpdateManyWithWhereWithoutLedgerInput | TreasuryEntryUpdateManyWithWhereWithoutLedgerInput[]
+    deleteMany?: TreasuryEntryScalarWhereInput | TreasuryEntryScalarWhereInput[]
+  }
+
+  export type TreasuryEntryUncheckedUpdateManyWithoutLedgerNestedInput = {
+    create?: XOR<TreasuryEntryCreateWithoutLedgerInput, TreasuryEntryUncheckedCreateWithoutLedgerInput> | TreasuryEntryCreateWithoutLedgerInput[] | TreasuryEntryUncheckedCreateWithoutLedgerInput[]
+    connectOrCreate?: TreasuryEntryCreateOrConnectWithoutLedgerInput | TreasuryEntryCreateOrConnectWithoutLedgerInput[]
+    upsert?: TreasuryEntryUpsertWithWhereUniqueWithoutLedgerInput | TreasuryEntryUpsertWithWhereUniqueWithoutLedgerInput[]
+    createMany?: TreasuryEntryCreateManyLedgerInputEnvelope
+    set?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    disconnect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    delete?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    connect?: TreasuryEntryWhereUniqueInput | TreasuryEntryWhereUniqueInput[]
+    update?: TreasuryEntryUpdateWithWhereUniqueWithoutLedgerInput | TreasuryEntryUpdateWithWhereUniqueWithoutLedgerInput[]
+    updateMany?: TreasuryEntryUpdateManyWithWhereWithoutLedgerInput | TreasuryEntryUpdateManyWithWhereWithoutLedgerInput[]
+    deleteMany?: TreasuryEntryScalarWhereInput | TreasuryEntryScalarWhereInput[]
+  }
+
+  export type TreasuryLedgerCreateNestedOneWithoutEntriesInput = {
+    create?: XOR<TreasuryLedgerCreateWithoutEntriesInput, TreasuryLedgerUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: TreasuryLedgerCreateOrConnectWithoutEntriesInput
+    connect?: TreasuryLedgerWhereUniqueInput
+  }
+
+  export type TreasuryAccountCreateNestedOneWithoutEntriesInput = {
+    create?: XOR<TreasuryAccountCreateWithoutEntriesInput, TreasuryAccountUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutEntriesInput
+    connect?: TreasuryAccountWhereUniqueInput
+  }
+
+  export type TreasuryLedgerUpdateOneRequiredWithoutEntriesNestedInput = {
+    create?: XOR<TreasuryLedgerCreateWithoutEntriesInput, TreasuryLedgerUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: TreasuryLedgerCreateOrConnectWithoutEntriesInput
+    upsert?: TreasuryLedgerUpsertWithoutEntriesInput
+    connect?: TreasuryLedgerWhereUniqueInput
+    update?: XOR<XOR<TreasuryLedgerUpdateToOneWithWhereWithoutEntriesInput, TreasuryLedgerUpdateWithoutEntriesInput>, TreasuryLedgerUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type TreasuryAccountUpdateOneRequiredWithoutEntriesNestedInput = {
+    create?: XOR<TreasuryAccountCreateWithoutEntriesInput, TreasuryAccountUncheckedCreateWithoutEntriesInput>
+    connectOrCreate?: TreasuryAccountCreateOrConnectWithoutEntriesInput
+    upsert?: TreasuryAccountUpsertWithoutEntriesInput
+    connect?: TreasuryAccountWhereUniqueInput
+    update?: XOR<XOR<TreasuryAccountUpdateToOneWithWhereWithoutEntriesInput, TreasuryAccountUpdateWithoutEntriesInput>, TreasuryAccountUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type EnumSweepStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SweepStatus
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12785,24 +20812,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
-    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
-    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
-    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
-    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
-  }
-
-  export type NestedEnumTxDirectionFilter<$PrismaModel = never> = {
-    equals?: $Enums.TxDirection | EnumTxDirectionFieldRefInput<$PrismaModel>
-    in?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumTxDirectionFilter<$PrismaModel> | $Enums.TxDirection
-  }
-
   export type NestedEnumChainTxStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ChainTxStatus | EnumChainTxStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
@@ -12819,6 +20828,24 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type NestedEnumTxDirectionFilter<$PrismaModel = never> = {
+    equals?: $Enums.TxDirection | EnumTxDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TxDirection[] | ListEnumTxDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTxDirectionFilter<$PrismaModel> | $Enums.TxDirection
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12847,6 +20874,30 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumChainTxStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChainTxStatus | EnumChainTxStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChainTxStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChainTxStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChainTxStatusFilter<$PrismaModel>
+    _max?: NestedEnumChainTxStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12884,30 +20935,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTxDirectionFilter<$PrismaModel>
     _max?: NestedEnumTxDirectionFilter<$PrismaModel>
-  }
-
-  export type NestedEnumChainTxStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ChainTxStatus | EnumChainTxStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.ChainTxStatus[] | ListEnumChainTxStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumChainTxStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChainTxStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumChainTxStatusFilter<$PrismaModel>
-    _max?: NestedEnumChainTxStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumLedgerTypeFilter<$PrismaModel = never> = {
@@ -12970,6 +20997,106 @@ export namespace Prisma {
     _max?: NestedBigIntFilter<$PrismaModel>
   }
 
+  export type NestedEnumTreasuryAccountTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryAccountType | EnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryAccountTypeFilter<$PrismaModel> | $Enums.TreasuryAccountType
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumTreasuryAccountTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryAccountType | EnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryAccountTypeWithAggregatesFilter<$PrismaModel> | $Enums.TreasuryAccountType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTreasuryAccountTypeFilter<$PrismaModel>
+    _max?: NestedEnumTreasuryAccountTypeFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTreasuryLedgerReferenceTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryLedgerReferenceType | EnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryLedgerReferenceTypeFilter<$PrismaModel> | $Enums.TreasuryLedgerReferenceType
+  }
+
+  export type NestedEnumTreasuryLedgerReferenceTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TreasuryLedgerReferenceType | EnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TreasuryLedgerReferenceType[] | ListEnumTreasuryLedgerReferenceTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTreasuryLedgerReferenceTypeWithAggregatesFilter<$PrismaModel> | $Enums.TreasuryLedgerReferenceType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTreasuryLedgerReferenceTypeFilter<$PrismaModel>
+    _max?: NestedEnumTreasuryLedgerReferenceTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSweepStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SweepStatus | EnumSweepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSweepStatusFilter<$PrismaModel> | $Enums.SweepStatus
+  }
+
+  export type NestedEnumSweepStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SweepStatus | EnumSweepStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SweepStatus[] | ListEnumSweepStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSweepStatusWithAggregatesFilter<$PrismaModel> | $Enums.SweepStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSweepStatusFilter<$PrismaModel>
+    _max?: NestedEnumSweepStatusFilter<$PrismaModel>
+  }
+
+  export type ChainTransactionCreateWithoutUserInput = {
+    id?: string
+    chain: string
+    to: string
+    amount: string
+    txHash?: string | null
+    status?: $Enums.ChainTxStatus
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+    blockNumber?: bigint | number | null
+    direction?: $Enums.TxDirection
+  }
+
+  export type ChainTransactionUncheckedCreateWithoutUserInput = {
+    id?: string
+    chain: string
+    to: string
+    amount: string
+    txHash?: string | null
+    status?: $Enums.ChainTxStatus
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+    blockNumber?: bigint | number | null
+    direction?: $Enums.TxDirection
+  }
+
+  export type ChainTransactionCreateOrConnectWithoutUserInput = {
+    where: ChainTransactionWhereUniqueInput
+    create: XOR<ChainTransactionCreateWithoutUserInput, ChainTransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type ChainTransactionCreateManyUserInputEnvelope = {
+    data: ChainTransactionCreateManyUserInput | ChainTransactionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type TransactionCreateWithoutUserInput = {
     id?: string
     amount: number
@@ -12996,39 +21123,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ChainTransactionCreateWithoutUserInput = {
+  export type UserWalletCreateWithoutUserInput = {
     id?: string
     chain: string
-    to: string
-    amount: string
-    txHash?: string | null
-    blockNumber?: bigint | number | null
-    direction?: $Enums.TxDirection
-    status?: $Enums.ChainTxStatus
+    derivationIndex: number
+    address: string
     createdAt?: Date | string
-    confirmedAt?: Date | string | null
+    lastKnownBalance?: string
   }
 
-  export type ChainTransactionUncheckedCreateWithoutUserInput = {
+  export type UserWalletUncheckedCreateWithoutUserInput = {
     id?: string
     chain: string
-    to: string
-    amount: string
-    txHash?: string | null
-    blockNumber?: bigint | number | null
-    direction?: $Enums.TxDirection
-    status?: $Enums.ChainTxStatus
+    derivationIndex: number
+    address: string
     createdAt?: Date | string
-    confirmedAt?: Date | string | null
+    lastKnownBalance?: string
   }
 
-  export type ChainTransactionCreateOrConnectWithoutUserInput = {
-    where: ChainTransactionWhereUniqueInput
-    create: XOR<ChainTransactionCreateWithoutUserInput, ChainTransactionUncheckedCreateWithoutUserInput>
+  export type UserWalletCreateOrConnectWithoutUserInput = {
+    where: UserWalletWhereUniqueInput
+    create: XOR<UserWalletCreateWithoutUserInput, UserWalletUncheckedCreateWithoutUserInput>
   }
 
-  export type ChainTransactionCreateManyUserInputEnvelope = {
-    data: ChainTransactionCreateManyUserInput | ChainTransactionCreateManyUserInput[]
+  export type UserWalletCreateManyUserInputEnvelope = {
+    data: UserWalletCreateManyUserInput | UserWalletCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -13058,32 +21177,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserWalletCreateWithoutUserInput = {
-    id?: string
-    chain: string
-    derivationIndex: number
-    address: string
-    lastKnownBalance?: string
-    createdAt?: Date | string
+  export type ChainTransactionUpsertWithWhereUniqueWithoutUserInput = {
+    where: ChainTransactionWhereUniqueInput
+    update: XOR<ChainTransactionUpdateWithoutUserInput, ChainTransactionUncheckedUpdateWithoutUserInput>
+    create: XOR<ChainTransactionCreateWithoutUserInput, ChainTransactionUncheckedCreateWithoutUserInput>
   }
 
-  export type UserWalletUncheckedCreateWithoutUserInput = {
-    id?: string
-    chain: string
-    derivationIndex: number
-    address: string
-    lastKnownBalance?: string
-    createdAt?: Date | string
+  export type ChainTransactionUpdateWithWhereUniqueWithoutUserInput = {
+    where: ChainTransactionWhereUniqueInput
+    data: XOR<ChainTransactionUpdateWithoutUserInput, ChainTransactionUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserWalletCreateOrConnectWithoutUserInput = {
-    where: UserWalletWhereUniqueInput
-    create: XOR<UserWalletCreateWithoutUserInput, UserWalletUncheckedCreateWithoutUserInput>
+  export type ChainTransactionUpdateManyWithWhereWithoutUserInput = {
+    where: ChainTransactionScalarWhereInput
+    data: XOR<ChainTransactionUpdateManyMutationInput, ChainTransactionUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type UserWalletCreateManyUserInputEnvelope = {
-    data: UserWalletCreateManyUserInput | UserWalletCreateManyUserInput[]
-    skipDuplicates?: boolean
+  export type ChainTransactionScalarWhereInput = {
+    AND?: ChainTransactionScalarWhereInput | ChainTransactionScalarWhereInput[]
+    OR?: ChainTransactionScalarWhereInput[]
+    NOT?: ChainTransactionScalarWhereInput | ChainTransactionScalarWhereInput[]
+    id?: StringFilter<"ChainTransaction"> | string
+    userId?: StringFilter<"ChainTransaction"> | string
+    chain?: StringFilter<"ChainTransaction"> | string
+    to?: StringFilter<"ChainTransaction"> | string
+    amount?: StringFilter<"ChainTransaction"> | string
+    txHash?: StringNullableFilter<"ChainTransaction"> | string | null
+    status?: EnumChainTxStatusFilter<"ChainTransaction"> | $Enums.ChainTxStatus
+    createdAt?: DateTimeFilter<"ChainTransaction"> | Date | string
+    confirmedAt?: DateTimeNullableFilter<"ChainTransaction"> | Date | string | null
+    blockNumber?: BigIntNullableFilter<"ChainTransaction"> | bigint | number | null
+    direction?: EnumTxDirectionFilter<"ChainTransaction"> | $Enums.TxDirection
   }
 
   export type TransactionUpsertWithWhereUniqueWithoutUserInput = {
@@ -13114,37 +21238,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
   }
 
-  export type ChainTransactionUpsertWithWhereUniqueWithoutUserInput = {
-    where: ChainTransactionWhereUniqueInput
-    update: XOR<ChainTransactionUpdateWithoutUserInput, ChainTransactionUncheckedUpdateWithoutUserInput>
-    create: XOR<ChainTransactionCreateWithoutUserInput, ChainTransactionUncheckedCreateWithoutUserInput>
+  export type UserWalletUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserWalletWhereUniqueInput
+    update: XOR<UserWalletUpdateWithoutUserInput, UserWalletUncheckedUpdateWithoutUserInput>
+    create: XOR<UserWalletCreateWithoutUserInput, UserWalletUncheckedCreateWithoutUserInput>
   }
 
-  export type ChainTransactionUpdateWithWhereUniqueWithoutUserInput = {
-    where: ChainTransactionWhereUniqueInput
-    data: XOR<ChainTransactionUpdateWithoutUserInput, ChainTransactionUncheckedUpdateWithoutUserInput>
+  export type UserWalletUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserWalletWhereUniqueInput
+    data: XOR<UserWalletUpdateWithoutUserInput, UserWalletUncheckedUpdateWithoutUserInput>
   }
 
-  export type ChainTransactionUpdateManyWithWhereWithoutUserInput = {
-    where: ChainTransactionScalarWhereInput
-    data: XOR<ChainTransactionUpdateManyMutationInput, ChainTransactionUncheckedUpdateManyWithoutUserInput>
+  export type UserWalletUpdateManyWithWhereWithoutUserInput = {
+    where: UserWalletScalarWhereInput
+    data: XOR<UserWalletUpdateManyMutationInput, UserWalletUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type ChainTransactionScalarWhereInput = {
-    AND?: ChainTransactionScalarWhereInput | ChainTransactionScalarWhereInput[]
-    OR?: ChainTransactionScalarWhereInput[]
-    NOT?: ChainTransactionScalarWhereInput | ChainTransactionScalarWhereInput[]
-    id?: StringFilter<"ChainTransaction"> | string
-    userId?: StringFilter<"ChainTransaction"> | string
-    chain?: StringFilter<"ChainTransaction"> | string
-    to?: StringFilter<"ChainTransaction"> | string
-    amount?: StringFilter<"ChainTransaction"> | string
-    txHash?: StringNullableFilter<"ChainTransaction"> | string | null
-    blockNumber?: BigIntNullableFilter<"ChainTransaction"> | bigint | number | null
-    direction?: EnumTxDirectionFilter<"ChainTransaction"> | $Enums.TxDirection
-    status?: EnumChainTxStatusFilter<"ChainTransaction"> | $Enums.ChainTxStatus
-    createdAt?: DateTimeFilter<"ChainTransaction"> | Date | string
-    confirmedAt?: DateTimeNullableFilter<"ChainTransaction"> | Date | string | null
+  export type UserWalletScalarWhereInput = {
+    AND?: UserWalletScalarWhereInput | UserWalletScalarWhereInput[]
+    OR?: UserWalletScalarWhereInput[]
+    NOT?: UserWalletScalarWhereInput | UserWalletScalarWhereInput[]
+    id?: StringFilter<"UserWallet"> | string
+    userId?: StringFilter<"UserWallet"> | string
+    chain?: StringFilter<"UserWallet"> | string
+    derivationIndex?: IntFilter<"UserWallet"> | number
+    address?: StringFilter<"UserWallet"> | string
+    createdAt?: DateTimeFilter<"UserWallet"> | Date | string
+    lastKnownBalance?: StringFilter<"UserWallet"> | string
   }
 
   export type WithdrawalUpsertWithWhereUniqueWithoutUserInput = {
@@ -13175,35 +21295,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Withdrawal"> | Date | string
   }
 
-  export type UserWalletUpsertWithWhereUniqueWithoutUserInput = {
-    where: UserWalletWhereUniqueInput
-    update: XOR<UserWalletUpdateWithoutUserInput, UserWalletUncheckedUpdateWithoutUserInput>
-    create: XOR<UserWalletCreateWithoutUserInput, UserWalletUncheckedCreateWithoutUserInput>
-  }
-
-  export type UserWalletUpdateWithWhereUniqueWithoutUserInput = {
-    where: UserWalletWhereUniqueInput
-    data: XOR<UserWalletUpdateWithoutUserInput, UserWalletUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserWalletUpdateManyWithWhereWithoutUserInput = {
-    where: UserWalletScalarWhereInput
-    data: XOR<UserWalletUpdateManyMutationInput, UserWalletUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type UserWalletScalarWhereInput = {
-    AND?: UserWalletScalarWhereInput | UserWalletScalarWhereInput[]
-    OR?: UserWalletScalarWhereInput[]
-    NOT?: UserWalletScalarWhereInput | UserWalletScalarWhereInput[]
-    id?: StringFilter<"UserWallet"> | string
-    userId?: StringFilter<"UserWallet"> | string
-    chain?: StringFilter<"UserWallet"> | string
-    derivationIndex?: IntFilter<"UserWallet"> | number
-    address?: StringFilter<"UserWallet"> | string
-    lastKnownBalance?: StringFilter<"UserWallet"> | string
-    createdAt?: DateTimeFilter<"UserWallet"> | Date | string
-  }
-
   export type UserCreateWithoutTransactionsInput = {
     id?: string
     email: string
@@ -13214,8 +21305,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     chainTransactions?: ChainTransactionCreateNestedManyWithoutUserInput
-    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     wallets?: UserWalletCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -13228,8 +21319,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     chainTransactions?: ChainTransactionUncheckedCreateNestedManyWithoutUserInput
-    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     wallets?: UserWalletUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -13258,8 +21349,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chainTransactions?: ChainTransactionUpdateManyWithoutUserNestedInput
-    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -13272,8 +21363,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chainTransactions?: ChainTransactionUncheckedUpdateManyWithoutUserNestedInput
-    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutChainTransactionsInput = {
@@ -13286,8 +21377,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: TransactionCreateNestedManyWithoutUserInput
-    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     wallets?: UserWalletCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutChainTransactionsInput = {
@@ -13300,8 +21391,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
-    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     wallets?: UserWalletUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutChainTransactionsInput = {
@@ -13330,8 +21421,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: TransactionUpdateManyWithoutUserNestedInput
-    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutChainTransactionsInput = {
@@ -13344,8 +21435,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
-    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -13357,8 +21448,8 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    transactions?: TransactionCreateNestedManyWithoutUserInput
     chainTransactions?: ChainTransactionCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
     wallets?: UserWalletCreateNestedManyWithoutUserInput
   }
 
@@ -13371,8 +21462,8 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     chainTransactions?: ChainTransactionUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     wallets?: UserWalletUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13401,8 +21492,8 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    transactions?: TransactionUpdateManyWithoutUserNestedInput
     chainTransactions?: ChainTransactionUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUpdateManyWithoutUserNestedInput
   }
 
@@ -13415,8 +21506,8 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     chainTransactions?: ChainTransactionUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     wallets?: UserWalletUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13429,8 +21520,8 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    transactions?: TransactionCreateNestedManyWithoutUserInput
     chainTransactions?: ChainTransactionCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
   }
 
@@ -13443,8 +21534,8 @@ export namespace Prisma {
     balance?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     chainTransactions?: ChainTransactionUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13473,8 +21564,8 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    transactions?: TransactionUpdateManyWithoutUserNestedInput
     chainTransactions?: ChainTransactionUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
   }
 
@@ -13487,9 +21578,395 @@ export namespace Prisma {
     balance?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     chainTransactions?: ChainTransactionUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type TreasuryAccountCreateWithoutChildrenInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    parentAccount?: TreasuryAccountCreateNestedOneWithoutChildrenInput
+    entries?: TreasuryEntryCreateNestedManyWithoutAccountInput
+  }
+
+  export type TreasuryAccountUncheckedCreateWithoutChildrenInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    parentAccountId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    entries?: TreasuryEntryUncheckedCreateNestedManyWithoutAccountInput
+  }
+
+  export type TreasuryAccountCreateOrConnectWithoutChildrenInput = {
+    where: TreasuryAccountWhereUniqueInput
+    create: XOR<TreasuryAccountCreateWithoutChildrenInput, TreasuryAccountUncheckedCreateWithoutChildrenInput>
+  }
+
+  export type TreasuryAccountCreateWithoutParentAccountInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    children?: TreasuryAccountCreateNestedManyWithoutParentAccountInput
+    entries?: TreasuryEntryCreateNestedManyWithoutAccountInput
+  }
+
+  export type TreasuryAccountUncheckedCreateWithoutParentAccountInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    children?: TreasuryAccountUncheckedCreateNestedManyWithoutParentAccountInput
+    entries?: TreasuryEntryUncheckedCreateNestedManyWithoutAccountInput
+  }
+
+  export type TreasuryAccountCreateOrConnectWithoutParentAccountInput = {
+    where: TreasuryAccountWhereUniqueInput
+    create: XOR<TreasuryAccountCreateWithoutParentAccountInput, TreasuryAccountUncheckedCreateWithoutParentAccountInput>
+  }
+
+  export type TreasuryAccountCreateManyParentAccountInputEnvelope = {
+    data: TreasuryAccountCreateManyParentAccountInput | TreasuryAccountCreateManyParentAccountInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TreasuryEntryCreateWithoutAccountInput = {
+    id?: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+    ledger: TreasuryLedgerCreateNestedOneWithoutEntriesInput
+  }
+
+  export type TreasuryEntryUncheckedCreateWithoutAccountInput = {
+    id?: string
+    ledgerId: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+  }
+
+  export type TreasuryEntryCreateOrConnectWithoutAccountInput = {
+    where: TreasuryEntryWhereUniqueInput
+    create: XOR<TreasuryEntryCreateWithoutAccountInput, TreasuryEntryUncheckedCreateWithoutAccountInput>
+  }
+
+  export type TreasuryEntryCreateManyAccountInputEnvelope = {
+    data: TreasuryEntryCreateManyAccountInput | TreasuryEntryCreateManyAccountInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TreasuryAccountUpsertWithoutChildrenInput = {
+    update: XOR<TreasuryAccountUpdateWithoutChildrenInput, TreasuryAccountUncheckedUpdateWithoutChildrenInput>
+    create: XOR<TreasuryAccountCreateWithoutChildrenInput, TreasuryAccountUncheckedCreateWithoutChildrenInput>
+    where?: TreasuryAccountWhereInput
+  }
+
+  export type TreasuryAccountUpdateToOneWithWhereWithoutChildrenInput = {
+    where?: TreasuryAccountWhereInput
+    data: XOR<TreasuryAccountUpdateWithoutChildrenInput, TreasuryAccountUncheckedUpdateWithoutChildrenInput>
+  }
+
+  export type TreasuryAccountUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentAccount?: TreasuryAccountUpdateOneWithoutChildrenNestedInput
+    entries?: TreasuryEntryUpdateManyWithoutAccountNestedInput
+  }
+
+  export type TreasuryAccountUncheckedUpdateWithoutChildrenInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    parentAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    entries?: TreasuryEntryUncheckedUpdateManyWithoutAccountNestedInput
+  }
+
+  export type TreasuryAccountUpsertWithWhereUniqueWithoutParentAccountInput = {
+    where: TreasuryAccountWhereUniqueInput
+    update: XOR<TreasuryAccountUpdateWithoutParentAccountInput, TreasuryAccountUncheckedUpdateWithoutParentAccountInput>
+    create: XOR<TreasuryAccountCreateWithoutParentAccountInput, TreasuryAccountUncheckedCreateWithoutParentAccountInput>
+  }
+
+  export type TreasuryAccountUpdateWithWhereUniqueWithoutParentAccountInput = {
+    where: TreasuryAccountWhereUniqueInput
+    data: XOR<TreasuryAccountUpdateWithoutParentAccountInput, TreasuryAccountUncheckedUpdateWithoutParentAccountInput>
+  }
+
+  export type TreasuryAccountUpdateManyWithWhereWithoutParentAccountInput = {
+    where: TreasuryAccountScalarWhereInput
+    data: XOR<TreasuryAccountUpdateManyMutationInput, TreasuryAccountUncheckedUpdateManyWithoutParentAccountInput>
+  }
+
+  export type TreasuryAccountScalarWhereInput = {
+    AND?: TreasuryAccountScalarWhereInput | TreasuryAccountScalarWhereInput[]
+    OR?: TreasuryAccountScalarWhereInput[]
+    NOT?: TreasuryAccountScalarWhereInput | TreasuryAccountScalarWhereInput[]
+    id?: StringFilter<"TreasuryAccount"> | string
+    name?: StringFilter<"TreasuryAccount"> | string
+    type?: EnumTreasuryAccountTypeFilter<"TreasuryAccount"> | $Enums.TreasuryAccountType
+    network?: StringNullableFilter<"TreasuryAccount"> | string | null
+    currency?: StringFilter<"TreasuryAccount"> | string
+    walletAddress?: StringNullableFilter<"TreasuryAccount"> | string | null
+    parentAccountId?: StringNullableFilter<"TreasuryAccount"> | string | null
+    isActive?: BoolFilter<"TreasuryAccount"> | boolean
+    createdAt?: DateTimeFilter<"TreasuryAccount"> | Date | string
+  }
+
+  export type TreasuryEntryUpsertWithWhereUniqueWithoutAccountInput = {
+    where: TreasuryEntryWhereUniqueInput
+    update: XOR<TreasuryEntryUpdateWithoutAccountInput, TreasuryEntryUncheckedUpdateWithoutAccountInput>
+    create: XOR<TreasuryEntryCreateWithoutAccountInput, TreasuryEntryUncheckedCreateWithoutAccountInput>
+  }
+
+  export type TreasuryEntryUpdateWithWhereUniqueWithoutAccountInput = {
+    where: TreasuryEntryWhereUniqueInput
+    data: XOR<TreasuryEntryUpdateWithoutAccountInput, TreasuryEntryUncheckedUpdateWithoutAccountInput>
+  }
+
+  export type TreasuryEntryUpdateManyWithWhereWithoutAccountInput = {
+    where: TreasuryEntryScalarWhereInput
+    data: XOR<TreasuryEntryUpdateManyMutationInput, TreasuryEntryUncheckedUpdateManyWithoutAccountInput>
+  }
+
+  export type TreasuryEntryScalarWhereInput = {
+    AND?: TreasuryEntryScalarWhereInput | TreasuryEntryScalarWhereInput[]
+    OR?: TreasuryEntryScalarWhereInput[]
+    NOT?: TreasuryEntryScalarWhereInput | TreasuryEntryScalarWhereInput[]
+    id?: StringFilter<"TreasuryEntry"> | string
+    ledgerId?: StringFilter<"TreasuryEntry"> | string
+    accountId?: StringFilter<"TreasuryEntry"> | string
+    debitAmount?: BigIntFilter<"TreasuryEntry"> | bigint | number
+    creditAmount?: BigIntFilter<"TreasuryEntry"> | bigint | number
+    currency?: StringFilter<"TreasuryEntry"> | string
+    network?: StringFilter<"TreasuryEntry"> | string
+    createdAt?: DateTimeFilter<"TreasuryEntry"> | Date | string
+  }
+
+  export type TreasuryEntryCreateWithoutLedgerInput = {
+    id?: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+    account: TreasuryAccountCreateNestedOneWithoutEntriesInput
+  }
+
+  export type TreasuryEntryUncheckedCreateWithoutLedgerInput = {
+    id?: string
+    accountId: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+  }
+
+  export type TreasuryEntryCreateOrConnectWithoutLedgerInput = {
+    where: TreasuryEntryWhereUniqueInput
+    create: XOR<TreasuryEntryCreateWithoutLedgerInput, TreasuryEntryUncheckedCreateWithoutLedgerInput>
+  }
+
+  export type TreasuryEntryCreateManyLedgerInputEnvelope = {
+    data: TreasuryEntryCreateManyLedgerInput | TreasuryEntryCreateManyLedgerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TreasuryEntryUpsertWithWhereUniqueWithoutLedgerInput = {
+    where: TreasuryEntryWhereUniqueInput
+    update: XOR<TreasuryEntryUpdateWithoutLedgerInput, TreasuryEntryUncheckedUpdateWithoutLedgerInput>
+    create: XOR<TreasuryEntryCreateWithoutLedgerInput, TreasuryEntryUncheckedCreateWithoutLedgerInput>
+  }
+
+  export type TreasuryEntryUpdateWithWhereUniqueWithoutLedgerInput = {
+    where: TreasuryEntryWhereUniqueInput
+    data: XOR<TreasuryEntryUpdateWithoutLedgerInput, TreasuryEntryUncheckedUpdateWithoutLedgerInput>
+  }
+
+  export type TreasuryEntryUpdateManyWithWhereWithoutLedgerInput = {
+    where: TreasuryEntryScalarWhereInput
+    data: XOR<TreasuryEntryUpdateManyMutationInput, TreasuryEntryUncheckedUpdateManyWithoutLedgerInput>
+  }
+
+  export type TreasuryLedgerCreateWithoutEntriesInput = {
+    id?: string
+    referenceType: $Enums.TreasuryLedgerReferenceType
+    referenceId?: string | null
+    description: string
+    network: string
+    currency: string
+    createdByAdminId?: string | null
+    locked?: boolean
+    createdAt?: Date | string
+  }
+
+  export type TreasuryLedgerUncheckedCreateWithoutEntriesInput = {
+    id?: string
+    referenceType: $Enums.TreasuryLedgerReferenceType
+    referenceId?: string | null
+    description: string
+    network: string
+    currency: string
+    createdByAdminId?: string | null
+    locked?: boolean
+    createdAt?: Date | string
+  }
+
+  export type TreasuryLedgerCreateOrConnectWithoutEntriesInput = {
+    where: TreasuryLedgerWhereUniqueInput
+    create: XOR<TreasuryLedgerCreateWithoutEntriesInput, TreasuryLedgerUncheckedCreateWithoutEntriesInput>
+  }
+
+  export type TreasuryAccountCreateWithoutEntriesInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    parentAccount?: TreasuryAccountCreateNestedOneWithoutChildrenInput
+    children?: TreasuryAccountCreateNestedManyWithoutParentAccountInput
+  }
+
+  export type TreasuryAccountUncheckedCreateWithoutEntriesInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    parentAccountId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    children?: TreasuryAccountUncheckedCreateNestedManyWithoutParentAccountInput
+  }
+
+  export type TreasuryAccountCreateOrConnectWithoutEntriesInput = {
+    where: TreasuryAccountWhereUniqueInput
+    create: XOR<TreasuryAccountCreateWithoutEntriesInput, TreasuryAccountUncheckedCreateWithoutEntriesInput>
+  }
+
+  export type TreasuryLedgerUpsertWithoutEntriesInput = {
+    update: XOR<TreasuryLedgerUpdateWithoutEntriesInput, TreasuryLedgerUncheckedUpdateWithoutEntriesInput>
+    create: XOR<TreasuryLedgerCreateWithoutEntriesInput, TreasuryLedgerUncheckedCreateWithoutEntriesInput>
+    where?: TreasuryLedgerWhereInput
+  }
+
+  export type TreasuryLedgerUpdateToOneWithWhereWithoutEntriesInput = {
+    where?: TreasuryLedgerWhereInput
+    data: XOR<TreasuryLedgerUpdateWithoutEntriesInput, TreasuryLedgerUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type TreasuryLedgerUpdateWithoutEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeFieldUpdateOperationsInput | $Enums.TreasuryLedgerReferenceType
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryLedgerUncheckedUpdateWithoutEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referenceType?: EnumTreasuryLedgerReferenceTypeFieldUpdateOperationsInput | $Enums.TreasuryLedgerReferenceType
+    referenceId?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    createdByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    locked?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryAccountUpsertWithoutEntriesInput = {
+    update: XOR<TreasuryAccountUpdateWithoutEntriesInput, TreasuryAccountUncheckedUpdateWithoutEntriesInput>
+    create: XOR<TreasuryAccountCreateWithoutEntriesInput, TreasuryAccountUncheckedCreateWithoutEntriesInput>
+    where?: TreasuryAccountWhereInput
+  }
+
+  export type TreasuryAccountUpdateToOneWithWhereWithoutEntriesInput = {
+    where?: TreasuryAccountWhereInput
+    data: XOR<TreasuryAccountUpdateWithoutEntriesInput, TreasuryAccountUncheckedUpdateWithoutEntriesInput>
+  }
+
+  export type TreasuryAccountUpdateWithoutEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentAccount?: TreasuryAccountUpdateOneWithoutChildrenNestedInput
+    children?: TreasuryAccountUpdateManyWithoutParentAccountNestedInput
+  }
+
+  export type TreasuryAccountUncheckedUpdateWithoutEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    parentAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: TreasuryAccountUncheckedUpdateManyWithoutParentAccountNestedInput
+  }
+
+  export type ChainTransactionCreateManyUserInput = {
+    id?: string
+    chain: string
+    to: string
+    amount: string
+    txHash?: string | null
+    status?: $Enums.ChainTxStatus
+    createdAt?: Date | string
+    confirmedAt?: Date | string | null
+    blockNumber?: bigint | number | null
+    direction?: $Enums.TxDirection
   }
 
   export type TransactionCreateManyUserInput = {
@@ -13500,17 +21977,13 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type ChainTransactionCreateManyUserInput = {
+  export type UserWalletCreateManyUserInput = {
     id?: string
     chain: string
-    to: string
-    amount: string
-    txHash?: string | null
-    blockNumber?: bigint | number | null
-    direction?: $Enums.TxDirection
-    status?: $Enums.ChainTxStatus
+    derivationIndex: number
+    address: string
     createdAt?: Date | string
-    confirmedAt?: Date | string | null
+    lastKnownBalance?: string
   }
 
   export type WithdrawalCreateManyUserInput = {
@@ -13521,13 +21994,43 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type UserWalletCreateManyUserInput = {
-    id?: string
-    chain: string
-    derivationIndex: number
-    address: string
-    lastKnownBalance?: string
-    createdAt?: Date | string
+  export type ChainTransactionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chain?: StringFieldUpdateOperationsInput | string
+    to?: StringFieldUpdateOperationsInput | string
+    amount?: StringFieldUpdateOperationsInput | string
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
+  }
+
+  export type ChainTransactionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chain?: StringFieldUpdateOperationsInput | string
+    to?: StringFieldUpdateOperationsInput | string
+    amount?: StringFieldUpdateOperationsInput | string
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
+  }
+
+  export type ChainTransactionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chain?: StringFieldUpdateOperationsInput | string
+    to?: StringFieldUpdateOperationsInput | string
+    amount?: StringFieldUpdateOperationsInput | string
+    txHash?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
   }
 
   export type TransactionUpdateWithoutUserInput = {
@@ -13554,43 +22057,31 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ChainTransactionUpdateWithoutUserInput = {
+  export type UserWalletUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     chain?: StringFieldUpdateOperationsInput | string
-    to?: StringFieldUpdateOperationsInput | string
-    amount?: StringFieldUpdateOperationsInput | string
-    txHash?: NullableStringFieldUpdateOperationsInput | string | null
-    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
-    status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
+    derivationIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastKnownBalance?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ChainTransactionUncheckedUpdateWithoutUserInput = {
+  export type UserWalletUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     chain?: StringFieldUpdateOperationsInput | string
-    to?: StringFieldUpdateOperationsInput | string
-    amount?: StringFieldUpdateOperationsInput | string
-    txHash?: NullableStringFieldUpdateOperationsInput | string | null
-    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
-    status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
+    derivationIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastKnownBalance?: StringFieldUpdateOperationsInput | string
   }
 
-  export type ChainTransactionUncheckedUpdateManyWithoutUserInput = {
+  export type UserWalletUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     chain?: StringFieldUpdateOperationsInput | string
-    to?: StringFieldUpdateOperationsInput | string
-    amount?: StringFieldUpdateOperationsInput | string
-    txHash?: NullableStringFieldUpdateOperationsInput | string | null
-    blockNumber?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    direction?: EnumTxDirectionFieldUpdateOperationsInput | $Enums.TxDirection
-    status?: EnumChainTxStatusFieldUpdateOperationsInput | $Enums.ChainTxStatus
+    derivationIndex?: IntFieldUpdateOperationsInput | number
+    address?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastKnownBalance?: StringFieldUpdateOperationsInput | string
   }
 
   export type WithdrawalUpdateWithoutUserInput = {
@@ -13617,30 +22108,131 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserWalletUpdateWithoutUserInput = {
+  export type TreasuryAccountCreateManyParentAccountInput = {
+    id?: string
+    name: string
+    type: $Enums.TreasuryAccountType
+    network?: string | null
+    currency: string
+    walletAddress?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type TreasuryEntryCreateManyAccountInput = {
+    id?: string
+    ledgerId: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+  }
+
+  export type TreasuryAccountUpdateWithoutParentAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
-    chain?: StringFieldUpdateOperationsInput | string
-    derivationIndex?: IntFieldUpdateOperationsInput | number
-    address?: StringFieldUpdateOperationsInput | string
-    lastKnownBalance?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: TreasuryAccountUpdateManyWithoutParentAccountNestedInput
+    entries?: TreasuryEntryUpdateManyWithoutAccountNestedInput
+  }
+
+  export type TreasuryAccountUncheckedUpdateWithoutParentAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    children?: TreasuryAccountUncheckedUpdateManyWithoutParentAccountNestedInput
+    entries?: TreasuryEntryUncheckedUpdateManyWithoutAccountNestedInput
+  }
+
+  export type TreasuryAccountUncheckedUpdateManyWithoutParentAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumTreasuryAccountTypeFieldUpdateOperationsInput | $Enums.TreasuryAccountType
+    network?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    walletAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserWalletUncheckedUpdateWithoutUserInput = {
+  export type TreasuryEntryUpdateWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
-    chain?: StringFieldUpdateOperationsInput | string
-    derivationIndex?: IntFieldUpdateOperationsInput | number
-    address?: StringFieldUpdateOperationsInput | string
-    lastKnownBalance?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ledger?: TreasuryLedgerUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type TreasuryEntryUncheckedUpdateWithoutAccountInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ledgerId?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserWalletUncheckedUpdateManyWithoutUserInput = {
+  export type TreasuryEntryUncheckedUpdateManyWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
-    chain?: StringFieldUpdateOperationsInput | string
-    derivationIndex?: IntFieldUpdateOperationsInput | number
-    address?: StringFieldUpdateOperationsInput | string
-    lastKnownBalance?: StringFieldUpdateOperationsInput | string
+    ledgerId?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryEntryCreateManyLedgerInput = {
+    id?: string
+    accountId: string
+    debitAmount?: bigint | number
+    creditAmount?: bigint | number
+    currency: string
+    network: string
+    createdAt?: Date | string
+  }
+
+  export type TreasuryEntryUpdateWithoutLedgerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    account?: TreasuryAccountUpdateOneRequiredWithoutEntriesNestedInput
+  }
+
+  export type TreasuryEntryUncheckedUpdateWithoutLedgerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TreasuryEntryUncheckedUpdateManyWithoutLedgerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
+    debitAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    creditAmount?: BigIntFieldUpdateOperationsInput | bigint | number
+    currency?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -13653,6 +22245,14 @@ export namespace Prisma {
      * @deprecated Use UserCountOutputTypeDefaultArgs instead
      */
     export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TreasuryAccountCountOutputTypeDefaultArgs instead
+     */
+    export type TreasuryAccountCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TreasuryAccountCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TreasuryLedgerCountOutputTypeDefaultArgs instead
+     */
+    export type TreasuryLedgerCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TreasuryLedgerCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -13689,6 +22289,30 @@ export namespace Prisma {
      * @deprecated Use ChainScanStateDefaultArgs instead
      */
     export type ChainScanStateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChainScanStateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TreasuryAccountDefaultArgs instead
+     */
+    export type TreasuryAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TreasuryAccountDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TreasuryLedgerDefaultArgs instead
+     */
+    export type TreasuryLedgerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TreasuryLedgerDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TreasuryEntryDefaultArgs instead
+     */
+    export type TreasuryEntryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TreasuryEntryDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BalanceSnapshotDefaultArgs instead
+     */
+    export type BalanceSnapshotArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BalanceSnapshotDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TreasuryStateDefaultArgs instead
+     */
+    export type TreasuryStateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TreasuryStateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SweepDefaultArgs instead
+     */
+    export type SweepArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SweepDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

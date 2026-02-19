@@ -1,17 +1,9 @@
 import { prisma } from "../lib/prisma";
-import { ethers, JsonRpcProvider } from "ethers";
-import * as dotenv from "dotenv";
-import path from "path";
-
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+import { ethers } from "ethers";
+import { providerRegistry } from "../core/provider-registry";
 
 async function check() {
-    const ethRpc = process.env.ETH_SEPOLIA_RPC;
-    if (!ethRpc) {
-        console.error("ETH_SEPOLIA_RPC not found in environment");
-        return;
-    }
-    const provider = new JsonRpcProvider(ethRpc);
+    const provider = providerRegistry.getEvmProvider("ETH");
 
     console.log("Checking ETH wallets in DB...");
     const wallets = await prisma.userWallet.findMany({

@@ -134,11 +134,11 @@ exports.Prisma.ChainTransactionScalarFieldEnum = {
   to: 'to',
   amount: 'amount',
   txHash: 'txHash',
-  blockNumber: 'blockNumber',
-  direction: 'direction',
   status: 'status',
   createdAt: 'createdAt',
-  confirmedAt: 'confirmedAt'
+  confirmedAt: 'confirmedAt',
+  blockNumber: 'blockNumber',
+  direction: 'direction'
 };
 
 exports.Prisma.LedgerEntryScalarFieldEnum = {
@@ -178,14 +178,85 @@ exports.Prisma.UserWalletScalarFieldEnum = {
   chain: 'chain',
   derivationIndex: 'derivationIndex',
   address: 'address',
-  lastKnownBalance: 'lastKnownBalance',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  lastKnownBalance: 'lastKnownBalance'
 };
 
 exports.Prisma.ChainScanStateScalarFieldEnum = {
   chain: 'chain',
   lastScannedBlock: 'lastScannedBlock',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TreasuryAccountScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  network: 'network',
+  currency: 'currency',
+  walletAddress: 'walletAddress',
+  parentAccountId: 'parentAccountId',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.TreasuryLedgerScalarFieldEnum = {
+  id: 'id',
+  referenceType: 'referenceType',
+  referenceId: 'referenceId',
+  description: 'description',
+  network: 'network',
+  currency: 'currency',
+  createdByAdminId: 'createdByAdminId',
+  locked: 'locked',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.TreasuryEntryScalarFieldEnum = {
+  id: 'id',
+  ledgerId: 'ledgerId',
+  accountId: 'accountId',
+  debitAmount: 'debitAmount',
+  creditAmount: 'creditAmount',
+  currency: 'currency',
+  network: 'network',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BalanceSnapshotScalarFieldEnum = {
+  id: 'id',
+  snapshotTime: 'snapshotTime',
+  network: 'network',
+  currency: 'currency',
+  totalAssets: 'totalAssets',
+  totalLiabilities: 'totalLiabilities',
+  totalEquity: 'totalEquity'
+};
+
+exports.Prisma.TreasuryStateScalarFieldEnum = {
+  chain: 'chain',
+  totalOnchainBalance: 'totalOnchainBalance',
+  totalUserLiabilities: 'totalUserLiabilities',
+  sweepableBalance: 'sweepableBalance',
+  lastSyncedAt: 'lastSyncedAt',
+  locked: 'locked',
+  lockedAt: 'lockedAt',
+  lockedBy: 'lockedBy'
+};
+
+exports.Prisma.SweepScalarFieldEnum = {
+  id: 'id',
+  chain: 'chain',
+  amount: 'amount',
+  amountRaw: 'amountRaw',
+  fromWallet: 'fromWallet',
+  toWallet: 'toWallet',
+  txHash: 'txHash',
+  status: 'status',
+  initiatedBy: 'initiatedBy',
+  error: 'error',
+  createdAt: 'createdAt',
+  confirmedAt: 'confirmedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -225,11 +296,6 @@ exports.TxStatus = exports.$Enums.TxStatus = {
   REJECTED: 'REJECTED'
 };
 
-exports.TxDirection = exports.$Enums.TxDirection = {
-  INBOUND: 'INBOUND',
-  OUTBOUND: 'OUTBOUND'
-};
-
 exports.ChainTxStatus = exports.$Enums.ChainTxStatus = {
   PENDING: 'PENDING',
   BROADCASTED: 'BROADCASTED',
@@ -237,12 +303,39 @@ exports.ChainTxStatus = exports.$Enums.ChainTxStatus = {
   FAILED: 'FAILED'
 };
 
+exports.TxDirection = exports.$Enums.TxDirection = {
+  INBOUND: 'INBOUND',
+  OUTBOUND: 'OUTBOUND'
+};
+
 exports.LedgerType = exports.$Enums.LedgerType = {
   DEPOSIT: 'DEPOSIT',
   WITHDRAWAL: 'WITHDRAWAL',
+  ADJUSTMENT: 'ADJUSTMENT',
   TRANSFER: 'TRANSFER',
-  EARNING: 'EARNING',
+  EARNING: 'EARNING'
+};
+
+exports.TreasuryAccountType = exports.$Enums.TreasuryAccountType = {
+  ASSET: 'ASSET',
+  LIABILITY: 'LIABILITY',
+  EQUITY: 'EQUITY'
+};
+
+exports.TreasuryLedgerReferenceType = exports.$Enums.TreasuryLedgerReferenceType = {
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAWAL_REQUEST: 'WITHDRAWAL_REQUEST',
+  WITHDRAWAL_EXECUTED: 'WITHDRAWAL_EXECUTED',
+  SWEEP: 'SWEEP',
+  TREASURY_MOVE: 'TREASURY_MOVE',
   ADJUSTMENT: 'ADJUSTMENT'
+};
+
+exports.SweepStatus = exports.$Enums.SweepStatus = {
+  PENDING: 'PENDING',
+  BROADCASTING: 'BROADCASTING',
+  CONFIRMED: 'CONFIRMED',
+  FAILED: 'FAILED'
 };
 
 exports.Prisma.ModelName = {
@@ -254,7 +347,13 @@ exports.Prisma.ModelName = {
   Withdrawal: 'Withdrawal',
   SystemSetting: 'SystemSetting',
   UserWallet: 'UserWallet',
-  ChainScanState: 'ChainScanState'
+  ChainScanState: 'ChainScanState',
+  TreasuryAccount: 'TreasuryAccount',
+  TreasuryLedger: 'TreasuryLedger',
+  TreasuryEntry: 'TreasuryEntry',
+  BalanceSnapshot: 'BalanceSnapshot',
+  TreasuryState: 'TreasuryState',
+  Sweep: 'Sweep'
 };
 
 /**

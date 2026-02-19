@@ -3,12 +3,16 @@
 import { prisma } from "../prisma";
 import { ethers } from "ethers";
 import { Connection } from "@solana/web3.js";
+import { networkConfig } from "../../core/network-config";
+import { providerRegistry } from "../../core/provider-registry";
 
-// Confirmation thresholds
+import { chainFactory } from "../../core/chain-factory";
+
+// Confirmation thresholds - DEPRECATED: Thresholds are now inside chain modules
 const CONFIRMATIONS = {
     ETH: 12,
     BSC: 5,
-    SOL: 0 // Uses "finalized" status
+    SOL: 0
 };
 
 /**
@@ -19,17 +23,8 @@ const CONFIRMATIONS = {
 async function creditDeposit(chainTx: any) {
     console.log(`[Tx Monitor] Crediting deposit ${chainTx.id} to user ${chainTx.userId}`);
 
-    // Convert amount to smallest unit
-    let amountSmallestUnit: bigint;
-
-    if (chainTx.chain === "ETH" || chainTx.chain === "BSC") {
-        amountSmallestUnit = ethers.parseEther(chainTx.amount);
-    } else if (chainTx.chain === "SOL") {
-        amountSmallestUnit = BigInt(Math.floor(parseFloat(chainTx.amount) * 1_000_000_000));
-    } else {
-        console.error(`[Tx Monitor] Unknown chain: ${chainTx.chain}`);
-        return;
-    }
+    const chainImpl = chainFactory.getChain(chainTx.chain);
+    const amountSmallestUnit = chainImpl.toSmallestUnit(chainTx.amount);
 
     // Atomic credit
     await prisma.$transaction(async (tx) => {
@@ -76,6 +71,48 @@ async function creditDeposit(chainTx: any) {
  * 
  * STEP 14: Credits deposits when confirmed
  */
+// Helper to refund failed withdrawals
+async function refundFailedWithdrawal(chainTx: any) {
+    if (chainTx.direction !== "OUTBOUND") return;
+
+    // Check if already refunded
+    const alreadyAdjusted = await prisma.ledgerEntry.findFirst({
+        where: { referenceId: `REFUND:${chainTx.id}` }
+    });
+    if (alreadyAdjusted) return;
+
+    console.log(`[Tx Monitor] Refunding failed withdrawal ${chainTx.id} for user ${chainTx.userId}`);
+
+    const chainImpl = chainFactory.getChain(chainTx.chain);
+    const amountSmallestUnit = chainImpl.toSmallestUnit(chainTx.amount);
+
+    await prisma.$transaction(async (tx) => {
+        // Refund Balance
+        const balance = await tx.userBalance.findUnique({
+            where: { userId_chain: { userId: chainTx.userId, chain: chainTx.chain } }
+        });
+        const currentBalance = balance ? BigInt(balance.balance) : 0n;
+        const newBalance = currentBalance + amountSmallestUnit;
+
+        await tx.userBalance.upsert({
+            where: { userId_chain: { userId: chainTx.userId, chain: chainTx.chain } },
+            update: { balance: newBalance.toString() },
+            create: { userId: chainTx.userId, chain: chainTx.chain, balance: newBalance.toString() }
+        });
+
+        // Add Ledger Entry
+        await tx.ledgerEntry.create({
+            data: {
+                userId: chainTx.userId,
+                chain: chainTx.chain,
+                amount: amountSmallestUnit.toString(),
+                type: "ADJUSTMENT",
+                referenceId: `REFUND:${chainTx.id}`
+            }
+        });
+    });
+}
+
 export async function monitorPendingTransactions() {
     console.log("[Tx Monitor] Checking pending transactions...");
 
@@ -101,109 +138,65 @@ export async function monitorPendingTransactions() {
                         where: { id: tx.id },
                         data: { status: "FAILED" }
                     });
+                    await refundFailedWithdrawal(tx);
                     continue;
                 }
 
                 console.log(`[Tx Monitor] Checking ${tx.chain} ${tx.direction} TX: ${tx.txHash}`);
 
-                if (tx.chain === "ETH" || tx.chain === "BSC") {
-                    const rpcUrl = tx.chain === "ETH" ? process.env.ETH_SEPOLIA_RPC : process.env.BSC_TESTNET_RPC;
-                    if (!rpcUrl) {
-                        console.error(`[Tx Monitor] RPC URL not configured for ${tx.chain}`);
-                        continue;
-                    }
+                const chainImpl = chainFactory.getChain(tx.chain as any);
+                // Cast to allow DROPPED status which we added to EthChain but interface might not reflect yet
+                const result = await chainImpl.getTransactionStatus(tx.txHash, tx.direction as any) as any;
 
-                    const provider = new ethers.JsonRpcProvider(rpcUrl);
-                    const receipt = await provider.getTransactionReceipt(tx.txHash);
+                if (result.status === "CONFIRMED") {
+                    console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash} CONFIRMED`);
 
-                    if (receipt) {
-                        const currentBlock = await provider.getBlockNumber();
-                        const confirmations = currentBlock - receipt.blockNumber;
-                        const requiredConfs = CONFIRMATIONS[tx.chain];
-
-                        console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash}: ${confirmations}/${requiredConfs} confirmations`);
-
-                        // Check if we have enough confirmations
-                        if (confirmations >= requiredConfs) {
-                            if (receipt.status === 1) {
-                                console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash} CONFIRMED`);
-
-                                await prisma.chainTransaction.update({
-                                    where: { id: tx.id },
-                                    data: {
-                                        status: "CONFIRMED",
-                                        confirmedAt: new Date(),
-                                        blockNumber: BigInt(receipt.blockNumber)
-                                    }
-                                });
-
-                                // Credit if deposit
-                                if (tx.direction === "INBOUND") {
-                                    await creditDeposit(tx);
-                                }
-                            } else if (receipt.status === 0) {
-                                console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash} FAILED (Reverted)`);
-                                await prisma.chainTransaction.update({
-                                    where: { id: tx.id },
-                                    data: { status: "FAILED" }
-                                });
-                                // Note: For withdrawals, refund was already handled in signTransaction catch
-                            }
-                        } else {
-                            console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash} waiting for confirmations...`);
+                    await prisma.chainTransaction.update({
+                        where: { id: tx.id },
+                        data: {
+                            status: "CONFIRMED",
+                            confirmedAt: new Date(),
+                            blockNumber: result.blockNumber
                         }
+                    });
+
+                    // Credit if deposit
+                    if (tx.direction === "INBOUND") {
+                        await creditDeposit(tx);
+                    }
+                } else if (result.status === "FAILED" || result.status === "DROPPED") {
+                    console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash} ${result.status} - Processing Refund`);
+
+                    await prisma.chainTransaction.update({
+                        where: { id: tx.id },
+                        data: { status: "FAILED" }
+                    });
+
+                    // Automatically refund user for failed withdrawals
+                    if (tx.direction === "OUTBOUND") {
+                        await refundFailedWithdrawal(tx);
+                    }
+
+                } else {
+                    // PENDING
+                    if (result.confirmations !== undefined) {
+                        console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash}: ${result.confirmations}/${result.requiredConfirmations || '?'} confirmations`);
                     } else {
-                        console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash} still pending (no receipt)`);
-                    }
-                }
-
-                if (tx.chain === "SOL") {
-                    const rpcUrl = process.env.SOLANA_DEVNET_RPC;
-                    if (!rpcUrl) {
-                        console.error("[Tx Monitor] SOLANA_DEVNET_RPC not configured");
-                        continue;
-                    }
-
-                    const connection = new Connection(rpcUrl, "confirmed");
-                    const result = await connection.getSignatureStatus(tx.txHash);
-
-                    const status = result.value;
-
-                    if (status) {
-                        // For Solana, require "finalized" for deposits, "confirmed" for withdrawals
-                        const requiredStatus = tx.direction === "INBOUND" ? "finalized" : "confirmed";
-
-                        if (status.confirmationStatus === "finalized" ||
-                            (status.confirmationStatus === "confirmed" && requiredStatus === "confirmed")) {
-
-                            console.log(`[Tx Monitor] SOL TX ${tx.txHash} CONFIRMED`);
-
-                            await prisma.chainTransaction.update({
-                                where: { id: tx.id },
-                                data: {
-                                    status: "CONFIRMED",
-                                    confirmedAt: new Date()
-                                }
-                            });
-
-                            // Credit if deposit
-                            if (tx.direction === "INBOUND") {
-                                await creditDeposit(tx);
-                            }
-                        } else if (status.err) {
-                            console.log(`[Tx Monitor] SOL TX ${tx.txHash} FAILED:`, status.err);
+                        // Check if it's been pending for too long (e.g. > 15 mins) and assume dropped?
+                        // For now, let's trust "DROPPED" status from chain impl or just wait.
+                        const ageMinutes = (Date.now() - new Date(tx.createdAt).getTime()) / 60000;
+                        if (ageMinutes > 30) {
+                            console.warn(`[Tx Monitor] TX ${tx.txHash} pending for ${ageMinutes.toFixed(0)} mins. Marking FAILED (Timeout).`);
                             await prisma.chainTransaction.update({
                                 where: { id: tx.id },
                                 data: { status: "FAILED" }
                             });
+                            await refundFailedWithdrawal(tx);
                         } else {
-                            console.log(`[Tx Monitor] SOL TX ${tx.txHash} status: ${status.confirmationStatus}`);
+                            console.log(`[Tx Monitor] ${tx.chain} TX ${tx.txHash} still pending (${ageMinutes.toFixed(1)}m)...`);
                         }
-                    } else {
-                        console.log(`[Tx Monitor] SOL TX ${tx.txHash} status unknown (pending)`);
                     }
                 }
-
             } catch (err) {
                 console.error(`[Tx Monitor] Error processing tx ${tx.id}:`, err);
             }

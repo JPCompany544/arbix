@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateAddress } from "@/lib/wallet/engine";
+import { generateAddress } from "@/lib/wallet/wallet-service";
 
 export async function GET() {
   try {

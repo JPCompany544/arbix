@@ -1,0 +1,4 @@
+﻿[dotenv@17.3.1] injecting env (9) from .env -- tip: ÔÜÖ´©Å  override existing env vars with { override: true }
+DB: DIFFERENT
+URL1: postgresql://neondb_owner:npg_tGY3NoXFcp1J@ep-steep-shape-aiymp707-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+URL2: postgresql://postgres:Johnpaul%403@localhost:5432/arbix_production

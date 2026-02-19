@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import { prisma } from "../lib/prisma";
-import { ethers } from "ethers";
+import { chainFactory } from "../core/chain-factory";
 
 /**
  * Display User Address for Deposit Testing
@@ -47,13 +47,9 @@ async function showDepositAddresses() {
         });
 
         for (const bal of balances) {
-            let humanReadable = "";
-            if (bal.chain === "ETH" || bal.chain === "BSC") {
-                humanReadable = ethers.formatEther(bal.balance);
-            } else if (bal.chain === "SOL") {
-                humanReadable = (Number(bal.balance) / 1_000_000_000).toFixed(9);
-            }
-            console.log(`${bal.chain}: ${humanReadable}`);
+            const chainImpl = chainFactory.getChain(bal.chain as any);
+            const humanReadable = chainImpl.toHumanUnit(bal.balance);
+            console.log(`${bal.chain} (${chainImpl.getSymbol()}): ${humanReadable}`);
         }
 
         // Show scan state

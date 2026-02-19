@@ -1,0 +1,8 @@
+﻿[DB] Isolation Check - Mode: TESTNET, Target: ...@ep-steep-shape-aiymp707-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+[Network Config] Initialized in TESTNET mode (env: testnet)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ÔÜÖ´©Å  write to custom object with { processEnv: myObject }
+
+--- RUNNING ISOLATION TEST (Mode: TESTNET) ---
+[TEST] Writing isolation_test_testnet to database...
+[TEST] Ô£à Verify isolation_test_testnet exists: YES
+[TEST] ­ƒøí´©Å Check isolation_test_mainnet presence (Should be null if first run): NULL (Good)

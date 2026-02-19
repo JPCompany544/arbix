@@ -1,0 +1,47 @@
+﻿[DB] Isolation Check - Mode: MAINNET, Target: ...@localhost:5432/arbix_production
+[Network Config] Initialized in MAINNET mode (env: mainnet)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ­ƒöÉ prevent building .env in docker: https://dotenvx.com/prebuild
+
+--- RUNNING ISOLATION TEST (Mode: MAINNET) ---
+[TEST] Writing isolation_test_mainnet to database...
+node.exe : [TEST] ÔØî 
+FAILED: 
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    + CategoryInfo          
+    : NotSpecified: ([TEST  
+  ] ÔØî FAILED: :String)    
+ [], RemoteException
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+Invalid `prisma.systemSettin
+g.upsert()` invocation in
+C:\Users\nnamd\Documents\Arb
+itrage-platform\my-app\scrip
+ts\test-isolation-action.ts:
+17:36
+
+  14 
+  15 console.log(`[TEST] 
+Writing ${key} to 
+database...`);
+  16 
+ÔåÆ 17 await 
+prisma.systemSetting.upsert(
+Authentication failed 
+against database server at 
+`localhost`, the provided 
+database credentials for 
+`user` are not valid.
+
+Please make sure to provide 
+valid database credentials 
+for the database server at 
+`localhost`.

@@ -9,8 +9,11 @@ export async function GET() {
     }
 
     try {
-        const withdrawals = await prisma.withdrawal.findMany({
-            where: { status: 'PENDING' },
+        const withdrawals = await prisma.chainTransaction.findMany({
+            where: {
+                direction: 'OUTBOUND',
+                status: { in: ['PENDING', 'BROADCASTED'] }
+            },
             include: {
                 user: {
                     select: { email: true }
@@ -25,13 +28,15 @@ export async function GET() {
             userId: w.userId,
             userEmail: w.user.email,
             amount: w.amount,
-            walletAddress: w.walletAddress,
+            chain: w.chain,
+            walletAddress: w.to,
             status: w.status,
             date: w.createdAt
         }));
 
         return NextResponse.json(formatted);
     } catch (error) {
+        console.error("Admin withdrawals API error:", error);
         return NextResponse.json({ error: "Failed to fetch withdrawals" }, { status: 500 });
     }
 }

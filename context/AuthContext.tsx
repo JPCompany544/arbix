@@ -9,6 +9,7 @@ type AuthContextType = {
     login: (token: string, user?: any) => void;
     logout: () => void;
     user: any | null;
+    loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<any | null>(null);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
@@ -36,6 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 console.error("Failed to parse user data", e);
             }
         }
+        setLoading(false);
     }, []);
 
     const login = (newToken: string, newUser?: any) => {
@@ -59,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, token, login, logout, user }}>
+        <AuthContext.Provider value={{ isLoggedIn, token, login, logout, user, loading }}>
             {children}
         </AuthContext.Provider>
     );

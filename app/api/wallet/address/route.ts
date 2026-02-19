@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { generateAddress } from "@/lib/wallet/engine";
+import { generateAddress } from "@/lib/wallet/wallet-service";
 
 /**
  * GET /api/wallet/address?chain=ETH&userId=xxx
@@ -10,8 +10,8 @@ import { generateAddress } from "@/lib/wallet/engine";
 export async function GET(request: NextRequest) {
     try {
         const searchParams = request.nextUrl.searchParams;
-        const chain = searchParams.get("chain");
-        const userId = searchParams.get("userId");
+        const chain = searchParams.get("chain") as any;
+        const userId = searchParams.get("userId") as string;
 
         if (!userId) {
             return NextResponse.json(
@@ -27,56 +27,22 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        let wallet;
-
-        // Hardcoded addresses for BTC and XRP
-        if (chain === "BTC" || chain === "XRP") {
-            const hardcodedAddress = chain === "BTC"
-                ? "bc1qfgc08xen820n6ak0jf8mf3j9gaqtfqxalvc09z"
-                : "rLhHG4nVsAch1HtrURyaaAKLczAUgC2s9Y";
-
-            wallet = await prisma.userWallet.upsert({
-                where: { userId_chain: { userId, chain } },
-                update: { address: hardcodedAddress },
-                create: {
-                    userId,
-                    chain,
-                    address: hardcodedAddress,
-                    derivationIndex: 0,
-                    lastKnownBalance: "0"
-                }
-            });
-
-            return NextResponse.json({
-                chain,
-                address: wallet.address,
-                createdAt: wallet.createdAt
-            });
-        }
-
-        // Check if wallet exists for other chains
-        wallet = await prisma.userWallet.findUnique({
-            where: {
-                userId_chain: { userId, chain }
-            }
-        });
-
-        // If not, generate it
-        if (!wallet) {
-            const address = await generateAddress(userId, chain as "ETH" | "BSC" | "SOL");
-            wallet = await prisma.userWallet.findUnique({
-                where: {
-                    userId_chain: { userId, chain }
-                }
-            });
-        }
-
-        if (!wallet) {
+        // 0. Verify user exists in this environment
+        const userExists = await prisma.user.findUnique({ where: { id: userId } });
+        if (!userExists) {
+            console.warn(`[API] Address request for non-existent user: ${userId}`);
             return NextResponse.json(
-                { error: "Failed to generate wallet" },
-                { status: 500 }
+                { error: "User not found in this environment. Please log out and log in again." },
+                { status: 404 }
             );
         }
+
+        // Generate/Retrieve address via WalletService
+        await generateAddress(userId, chain);
+
+        const wallet = await prisma.userWallet.findUniqueOrThrow({
+            where: { userId_chain: { userId, chain } }
+        });
 
         return NextResponse.json({
             chain,

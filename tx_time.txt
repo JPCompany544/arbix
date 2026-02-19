@@ -1,0 +1,2 @@
+﻿[DB] Initializing Prisma - Mode: TESTNET, Target: postgresql://neondb_owner:****@ep-steep-shape-aiymp707-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+CREATED AT: 2026-02-18T11:23:36.504Z

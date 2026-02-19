@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import { signTransaction, generateAddress } from "../lib/wallet/engine";
+import { generateAddress, processWithdrawal } from "../lib/wallet/wallet-service";
 import { Keypair } from "@solana/web3.js";
 
 async function test() {
     const userId = "cmli2bcpp0000dj58qvyfht0h";
 
-    console.log("\n=== Testing Multi-Chain Wallet Engine ===\n");
+    console.log("\n=== Testing Multi-Chain Wallet Service ===\n");
 
     try {
         // 1. Generate Addresses (Ensure wallets exist in DB)
@@ -31,9 +31,9 @@ async function test() {
         // ----------------------------------------------------------------
         console.log("🔷 Testing ETH transaction...");
         try {
-            const ethResult = await signTransaction(userId, "ETH", {
+            const ethResult = await processWithdrawal(userId, "ETH", {
                 to: "0x070FB771612106e2F3F6b7d150F9AA724b2f5CF0",
-                value: "0.0001"
+                amount: "0.0001"
             });
             console.log(`✅ ETH TX Hash: ${ethResult.txHash} (ID: ${ethResult.id})\n`);
         } catch (error) {
@@ -45,9 +45,9 @@ async function test() {
         // ----------------------------------------------------------------
         console.log("🟡 Testing BSC transaction...");
         try {
-            const bscResult = await signTransaction(userId, "BSC", {
+            const bscResult = await processWithdrawal(userId, "BSC", {
                 to: "0x070FB771612106e2F3F6b7d150F9AA724b2f5CF0",
-                value: "0.0001"
+                amount: "0.0001"
             });
             console.log(`✅ BSC TX Hash: ${bscResult.txHash} (ID: ${bscResult.id})\n`);
         } catch (error) {
@@ -60,9 +60,9 @@ async function test() {
         console.log("🟣 Testing SOL transaction...");
         try {
             console.log(`Using random destination: ${randomSolDest}`);
-            const solResult = await signTransaction(userId, "SOL", {
+            const solResult = await processWithdrawal(userId, "SOL", {
                 to: randomSolDest,
-                amount: 0.001
+                amount: "0.001"
             });
             console.log(`✅ SOL TX Signature: ${solResult.txHash} (ID: ${solResult.id})\n`);
         } catch (error) {

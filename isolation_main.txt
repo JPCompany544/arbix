@@ -1,0 +1,6 @@
+﻿[DB] Isolation Check - Mode: MAINNET, Target: ...@localhost:5432/arbix_production
+[Network Config] Initialized in MAINNET mode (env: mainnet)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ÔÜí´©Å secrets for agents: https://dotenvx.com/as2
+
+--- RUNNING ISOLATION TEST (Mode: MAINNET) ---
+[TEST] Writing isolation_test_mainnet to database...

@@ -3,6 +3,7 @@ import { startSolanaMonitor, checkSolanaDeposits } from "../lib/monitor/solana-m
 import { checkBitcoinDeposits } from "../lib/monitor/btc-monitor";
 import { checkXrpDeposits } from "../lib/monitor/xrp-monitor";
 import { prisma } from "../lib/prisma";
+import { networkConfig } from "../core/network-config";
 
 // Keep Prisma connection alive
 async function keepConnectionAlive() {
@@ -37,9 +38,9 @@ async function start() {
     async function runMonitors() {
         console.log(`[MONITOR] Pulse at ${new Date().toLocaleTimeString()}`);
         await Promise.allSettled([
-            checkEvmNativeDeposits("ETH", process.env.ETH_SEPOLIA_RPC!),
-            checkEvmNativeDeposits("BSC", process.env.BSC_TESTNET_RPC!),
-            checkSolanaDeposits(process.env.SOLANA_DEVNET_RPC!),
+            checkEvmNativeDeposits("ETH", networkConfig.getRpc("ETH")),
+            checkEvmNativeDeposits("BSC", networkConfig.getRpc("BSC")),
+            checkSolanaDeposits(networkConfig.getRpc("SOL")),
             checkBitcoinDeposits(),
             checkXrpDeposits()
         ]);

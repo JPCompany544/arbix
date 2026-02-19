@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyAdmin } from "@/lib/auth";
+import { getPrices } from "@/lib/pricing/price-service";
 
 export async function GET() {
     const admin = await verifyAdmin();
@@ -16,28 +17,61 @@ export async function GET() {
                 role: true,
                 status: true,
                 createdAt: true,
-                balance: true
             },
             orderBy: { createdAt: 'desc' }
         });
 
-        // Calculate totals efficiently
-        const depositSums = await prisma.transaction.groupBy({
-            by: ['userId'],
-            _sum: { amount: true },
-            where: { type: 'DEPOSIT', status: 'COMPLETED' }
-        });
+        // Get prices for conversion
+        const prices = await getPrices();
 
-        const withdrawalSums = await prisma.transaction.groupBy({
-            by: ['userId'],
-            _sum: { amount: true },
-            where: { type: 'WITHDRAWAL', status: 'COMPLETED' }
+        // Get all balances to map to users
+        const allBalances = await prisma.userBalance.findMany();
+
+        // Get ledger totals for each user (deposits vs withdrawals)
+        const entries = await prisma.ledgerEntry.findMany({
+            where: { type: { in: ['DEPOSIT', 'WITHDRAWAL'] } }
         });
 
         const userWithStats = users.map((user: any) => {
-            const deposit = depositSums.find((d: any) => d.userId === user.id)?._sum.amount || 0;
-            const withdrawal = withdrawalSums.find((w: any) => w.userId === user.id)?._sum.amount || 0;
-            return { ...user, totalDeposits: deposit, totalWithdrawals: withdrawal };
+            // Calculate current USD balance
+            let totalBalanceUSD = 0;
+            const userBalances = allBalances.filter(b => b.userId === user.id);
+
+            for (const b of userBalances) {
+                const price = prices[b.chain] || 0;
+                const rawVal = parseFloat(b.balance);
+
+                if (b.chain === 'ETH' || b.chain === 'BSC') totalBalanceUSD += (rawVal / 1e18) * price;
+                else if (b.chain === 'SOL') totalBalanceUSD += (rawVal / 1e9) * price;
+                else if (b.chain === 'BTC') totalBalanceUSD += (rawVal / 1e8) * price;
+                else if (b.chain === 'XRP') totalBalanceUSD += (rawVal / 1e6) * price;
+            }
+
+            // Calculate total volume (optional but good for 'Realness')
+            const userEntries = entries.filter(e => e.userId === user.id);
+            let totalDeposits = 0;
+            let totalWithdrawals = 0;
+
+            for (const e of userEntries) {
+                const price = prices[e.chain] || 0;
+                const rawVal = parseFloat(e.amount);
+                let usdVal = 0;
+
+                if (e.chain === 'ETH' || e.chain === 'BSC') usdVal = (rawVal / 1e18) * price;
+                else if (e.chain === 'SOL') usdVal = (rawVal / 1e9) * price;
+                else if (e.chain === 'BTC') usdVal = (rawVal / 1e8) * price;
+                else if (e.chain === 'XRP') usdVal = (rawVal / 1e6) * price;
+
+                if (e.type === 'DEPOSIT') totalDeposits += usdVal;
+                else if (e.type === 'WITHDRAWAL') totalWithdrawals += usdVal;
+            }
+
+            return {
+                ...user,
+                balance: totalBalanceUSD,
+                totalDeposits,
+                totalWithdrawals
+            };
         });
 
         return NextResponse.json(userWithStats);

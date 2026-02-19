@@ -9,14 +9,14 @@ export async function GET() {
     }
 
     try {
-        const transactions = await prisma.transaction.findMany({
+        const transactions = await prisma.chainTransaction.findMany({
             include: {
                 user: {
                     select: { email: true }
                 }
             },
             orderBy: { createdAt: 'desc' },
-            take: 100 // Limit to most recent 100
+            take: 100
         });
 
         // Format the response
@@ -25,13 +25,16 @@ export async function GET() {
             userId: tx.userId,
             userEmail: tx.user.email,
             amount: tx.amount,
-            type: tx.type,
+            chain: tx.chain,
+            type: tx.direction === 'INBOUND' ? 'DEPOSIT' : 'WITHDRAWAL',
             status: tx.status,
+            txHash: tx.txHash,
             date: tx.createdAt
         }));
 
         return NextResponse.json(formatted);
     } catch (error) {
+        console.error("Admin transactions API error:", error);
         return NextResponse.json({ error: "Failed to fetch transactions" }, { status: 500 });
     }
 }

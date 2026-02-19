@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyUser } from "@/lib/auth";
 import { getPrices } from "@/lib/pricing/price-service";
+import { chainFactory } from "@/core/chain-factory";
 
 export const dynamic = 'force-dynamic';
 
@@ -24,33 +25,17 @@ export async function GET(req: NextRequest) {
 
         // Map to portfolio format
         const portfolio = balances.map(record => {
-            const rawAmount = BigInt(record.balance);
-            let amount: number;
+            const chainImpl = chainFactory.getChain(record.chain as any);
 
-            // Convert from smallest unit to base unit
-            if (record.chain === 'ETH' || record.chain === 'BSC') {
-                // Convert from wei to ETH/BNB (1 ETH = 10^18 wei)
-                amount = Number(rawAmount) / 1e18;
-            } else if (record.chain === 'SOL') {
-                // Convert from lamports to SOL (1 SOL = 10^9 lamports)
-                amount = Number(rawAmount) / 1e9;
-            } else if (record.chain === 'BTC') {
-                // Convert from satoshis to BTC (1 BTC = 10^8 satoshis)
-                amount = Number(rawAmount) / 1e8;
-            } else if (record.chain === 'XRP') {
-                // Convert from drops to XRP (1 XRP = 10^6 drops)
-                amount = Number(rawAmount) / 1e6;
-            } else {
-                // For stablecoins or other tokens, assume already in correct unit
-                amount = parseFloat(record.balance);
-            }
+            // Convert from smallest unit to base unit via chain implementation
+            const amount = parseFloat(chainImpl.toHumanUnit(record.balance));
 
             const price = livePrices[record.chain] || 0;
             const usdValue = amount * price;
 
             return {
                 chain: record.chain,
-                symbol: record.chain, // Assuming chain code = symbol for now (ETH, SOL)
+                symbol: chainImpl.getSymbol(),
                 balance: amount,
                 rawBalance: record.balance,
                 usdValue: usdValue,
@@ -59,15 +44,17 @@ export async function GET(req: NextRequest) {
         });
 
         // Ensure we explicitly list supported chains even if balance is 0
-        const supportedChains = ["ETH", "BSC", "SOL", "BTC", "XRP"];
+        const supportedChains = chainFactory.getSupportedChains();
         const finalPortfolio = supportedChains.map(chain => {
             const existing = portfolio.find(p => p.chain === chain);
             if (existing) return existing;
 
+            const chainImpl = chainFactory.getChain(chain as any);
+
             // Return zero balance entry with live price
             return {
                 chain,
-                symbol: chain,
+                symbol: chainImpl.getSymbol(),
                 balance: 0,
                 rawBalance: "0",
                 usdValue: 0,

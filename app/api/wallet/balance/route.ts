@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { ethers } from "ethers";
+import { chainFactory } from "@/core/chain-factory";
 
 /**
  * GET /api/wallet/balance?chain=ETH&userId=xxx
@@ -27,6 +27,9 @@ export async function GET(request: NextRequest) {
             );
         }
 
+        // Get chain implementation
+        const chainImpl = chainFactory.getChain(chain as any);
+
         // Get internal balance
         const balance = await prisma.userBalance.findUnique({
             where: {
@@ -36,23 +39,14 @@ export async function GET(request: NextRequest) {
 
         const balanceSmallestUnit = balance ? balance.balance : "0";
 
-        // Convert to human-readable
-        let balanceHuman = "0";
-        if (chain === "ETH" || chain === "BSC") {
-            balanceHuman = ethers.formatEther(balanceSmallestUnit);
-        } else if (chain === "SOL") {
-            balanceHuman = (Number(balanceSmallestUnit) / 1_000_000_000).toFixed(9);
-        } else if (chain === "BTC") {
-            balanceHuman = (Number(balanceSmallestUnit) / 100_000_000).toFixed(8);
-        } else if (chain === "XRP") {
-            balanceHuman = (Number(balanceSmallestUnit) / 1_000_000).toFixed(6);
-        }
+        // Convert to human-readable via chain implementation
+        const balanceHuman = chainImpl.toHumanUnit(balanceSmallestUnit);
 
         return NextResponse.json({
             chain,
             balance: balanceSmallestUnit, // Smallest unit (wei/lamports)
             balanceHuman, // Human readable (ETH/SOL)
-            symbol: chain === "BSC" ? "BNB" : chain
+            symbol: chainImpl.getSymbol()
         });
 
     } catch (error) {

@@ -1,0 +1,6 @@
+﻿[Network Config] Initialized in MAINNET mode (env: mainnet)
+
+--- Seeding Test User (MAINNET) ---
+Ô£à User test@example.com is ready! ID: cmls3y8ln0000bvlvadozewlq
+
+To test this user in the UI, update the userId in app/wallet/page.tsx to: cmls3y8ln0000bvlvadozewlq

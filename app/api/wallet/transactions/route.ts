@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { chainFactory } from "@/core/chain-factory";
 
 /**
  * GET /api/wallet/transactions?chain=ETH&userId=xxx&limit=50
@@ -37,22 +38,13 @@ export async function GET(request: NextRequest) {
 
         // Format response
         const formatted = transactions.map(tx => {
-            let amountHuman = tx.amount;
-            const amt = BigInt(tx.amount);
-
-            if (tx.chain === 'ETH' || tx.chain === 'BSC') {
-                amountHuman = (Number(amt) / 1e18).toFixed(18).replace(/\.?0+$/, "");
-            } else if (tx.chain === 'SOL') {
-                amountHuman = (Number(amt) / 1e9).toFixed(9).replace(/\.?0+$/, "");
-            } else if (tx.chain === 'BTC') {
-                amountHuman = (Number(amt) / 1e8).toFixed(8).replace(/\.?0+$/, "");
-            } else if (tx.chain === 'XRP') {
-                amountHuman = (Number(amt) / 1e6).toFixed(6).replace(/\.?0+$/, "");
-            }
+            const chainImpl = chainFactory.getChain(tx.chain as any);
+            const amountHuman = chainImpl.toHumanUnit(tx.amount);
 
             return {
                 id: tx.id,
                 chain: tx.chain,
+                symbol: chainImpl.getSymbol(),
                 txHash: tx.txHash,
                 amount: tx.amount,
                 amountHuman,

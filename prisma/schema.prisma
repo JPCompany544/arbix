@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "./client"
@@ -12,19 +9,18 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  status    Status   @default(ACTIVE)
-  balance   Float    @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  transactions Transaction[]
+  id                String             @id @default(cuid())
+  email             String             @unique
+  password          String
+  role              Role               @default(USER)
+  status            Status             @default(ACTIVE)
+  balance           Float              @default(0)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   chainTransactions ChainTransaction[]
-  withdrawals  Withdrawal[]
-  wallets      UserWallet[]
+  transactions      Transaction[]
+  wallets           UserWallet[]
+  withdrawals       Withdrawal[]
 }
 
 model Transaction {
@@ -34,24 +30,22 @@ model Transaction {
   type      TxType
   status    TxStatus @default(PENDING)
   createdAt DateTime @default(now())
-  
   user      User     @relation(fields: [userId], references: [id])
 }
 
 model ChainTransaction {
-  id           String   @id @default(cuid())
-  userId       String
-  chain        String
-  to           String
-  amount       String   // stored as string to preserve precision
-  txHash       String?  @unique
-  blockNumber  BigInt?  // block number when detected/confirmed
-  direction    TxDirection @default(OUTBOUND) // INBOUND = deposit, OUTBOUND = withdrawal
-  status       ChainTxStatus @default(PENDING)
-  createdAt    DateTime @default(now())
-  confirmedAt  DateTime?
-
-  user      User     @relation(fields: [userId], references: [id])
+  id          String        @id @default(cuid())
+  userId      String
+  chain       String
+  to          String
+  amount      String
+  txHash      String?       @unique
+  status      ChainTxStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  confirmedAt DateTime?
+  blockNumber BigInt?
+  direction   TxDirection   @default(OUTBOUND)
+  user        User          @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([chain])
@@ -59,22 +53,22 @@ model ChainTransaction {
 }
 
 model LedgerEntry {
-  id            String   @id @default(cuid())
-  userId        String
-  chain         String
-  amount        String   // always positive
-  type          LedgerType
-  referenceId   String?  // ChainTransaction ID or manual reference
-  createdAt     DateTime @default(now())
+  id          String     @id @default(cuid())
+  userId      String
+  chain       String
+  amount      String
+  type        LedgerType
+  referenceId String?
+  createdAt   DateTime   @default(now())
 
   @@index([userId, chain])
 }
 
 model UserBalance {
-  id       String @id @default(cuid())
-  userId   String
-  chain    String
-  balance  String  // stored as string for precision
+  id      String @id @default(cuid())
+  userId  String
+  chain   String
+  balance String
 
   @@unique([userId, chain])
 }
@@ -86,8 +80,7 @@ model Withdrawal {
   walletAddress String?
   status        TxStatus @default(PENDING)
   createdAt     DateTime @default(now())
-  
-  user      User     @relation(fields: [userId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 model SystemSetting {
@@ -101,21 +94,144 @@ model UserWallet {
   chain            String
   derivationIndex  Int
   address          String
-  lastKnownBalance String   @default("0")
   createdAt        DateTime @default(now())
+  lastKnownBalance String   @default("0")
+  user             User     @relation(fields: [userId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
-
-  @@unique([userId, chain, derivationIndex])
+  @@unique([chain, derivationIndex])
   @@unique([userId, chain])
   @@index([userId])
   @@index([address])
 }
 
 model ChainScanState {
-  chain            String @id
-  lastScannedBlock BigInt @default(0)
-  updatedAt        DateTime @updatedAt @default(now())
+  chain            String   @id
+  lastScannedBlock BigInt   @default(0)
+  updatedAt        DateTime @default(now()) @updatedAt
+}
+
+enum TreasuryAccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+}
+
+enum TreasuryLedgerReferenceType {
+  DEPOSIT
+  WITHDRAWAL_REQUEST
+  WITHDRAWAL_EXECUTED
+  SWEEP
+  TREASURY_MOVE
+  ADJUSTMENT
+}
+
+enum WalletLifecycleStatus {
+  ACTIVE
+  SWEPT
+  ARCHIVED
+}
+
+model TreasuryAccount {
+  id              String               @id @default(cuid())
+  name            String
+  type            TreasuryAccountType
+  network         String?
+  currency        String
+  walletAddress   String?
+  parentAccountId String?
+  isActive        Boolean              @default(true)
+  createdAt       DateTime             @default(now())
+
+  parentAccount   TreasuryAccount?     @relation("ParentAccount", fields: [parentAccountId], references: [id])
+  children        TreasuryAccount[]    @relation("ParentAccount")
+  entries         TreasuryEntry[]
+
+  @@unique([walletAddress])
+  @@unique([name, currency, network])
+  @@index([type, network, currency])
+  @@index([walletAddress])
+  @@index([parentAccountId])
+}
+
+model TreasuryLedger {
+  id            String                     @id @default(cuid())
+  referenceType TreasuryLedgerReferenceType
+  referenceId   String?
+  description   String
+  network       String
+  currency      String
+  createdByAdminId String?
+  locked        Boolean                    @default(false)
+  createdAt     DateTime                   @default(now())
+
+  entries       TreasuryEntry[]
+
+  @@index([referenceType])
+  @@index([network, currency])
+  @@index([createdAt])
+}
+
+model TreasuryEntry {
+  id          String   @id @default(cuid())
+  ledgerId    String
+  accountId   String
+  debitAmount BigInt   @default(0)
+  creditAmount BigInt  @default(0)
+  currency    String
+  network     String
+  createdAt   DateTime @default(now())
+
+  ledger      TreasuryLedger @relation(fields: [ledgerId], references: [id])
+  account     TreasuryAccount @relation(fields: [accountId], references: [id])
+
+  @@index([ledgerId])
+  @@index([accountId])
+  @@index([network, currency])
+  @@index([accountId, createdAt])
+}
+
+// balance snapshots support the integrity layer, tracking assets vs liabilities over time
+model BalanceSnapshot {
+  id              String   @id @default(cuid())
+  snapshotTime    DateTime @default(now())
+  network         String
+  currency        String
+  totalAssets     BigInt
+  totalLiabilities BigInt
+  totalEquity     BigInt
+
+  @@index([network, currency])
+  @@index([snapshotTime])
+}
+
+model TreasuryState {
+  chain                String    @id
+  totalOnchainBalance  String    @default("0")
+  totalUserLiabilities String    @default("0")
+  sweepableBalance     String    @default("0")
+  lastSyncedAt         DateTime  @default(now())
+  locked               Boolean   @default(false)
+  lockedAt             DateTime?
+  lockedBy             String?
+}
+
+model Sweep {
+  id          String      @id @default(cuid())
+  chain       String
+  amount      String
+  amountRaw   String
+  fromWallet  String
+  toWallet    String
+  txHash      String?     @unique
+  status      SweepStatus @default(PENDING)
+  initiatedBy String
+  error       String?
+  createdAt   DateTime    @default(now())
+  confirmedAt DateTime?
+
+  @@index([chain])
+  @@index([status])
+  @@index([initiatedBy])
 }
 
 enum Role {
@@ -156,7 +272,14 @@ enum TxDirection {
 enum LedgerType {
   DEPOSIT
   WITHDRAWAL
+  ADJUSTMENT
   TRANSFER
   EARNING
-  ADJUSTMENT
+}
+
+enum SweepStatus {
+  PENDING
+  BROADCASTING
+  CONFIRMED
+  FAILED
 }

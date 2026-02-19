@@ -3,9 +3,14 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-type Chain = "ETH" | "BSC" | "SOL";
+type Chain = "ETH" | "BSC" | "SOL" | "BTC" | "XRP";
 type TxStatus = "PENDING" | "BROADCASTED" | "CONFIRMED" | "FAILED";
 type TxDirection = "INBOUND" | "OUTBOUND";
+
+interface ChainConfig {
+    chain: Chain;
+    symbol: string;
+}
 
 interface WalletData {
     address: string;
@@ -24,15 +29,18 @@ interface Transaction {
     direction: TxDirection;
     createdAt: string;
     confirmedAt: string | null;
+    symbol?: string; // Optional symbol override from API
 }
 
 export default function WalletPage() {
-    const [userId] = useState("cmli2bcpp0000dj58qvyfht0h"); // In production, get from auth
+    const [userId, setUserId] = useState("cmls3zx810000uqo2h7j7bwej"); // Default to testnet seed
     const [selectedChain, setSelectedChain] = useState<Chain>("ETH");
+    const [supportedChains, setSupportedChains] = useState<ChainConfig[]>([]);
     const [wallet, setWallet] = useState<WalletData | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(false);
     const [withdrawing, setWithdrawing] = useState(false);
+    const [status, setStatus] = useState<{ mode: string; isMainnet: boolean; testUserId?: string } | null>(null);
 
     // Withdraw form
     const [withdrawTo, setWithdrawTo] = useState("");
@@ -40,16 +48,25 @@ export default function WalletPage() {
     const [withdrawError, setWithdrawError] = useState("");
     const [withdrawSuccess, setWithdrawSuccess] = useState("");
 
+    const [error, setError] = useState<string | null>(null);
+
     // Fetch wallet data
     const fetchWalletData = async (chain: Chain) => {
+        if (!userId) return;
         setLoading(true);
+        setError(null);
         try {
             // Get address
             const addrRes = await fetch(`/api/wallet/address?chain=${chain}&userId=${userId}`);
+            if (!addrRes.ok) {
+                const errData = await addrRes.json();
+                throw new Error(errData.error || "Failed to generate/fetch address");
+            }
             const addrData = await addrRes.json();
 
             // Get balance
             const balRes = await fetch(`/api/wallet/balance?chain=${chain}&userId=${userId}`);
+            if (!balRes.ok) throw new Error("Failed to fetch balance");
             const balData = await balRes.json();
 
             setWallet({
@@ -64,8 +81,9 @@ export default function WalletPage() {
             const txData = await txRes.json();
             setTransactions(txData.transactions || []);
 
-        } catch (error) {
-            console.error("Error fetching wallet data:", error);
+        } catch (e: any) {
+            console.error("Fetch error:", e);
+            setError(e.message);
         } finally {
             setLoading(false);
         }
@@ -133,8 +151,27 @@ export default function WalletPage() {
 
     // Initial load
     useEffect(() => {
-        fetchWalletData(selectedChain);
-    }, [selectedChain]);
+        const fetchConfig = async () => {
+            try {
+                const [configRes, statusRes] = await Promise.all([
+                    fetch("/api/wallet/config"),
+                    fetch("/api/status")
+                ]);
+                const configData = await configRes.json();
+                const statusData = await statusRes.json();
+
+                if (configData.chains) setSupportedChains(configData.chains);
+                setStatus(statusData);
+                if (statusData.testUserId) setUserId(statusData.testUserId);
+            } catch (e) { }
+        };
+        fetchConfig();
+    }, []);
+
+    // Fetch wallet when chain or user changes
+    useEffect(() => {
+        if (userId) fetchWalletData(selectedChain);
+    }, [selectedChain, userId]);
 
     // Auto-refresh
     useEffect(() => {
@@ -148,11 +185,11 @@ export default function WalletPage() {
     // Status indicator
     const getStatusColor = (status: TxStatus) => {
         switch (status) {
-            case "CONFIRMED": return "bg-green-500";
-            case "BROADCASTED": return "bg-yellow-500";
-            case "PENDING": return "bg-blue-500";
-            case "FAILED": return "bg-red-500";
-            default: return "bg-gray-500";
+            case "CONFIRMED": return "bg-green-100 text-green-800";
+            case "BROADCASTED": return "bg-blue-100 text-blue-800";
+            case "PENDING": return "bg-yellow-100 text-yellow-800";
+            case "FAILED": return "bg-red-100 text-red-800";
+            default: return "bg-gray-100 text-gray-800";
         }
     };
 
@@ -170,25 +207,50 @@ export default function WalletPage() {
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Wallet Management</h1>
-                    <p className="text-gray-600 mt-2">Manage your multi-chain wallet balances and transactions</p>
+                <div className="mb-8 flex justify-between items-center">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">Wallet Management</h1>
+                        <p className="text-gray-600 mt-2">Manage your multi-chain wallet balances and transactions</p>
+                    </div>
+                    {status && (
+                        <div className={`px-4 py-2 rounded-full text-sm font-bold shadow-sm ${status.isMainnet
+                            ? "bg-red-100 text-red-700 border border-red-200"
+                            : "bg-green-100 text-green-700 border border-green-200"
+                            }`}>
+                            ● {status.mode.toUpperCase()} MODE
+                        </div>
+                    )}
                 </div>
+
+                {error && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg flex items-center justify-between">
+                        <div className="flex items-center">
+                            <span className="mr-2">⚠</span>
+                            <span>{error}</span>
+                        </div>
+                        <button
+                            onClick={() => window.location.href = "/signup"}
+                            className="text-sm font-bold underline"
+                        >
+                            Sign Up instead
+                        </button>
+                    </div>
+                )}
 
                 {/* Chain Selector */}
                 <div className="bg-white rounded-lg shadow p-6 mb-6">
                     <label className="block text-sm font-medium text-gray-700 mb-2">Select Chain</label>
                     <div className="flex gap-4">
-                        {(["ETH", "BSC", "SOL"] as Chain[]).map((chain) => (
+                        {supportedChains.map((c) => (
                             <button
-                                key={chain}
-                                onClick={() => setSelectedChain(chain)}
-                                className={`px-6 py-3 rounded-lg font-medium transition-colors ${selectedChain === chain
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                key={c.chain}
+                                onClick={() => setSelectedChain(c.chain)}
+                                className={`px-6 py-3 rounded-lg font-medium transition-colors ${selectedChain === c.chain
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                     }`}
                             >
-                                {chain === "BSC" ? "BNB" : chain}
+                                {c.symbol}
                             </button>
                         ))}
                     </div>
@@ -315,21 +377,21 @@ export default function WalletPage() {
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex items-center gap-2 mb-1">
                                                             <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${tx.direction === "INBOUND"
-                                                                    ? "bg-green-100 text-green-800"
-                                                                    : "bg-blue-100 text-blue-800"
+                                                                ? "bg-green-100 text-green-800"
+                                                                : "bg-blue-100 text-blue-800"
                                                                 }`}>
                                                                 {tx.direction === "INBOUND" ? "📥 Deposit" : "📤 Withdrawal"}
                                                             </span>
                                                             <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${tx.status === "CONFIRMED" ? "bg-green-100 text-green-800" :
-                                                                    tx.status === "BROADCASTED" ? "bg-yellow-100 text-yellow-800" :
-                                                                        tx.status === "PENDING" ? "bg-blue-100 text-blue-800" :
-                                                                            "bg-red-100 text-red-800"
+                                                                tx.status === "BROADCASTED" ? "bg-yellow-100 text-yellow-800" :
+                                                                    tx.status === "PENDING" ? "bg-blue-100 text-blue-800" :
+                                                                        "bg-red-100 text-red-800"
                                                                 }`}>
                                                                 {tx.status}
                                                             </span>
                                                         </div>
                                                         <div className="text-sm font-medium text-gray-900 mb-1">
-                                                            {tx.amount} {tx.chain === "BSC" ? "BNB" : tx.chain}
+                                                            {tx.amount} {supportedChains.find(c => c.chain === tx.chain)?.symbol || tx.chain}
                                                         </div>
                                                         {tx.txHash && (
                                                             <div className="text-xs text-gray-500 truncate">

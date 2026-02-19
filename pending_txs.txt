@@ -1,0 +1,6 @@
+﻿[DB] Initializing Prisma - Mode: TESTNET, Target: postgresql://neondb_owner:****@ep-steep-shape-aiymp707-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+TX: SOL 4fgtBkxh2c3mdjnMqjM5s5KaaZpqYHZR1ZiSCAwNLqe6SshiqCSgurL7EPXj3oe47dS3MEKfDgxxaBrSCwjTReYm
+TX: SOL 223iDASEMCQdmiRt5Ywa11uArATTn5BRAsQy7SePJtmjPF1bT5oSBpd9CG1D4q9KXVgKiEJb3fjhPWaVkAa44FzP
+TX: SOL 4DMpkUp3XCZuLvpaNEgnXiTS4rhNFRBGc1vrbS7c74D7iYxTAyE3X8e24fktRLfDZMuKCXgtNxxHSi3ZHmz4LGU5
+TX: SOL 2P6PaeUXWqyuUjCL4EwbBVEiCETWyNmkbovrgF1EjFB5z3a1nSmumt3PyoqdHo1w8QLJDLBP5XbMZqYysSoYyhjp
+TX: SOL 3uEh6pqCotvmKqDQZ2cNTqtudbn5zHpBn9N8yroA6UhLKT5HgASBBbD9zaWVoYmgGTNUH4H69goeLwwvMxeePG6o

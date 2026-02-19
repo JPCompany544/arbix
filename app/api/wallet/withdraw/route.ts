@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { signTransaction } from "@/lib/wallet/engine";
-import { ethers } from "ethers";
+import { processWithdrawal } from "@/lib/wallet/wallet-service";
+import { chainFactory } from "@/core/chain-factory";
 
 /**
  * POST /api/wallet/withdraw
@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (!chain || !["ETH", "BSC", "SOL"].includes(chain)) {
+        if (!chain || !["ETH", "BSC", "SOL", "BTC", "XRP"].includes(chain)) {
             return NextResponse.json(
-                { error: "Invalid chain. Must be ETH, BSC, or SOL" },
+                { error: "Invalid chain. Must be ETH, BSC, SOL, BTC, or XRP" },
                 { status: 400 }
             );
         }
@@ -41,45 +41,20 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Validate address format
-        if (chain === "ETH" || chain === "BSC") {
-            if (!ethers.isAddress(to)) {
-                return NextResponse.json(
-                    { error: "Invalid EVM address" },
-                    { status: 400 }
-                );
-            }
-        } else if (chain === "SOL") {
-            // Basic Solana address validation (44 characters, base58)
-            if (!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(to)) {
-                return NextResponse.json(
-                    { error: "Invalid Solana address" },
-                    { status: 400 }
-                );
-            }
-        }
-
-        // Execute withdrawal
-        let result;
-
-        if (chain === "ETH" || chain === "BSC") {
-            result = await signTransaction(userId, chain, {
-                to,
-                value: amount // ETH/BNB amount as string
-            });
-        } else if (chain === "SOL") {
-            result = await signTransaction(userId, chain, {
-                to,
-                amount: parseFloat(amount) // SOL amount as number
-            });
-        }
-
-        if (!result) {
+        // Validate address format via chain implementation
+        const chainImpl = chainFactory.getChain(chain as any);
+        if (!chainImpl.isValidAddress(to)) {
             return NextResponse.json(
-                { error: "Failed to process withdrawal" },
-                { status: 500 }
+                { error: `Invalid ${chain} address` },
+                { status: 400 }
             );
         }
+
+        // Execute withdrawal via WalletService
+        const result = await processWithdrawal(userId, chain as any, {
+            to,
+            amount // Standard string value
+        });
 
         return NextResponse.json({
             success: true,
@@ -92,7 +67,6 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
         console.error("[API] Withdraw error:", error);
 
-        // Handle specific errors
         if (error.message?.includes("Insufficient internal balance")) {
             return NextResponse.json(
                 { error: "Insufficient balance" },
@@ -100,15 +74,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (error.message?.includes("Invalid")) {
-            return NextResponse.json(
-                { error: error.message },
-                { status: 400 }
-            );
-        }
-
         return NextResponse.json(
-            { error: "Withdrawal failed. Please try again." },
+            { error: error.message || "Withdrawal failed. Please try again." },
             { status: 500 }
         );
     }

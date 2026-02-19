@@ -1,0 +1,6 @@
+﻿[Network Config] Initialized in TESTNET mode (env: testnet)
+
+--- Seeding Test User (TESTNET) ---
+Ô£à User test@example.com is ready! ID: cmls3zx810000uqo2h7j7bwej
+
+To test this user in the UI, update the userId in app/wallet/page.tsx to: cmls3zx810000uqo2h7j7bwej

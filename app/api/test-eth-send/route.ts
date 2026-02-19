@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { signEthereumTransaction } from "@/lib/wallet/engine";
+import { processWithdrawal } from "@/lib/wallet/wallet-service";
 
 export async function GET() {
     try {
@@ -7,9 +7,9 @@ export async function GET() {
 
         console.log("[Test] Starting Ethereum transaction sign test...");
 
-        const result = await signEthereumTransaction(userId, {
+        const result = await processWithdrawal(userId, "ETH", {
             to: "0x070FB771612106e2F3F6b7d150F9AA724b2f5CF0", // second test wallet OR same wallet
-            value: "0.0005"               // ETH amount to send
+            amount: "0.0005"               // ETH amount to send
         });
 
         console.log("[Test] Transaction Hash:", result.txHash);

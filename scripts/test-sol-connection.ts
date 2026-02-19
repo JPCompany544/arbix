@@ -1,9 +1,7 @@
-import "dotenv/config";
-import { Connection } from "@solana/web3.js";
+import { providerRegistry } from "../core/provider-registry";
 
 async function test() {
-    const rpc = process.env.SOLANA_DEVNET_RPC!;
-    const connection = new Connection(rpc);
+    const connection = providerRegistry.getSolanaConnection();
 
     const version = await connection.getVersion();
     console.log("Connected to Solana:", version);

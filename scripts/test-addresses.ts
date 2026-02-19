@@ -1,10 +1,16 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import { generateAddress } from "../lib/wallet/engine";
+import { generateAddress } from "../lib/wallet/wallet-service";
 
 
 async function test() {
-    const userId = "cmli2bcpp0000dj58qvyfht0h";
+    const { prisma } from "../lib/prisma";
+    const user = await prisma.user.findFirst();
+    if (!user) {
+        throw new Error("No users found in database. Run 'npx tsx scripts/seed-test-user.ts' first.");
+    }
+    const userId = user.id;
+    console.log(`Using UserID: ${userId}`);
 
     console.log("\n=== Testing Multi-Chain Address Generation ===\n");
 
