@@ -47,7 +47,7 @@ async function runTests() {
     await prisma.treasuryAccount.update({ where: { id: hot.id }, data: { currency: "BTC" } });
     let failed = false;
     try {
-      await svc.journalDeposit("userx", 10n);
+      await svc.journalDeposit("userx", 10n, 'test-admin');
     } catch (e) {
       failed = true;
     }
@@ -55,8 +55,8 @@ async function runTests() {
 
     // snapshot tests
     await resetData();
-    const ledger1 = await svc.journalDeposit("u1", 100n);
-    const ledger2 = await svc.journalWithdrawal("u1", 50n);
+    const ledger1 = await svc.journalDeposit("u1", 100n, 'test-admin');
+    const ledger2 = await svc.journalWithdrawal("u1", 50n, 'test-admin');
     const snapSvc = new SnapshotService();
     const snapId = await snapSvc.generateSnapshot();
     const snap = await snapSvc.getLatestSnapshot();
@@ -69,7 +69,7 @@ async function runTests() {
     const hotAcc = await prisma.treasuryAccount.findFirst({ where: { name: "Hot Wallet" } });
     assert(hotAcc);
     // deposit 200 to hot
-    const id3 = await svc.journalDeposit("u1", 200n);
+    const id3 = await svc.journalDeposit("u1", 200n, 'test-admin');
     const recSvc = new ReconciliationService();
     const { ledgerBalance: lb } = await recSvc.reconcile(hotAcc.id, 200n);
     assert.strictEqual(lb, 200n);

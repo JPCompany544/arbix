@@ -126,9 +126,33 @@ enum TreasuryLedgerReferenceType {
 }
 
 enum WalletLifecycleStatus {
+  GENERATED
   ACTIVE
+  ROTATING
+  ROTATED
+  DISABLED
   SWEPT
   ARCHIVED
+}
+
+model WalletLifecycle {
+  id                 String               @id @default(cuid())
+  walletAddress      String
+  network            String
+  currency           String
+  userId             String
+  status             WalletLifecycleStatus
+  sweptAt            DateTime?
+  replacedByWalletId String?
+  createdAt          DateTime             @default(now())
+
+  replacedBy         WalletLifecycle?     @relation("ReplacedBy", fields: [replacedByWalletId], references: [id])
+  replacements       WalletLifecycle[]    @relation("ReplacedBy")
+
+  @@unique([walletAddress])
+  @@index([userId])
+  @@index([network, currency])
+  @@index([status])
 }
 
 model TreasuryAccount {

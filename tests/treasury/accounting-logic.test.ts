@@ -39,6 +39,50 @@ async function ensureTreasurySchema() {
     EXECUTE FUNCTION "fn_treasuryentry_validate_line"();
   `);
 
+  // guard inserts so only service-layer transactions can create ledgers/entries
+  await prisma.$executeRawUnsafe(`
+    CREATE OR REPLACE FUNCTION "fn_treasuryledger_require_admin"()
+    RETURNS TRIGGER AS $$
+    BEGIN
+      IF NEW."createdByAdminId" IS NULL OR NEW."createdByAdminId" = '' THEN
+        RAISE EXCEPTION 'TreasuryLedger.createdByAdminId is required';
+      END IF;
+      IF current_setting('treasury.is_service', true) IS DISTINCT FROM '1' THEN
+        RAISE EXCEPTION 'TreasuryLedger inserts allowed only from service layer';
+      END IF;
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+  `);
+
+  await prisma.$executeRawUnsafe(`DROP TRIGGER IF EXISTS "trg_treasuryledger_require_admin" ON "TreasuryLedger"`);
+  await prisma.$executeRawUnsafe(`
+    CREATE TRIGGER "trg_treasuryledger_require_admin"
+    BEFORE INSERT ON "TreasuryLedger"
+    FOR EACH ROW
+    EXECUTE FUNCTION "fn_treasuryledger_require_admin"();
+  `);
+
+  await prisma.$executeRawUnsafe(`
+    CREATE OR REPLACE FUNCTION "fn_treasuryentry_guard"()
+    RETURNS TRIGGER AS $$
+    BEGIN
+      IF current_setting('treasury.is_service', true) IS DISTINCT FROM '1' THEN
+        RAISE EXCEPTION 'TreasuryEntry inserts allowed only from service layer';
+      END IF;
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+  `);
+
+  await prisma.$executeRawUnsafe(`DROP TRIGGER IF EXISTS "trg_treasuryentry_guard" ON "TreasuryEntry"`);
+  await prisma.$executeRawUnsafe(`
+    CREATE TRIGGER "trg_treasuryentry_guard"
+    BEFORE INSERT ON "TreasuryEntry"
+    FOR EACH ROW
+    EXECUTE FUNCTION "fn_treasuryentry_guard"();
+  `);
+
   await prisma.$executeRawUnsafe(`
     CREATE OR REPLACE FUNCTION "fn_treasuryledger_before_update"()
     RETURNS TRIGGER AS $$
@@ -112,6 +156,8 @@ async function resetTreasuryData() {
   await prisma.$executeRawUnsafe(`DROP TRIGGER IF EXISTS "trg_treasuryledger_before_update" ON "TreasuryLedger"`);
   await prisma.$executeRawUnsafe(`DROP TRIGGER IF EXISTS "trg_treasuryledger_before_delete" ON "TreasuryLedger"`);
   await prisma.$executeRawUnsafe(`DROP TRIGGER IF EXISTS "trg_treasuryentry_validate_line" ON "TreasuryEntry"`);
+  await prisma.$executeRawUnsafe(`DROP TRIGGER IF EXISTS "trg_treasuryledger_require_admin" ON "TreasuryLedger"`);
+  await prisma.$executeRawUnsafe(`DROP TRIGGER IF EXISTS "trg_treasuryentry_guard" ON "TreasuryEntry"`);
 
   // clear entries and ledgers
   await prisma.$executeRawUnsafe(`DELETE FROM "TreasuryEntry"`);
@@ -129,7 +175,7 @@ async function testDepositFlow() {
   await seedAccounts();
 
   const svc = new TreasuryService();
-  const ledgerId = await svc.journalDeposit("user1", 100n);
+  const ledgerId = await svc.journalDeposit("user1", 100n, 'test-admin');
 
   const ledger = await prisma.treasuryLedger.findUnique({
     where: { id: ledgerId },
@@ -170,7 +216,7 @@ async function testWithdrawalFlow() {
   await seedAccounts();
 
   const svc = new TreasuryService();
-  const ledgerId = await svc.journalWithdrawal("user2", 50n);
+  const ledgerId = await svc.journalWithdrawal("user2", 50n, 'test-admin');
 
   const ledger = await prisma.treasuryLedger.findUnique({ where: { id: ledgerId }, include: { entries: true } });
   assert(ledger && ledger.locked);
@@ -203,7 +249,7 @@ async function testSweepFlow() {
   });
 
   const svc = new TreasuryService();
-  const ledgerId = await svc.journalSweep(depositWallet.id, 20n);
+  const ledgerId = await svc.journalSweep(depositWallet.id, 20n, 'test-admin');
 
   const ledger = await prisma.treasuryLedger.findUnique({ where: { id: ledgerId }, include: { entries: true } });
   assert(ledger && ledger.locked);
@@ -228,7 +274,7 @@ async function testColdTransferFlow() {
   await seedAccounts();
 
   const svc = new TreasuryService();
-  const ledgerId = await svc.journalColdTransfer(30n);
+  const ledgerId = await svc.journalColdTransfer(30n, 'test-admin');
 
   const ledger = await prisma.treasuryLedger.findUnique({ where: { id: ledgerId }, include: { entries: true } });
   assert(ledger && ledger.locked);
@@ -264,12 +310,12 @@ async function testFullScenario() {
   const userBal = await acct("User Balances");
 
   // sequence: deposit 100, withdraw 40, sweep 20, cold 30, deposit 50, withdraw 10
-  await svc.journalDeposit("foo", 100n);
-  await svc.journalWithdrawal("foo", 40n);
-  await svc.journalSweep(deposit.id, 20n);
-  await svc.journalColdTransfer(30n);
-  await svc.journalDeposit("foo", 50n);
-  await svc.journalWithdrawal("foo", 10n);
+  await svc.journalDeposit("foo", 100n, 'test-admin');
+  await svc.journalWithdrawal("foo", 40n, 'test-admin');
+  await svc.journalSweep(deposit.id, 20n, 'test-admin');
+  await svc.journalColdTransfer(30n, 'test-admin');
+  await svc.journalDeposit("foo", 50n, 'test-admin');
+  await svc.journalWithdrawal("foo", 10n, 'test-admin');
 
   const hotBal = await svc.getAccountBalance(hot.id);
   const coldBal = await svc.getAccountBalance(cold.id);

@@ -59,6 +59,11 @@ export type UserWallet = $Result.DefaultSelection<Prisma.$UserWalletPayload>
  */
 export type ChainScanState = $Result.DefaultSelection<Prisma.$ChainScanStatePayload>
 /**
+ * Model WalletLifecycle
+ * 
+ */
+export type WalletLifecycle = $Result.DefaultSelection<Prisma.$WalletLifecyclePayload>
+/**
  * Model TreasuryAccount
  * 
  */
@@ -157,6 +162,19 @@ export const LedgerType: {
 export type LedgerType = (typeof LedgerType)[keyof typeof LedgerType]
 
 
+export const WalletLifecycleStatus: {
+  GENERATED: 'GENERATED',
+  ACTIVE: 'ACTIVE',
+  ROTATING: 'ROTATING',
+  ROTATED: 'ROTATED',
+  DISABLED: 'DISABLED',
+  SWEPT: 'SWEPT',
+  ARCHIVED: 'ARCHIVED'
+};
+
+export type WalletLifecycleStatus = (typeof WalletLifecycleStatus)[keyof typeof WalletLifecycleStatus]
+
+
 export const TreasuryAccountType: {
   ASSET: 'ASSET',
   LIABILITY: 'LIABILITY',
@@ -216,6 +234,10 @@ export const TxDirection: typeof $Enums.TxDirection
 export type LedgerType = $Enums.LedgerType
 
 export const LedgerType: typeof $Enums.LedgerType
+
+export type WalletLifecycleStatus = $Enums.WalletLifecycleStatus
+
+export const WalletLifecycleStatus: typeof $Enums.WalletLifecycleStatus
 
 export type TreasuryAccountType = $Enums.TreasuryAccountType
 
@@ -440,6 +462,16 @@ export class PrismaClient<
     * ```
     */
   get chainScanState(): Prisma.ChainScanStateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.walletLifecycle`: Exposes CRUD operations for the **WalletLifecycle** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WalletLifecycles
+    * const walletLifecycles = await prisma.walletLifecycle.findMany()
+    * ```
+    */
+  get walletLifecycle(): Prisma.WalletLifecycleDelegate<ExtArgs>;
 
   /**
    * `prisma.treasuryAccount`: Exposes CRUD operations for the **TreasuryAccount** model.
@@ -979,6 +1011,7 @@ export namespace Prisma {
     SystemSetting: 'SystemSetting',
     UserWallet: 'UserWallet',
     ChainScanState: 'ChainScanState',
+    WalletLifecycle: 'WalletLifecycle',
     TreasuryAccount: 'TreasuryAccount',
     TreasuryLedger: 'TreasuryLedger',
     TreasuryEntry: 'TreasuryEntry',
@@ -1001,7 +1034,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'user' | 'transaction' | 'chainTransaction' | 'ledgerEntry' | 'userBalance' | 'withdrawal' | 'systemSetting' | 'userWallet' | 'chainScanState' | 'treasuryAccount' | 'treasuryLedger' | 'treasuryEntry' | 'balanceSnapshot' | 'treasuryState' | 'sweep'
+      modelProps: 'user' | 'transaction' | 'chainTransaction' | 'ledgerEntry' | 'userBalance' | 'withdrawal' | 'systemSetting' | 'userWallet' | 'chainScanState' | 'walletLifecycle' | 'treasuryAccount' | 'treasuryLedger' | 'treasuryEntry' | 'balanceSnapshot' | 'treasuryState' | 'sweep'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1596,6 +1629,72 @@ export namespace Prisma {
           count: {
             args: Prisma.ChainScanStateCountArgs<ExtArgs>,
             result: $Utils.Optional<ChainScanStateCountAggregateOutputType> | number
+          }
+        }
+      }
+      WalletLifecycle: {
+        payload: Prisma.$WalletLifecyclePayload<ExtArgs>
+        fields: Prisma.WalletLifecycleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WalletLifecycleFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WalletLifecycleFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload>
+          }
+          findFirst: {
+            args: Prisma.WalletLifecycleFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WalletLifecycleFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload>
+          }
+          findMany: {
+            args: Prisma.WalletLifecycleFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload>[]
+          }
+          create: {
+            args: Prisma.WalletLifecycleCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload>
+          }
+          createMany: {
+            args: Prisma.WalletLifecycleCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.WalletLifecycleDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload>
+          }
+          update: {
+            args: Prisma.WalletLifecycleUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload>
+          }
+          deleteMany: {
+            args: Prisma.WalletLifecycleDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WalletLifecycleUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.WalletLifecycleUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$WalletLifecyclePayload>
+          }
+          aggregate: {
+            args: Prisma.WalletLifecycleAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateWalletLifecycle>
+          }
+          groupBy: {
+            args: Prisma.WalletLifecycleGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<WalletLifecycleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WalletLifecycleCountArgs<ExtArgs>,
+            result: $Utils.Optional<WalletLifecycleCountAggregateOutputType> | number
           }
         }
       }
@@ -2209,6 +2308,40 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WithdrawalWhereInput
+  }
+
+
+
+  /**
+   * Count Type WalletLifecycleCountOutputType
+   */
+
+  export type WalletLifecycleCountOutputType = {
+    replacements: number
+  }
+
+  export type WalletLifecycleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replacements?: boolean | WalletLifecycleCountOutputTypeCountReplacementsArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * WalletLifecycleCountOutputType without action
+   */
+  export type WalletLifecycleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycleCountOutputType
+     */
+    select?: WalletLifecycleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * WalletLifecycleCountOutputType without action
+   */
+  export type WalletLifecycleCountOutputTypeCountReplacementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WalletLifecycleWhereInput
   }
 
 
@@ -10770,6 +10903,1012 @@ export namespace Prisma {
 
 
   /**
+   * Model WalletLifecycle
+   */
+
+  export type AggregateWalletLifecycle = {
+    _count: WalletLifecycleCountAggregateOutputType | null
+    _min: WalletLifecycleMinAggregateOutputType | null
+    _max: WalletLifecycleMaxAggregateOutputType | null
+  }
+
+  export type WalletLifecycleMinAggregateOutputType = {
+    id: string | null
+    walletAddress: string | null
+    network: string | null
+    currency: string | null
+    userId: string | null
+    status: $Enums.WalletLifecycleStatus | null
+    sweptAt: Date | null
+    replacedByWalletId: string | null
+    createdAt: Date | null
+  }
+
+  export type WalletLifecycleMaxAggregateOutputType = {
+    id: string | null
+    walletAddress: string | null
+    network: string | null
+    currency: string | null
+    userId: string | null
+    status: $Enums.WalletLifecycleStatus | null
+    sweptAt: Date | null
+    replacedByWalletId: string | null
+    createdAt: Date | null
+  }
+
+  export type WalletLifecycleCountAggregateOutputType = {
+    id: number
+    walletAddress: number
+    network: number
+    currency: number
+    userId: number
+    status: number
+    sweptAt: number
+    replacedByWalletId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type WalletLifecycleMinAggregateInputType = {
+    id?: true
+    walletAddress?: true
+    network?: true
+    currency?: true
+    userId?: true
+    status?: true
+    sweptAt?: true
+    replacedByWalletId?: true
+    createdAt?: true
+  }
+
+  export type WalletLifecycleMaxAggregateInputType = {
+    id?: true
+    walletAddress?: true
+    network?: true
+    currency?: true
+    userId?: true
+    status?: true
+    sweptAt?: true
+    replacedByWalletId?: true
+    createdAt?: true
+  }
+
+  export type WalletLifecycleCountAggregateInputType = {
+    id?: true
+    walletAddress?: true
+    network?: true
+    currency?: true
+    userId?: true
+    status?: true
+    sweptAt?: true
+    replacedByWalletId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type WalletLifecycleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WalletLifecycle to aggregate.
+     */
+    where?: WalletLifecycleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletLifecycles to fetch.
+     */
+    orderBy?: WalletLifecycleOrderByWithRelationInput | WalletLifecycleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WalletLifecycleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletLifecycles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletLifecycles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WalletLifecycles
+    **/
+    _count?: true | WalletLifecycleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WalletLifecycleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WalletLifecycleMaxAggregateInputType
+  }
+
+  export type GetWalletLifecycleAggregateType<T extends WalletLifecycleAggregateArgs> = {
+        [P in keyof T & keyof AggregateWalletLifecycle]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWalletLifecycle[P]>
+      : GetScalarType<T[P], AggregateWalletLifecycle[P]>
+  }
+
+
+
+
+  export type WalletLifecycleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WalletLifecycleWhereInput
+    orderBy?: WalletLifecycleOrderByWithAggregationInput | WalletLifecycleOrderByWithAggregationInput[]
+    by: WalletLifecycleScalarFieldEnum[] | WalletLifecycleScalarFieldEnum
+    having?: WalletLifecycleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WalletLifecycleCountAggregateInputType | true
+    _min?: WalletLifecycleMinAggregateInputType
+    _max?: WalletLifecycleMaxAggregateInputType
+  }
+
+  export type WalletLifecycleGroupByOutputType = {
+    id: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt: Date | null
+    replacedByWalletId: string | null
+    createdAt: Date
+    _count: WalletLifecycleCountAggregateOutputType | null
+    _min: WalletLifecycleMinAggregateOutputType | null
+    _max: WalletLifecycleMaxAggregateOutputType | null
+  }
+
+  type GetWalletLifecycleGroupByPayload<T extends WalletLifecycleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WalletLifecycleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WalletLifecycleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WalletLifecycleGroupByOutputType[P]>
+            : GetScalarType<T[P], WalletLifecycleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WalletLifecycleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletAddress?: boolean
+    network?: boolean
+    currency?: boolean
+    userId?: boolean
+    status?: boolean
+    sweptAt?: boolean
+    replacedByWalletId?: boolean
+    createdAt?: boolean
+    replacedBy?: boolean | WalletLifecycle$replacedByArgs<ExtArgs>
+    replacements?: boolean | WalletLifecycle$replacementsArgs<ExtArgs>
+    _count?: boolean | WalletLifecycleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["walletLifecycle"]>
+
+  export type WalletLifecycleSelectScalar = {
+    id?: boolean
+    walletAddress?: boolean
+    network?: boolean
+    currency?: boolean
+    userId?: boolean
+    status?: boolean
+    sweptAt?: boolean
+    replacedByWalletId?: boolean
+    createdAt?: boolean
+  }
+
+  export type WalletLifecycleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    replacedBy?: boolean | WalletLifecycle$replacedByArgs<ExtArgs>
+    replacements?: boolean | WalletLifecycle$replacementsArgs<ExtArgs>
+    _count?: boolean | WalletLifecycleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+
+  export type $WalletLifecyclePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WalletLifecycle"
+    objects: {
+      replacedBy: Prisma.$WalletLifecyclePayload<ExtArgs> | null
+      replacements: Prisma.$WalletLifecyclePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      walletAddress: string
+      network: string
+      currency: string
+      userId: string
+      status: $Enums.WalletLifecycleStatus
+      sweptAt: Date | null
+      replacedByWalletId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["walletLifecycle"]>
+    composites: {}
+  }
+
+
+  type WalletLifecycleGetPayload<S extends boolean | null | undefined | WalletLifecycleDefaultArgs> = $Result.GetResult<Prisma.$WalletLifecyclePayload, S>
+
+  type WalletLifecycleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<WalletLifecycleFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: WalletLifecycleCountAggregateInputType | true
+    }
+
+  export interface WalletLifecycleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WalletLifecycle'], meta: { name: 'WalletLifecycle' } }
+    /**
+     * Find zero or one WalletLifecycle that matches the filter.
+     * @param {WalletLifecycleFindUniqueArgs} args - Arguments to find a WalletLifecycle
+     * @example
+     * // Get one WalletLifecycle
+     * const walletLifecycle = await prisma.walletLifecycle.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends WalletLifecycleFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, WalletLifecycleFindUniqueArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one WalletLifecycle that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {WalletLifecycleFindUniqueOrThrowArgs} args - Arguments to find a WalletLifecycle
+     * @example
+     * // Get one WalletLifecycle
+     * const walletLifecycle = await prisma.walletLifecycle.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends WalletLifecycleFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, WalletLifecycleFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first WalletLifecycle that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletLifecycleFindFirstArgs} args - Arguments to find a WalletLifecycle
+     * @example
+     * // Get one WalletLifecycle
+     * const walletLifecycle = await prisma.walletLifecycle.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends WalletLifecycleFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, WalletLifecycleFindFirstArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first WalletLifecycle that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletLifecycleFindFirstOrThrowArgs} args - Arguments to find a WalletLifecycle
+     * @example
+     * // Get one WalletLifecycle
+     * const walletLifecycle = await prisma.walletLifecycle.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends WalletLifecycleFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, WalletLifecycleFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more WalletLifecycles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletLifecycleFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WalletLifecycles
+     * const walletLifecycles = await prisma.walletLifecycle.findMany()
+     * 
+     * // Get first 10 WalletLifecycles
+     * const walletLifecycles = await prisma.walletLifecycle.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const walletLifecycleWithIdOnly = await prisma.walletLifecycle.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends WalletLifecycleFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, WalletLifecycleFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a WalletLifecycle.
+     * @param {WalletLifecycleCreateArgs} args - Arguments to create a WalletLifecycle.
+     * @example
+     * // Create one WalletLifecycle
+     * const WalletLifecycle = await prisma.walletLifecycle.create({
+     *   data: {
+     *     // ... data to create a WalletLifecycle
+     *   }
+     * })
+     * 
+    **/
+    create<T extends WalletLifecycleCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, WalletLifecycleCreateArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many WalletLifecycles.
+     *     @param {WalletLifecycleCreateManyArgs} args - Arguments to create many WalletLifecycles.
+     *     @example
+     *     // Create many WalletLifecycles
+     *     const walletLifecycle = await prisma.walletLifecycle.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends WalletLifecycleCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, WalletLifecycleCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a WalletLifecycle.
+     * @param {WalletLifecycleDeleteArgs} args - Arguments to delete one WalletLifecycle.
+     * @example
+     * // Delete one WalletLifecycle
+     * const WalletLifecycle = await prisma.walletLifecycle.delete({
+     *   where: {
+     *     // ... filter to delete one WalletLifecycle
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends WalletLifecycleDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, WalletLifecycleDeleteArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one WalletLifecycle.
+     * @param {WalletLifecycleUpdateArgs} args - Arguments to update one WalletLifecycle.
+     * @example
+     * // Update one WalletLifecycle
+     * const walletLifecycle = await prisma.walletLifecycle.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends WalletLifecycleUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, WalletLifecycleUpdateArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more WalletLifecycles.
+     * @param {WalletLifecycleDeleteManyArgs} args - Arguments to filter WalletLifecycles to delete.
+     * @example
+     * // Delete a few WalletLifecycles
+     * const { count } = await prisma.walletLifecycle.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends WalletLifecycleDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, WalletLifecycleDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WalletLifecycles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletLifecycleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WalletLifecycles
+     * const walletLifecycle = await prisma.walletLifecycle.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends WalletLifecycleUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, WalletLifecycleUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one WalletLifecycle.
+     * @param {WalletLifecycleUpsertArgs} args - Arguments to update or create a WalletLifecycle.
+     * @example
+     * // Update or create a WalletLifecycle
+     * const walletLifecycle = await prisma.walletLifecycle.upsert({
+     *   create: {
+     *     // ... data to create a WalletLifecycle
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WalletLifecycle we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends WalletLifecycleUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, WalletLifecycleUpsertArgs<ExtArgs>>
+    ): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of WalletLifecycles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletLifecycleCountArgs} args - Arguments to filter WalletLifecycles to count.
+     * @example
+     * // Count the number of WalletLifecycles
+     * const count = await prisma.walletLifecycle.count({
+     *   where: {
+     *     // ... the filter for the WalletLifecycles we want to count
+     *   }
+     * })
+    **/
+    count<T extends WalletLifecycleCountArgs>(
+      args?: Subset<T, WalletLifecycleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WalletLifecycleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WalletLifecycle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletLifecycleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WalletLifecycleAggregateArgs>(args: Subset<T, WalletLifecycleAggregateArgs>): Prisma.PrismaPromise<GetWalletLifecycleAggregateType<T>>
+
+    /**
+     * Group by WalletLifecycle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WalletLifecycleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WalletLifecycleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WalletLifecycleGroupByArgs['orderBy'] }
+        : { orderBy?: WalletLifecycleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WalletLifecycleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWalletLifecycleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WalletLifecycle model
+   */
+  readonly fields: WalletLifecycleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WalletLifecycle.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WalletLifecycleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    replacedBy<T extends WalletLifecycle$replacedByArgs<ExtArgs> = {}>(args?: Subset<T, WalletLifecycle$replacedByArgs<ExtArgs>>): Prisma__WalletLifecycleClient<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    replacements<T extends WalletLifecycle$replacementsArgs<ExtArgs> = {}>(args?: Subset<T, WalletLifecycle$replacementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletLifecyclePayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the WalletLifecycle model
+   */ 
+  interface WalletLifecycleFieldRefs {
+    readonly id: FieldRef<"WalletLifecycle", 'String'>
+    readonly walletAddress: FieldRef<"WalletLifecycle", 'String'>
+    readonly network: FieldRef<"WalletLifecycle", 'String'>
+    readonly currency: FieldRef<"WalletLifecycle", 'String'>
+    readonly userId: FieldRef<"WalletLifecycle", 'String'>
+    readonly status: FieldRef<"WalletLifecycle", 'WalletLifecycleStatus'>
+    readonly sweptAt: FieldRef<"WalletLifecycle", 'DateTime'>
+    readonly replacedByWalletId: FieldRef<"WalletLifecycle", 'String'>
+    readonly createdAt: FieldRef<"WalletLifecycle", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * WalletLifecycle findUnique
+   */
+  export type WalletLifecycleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletLifecycle to fetch.
+     */
+    where: WalletLifecycleWhereUniqueInput
+  }
+
+
+  /**
+   * WalletLifecycle findUniqueOrThrow
+   */
+  export type WalletLifecycleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletLifecycle to fetch.
+     */
+    where: WalletLifecycleWhereUniqueInput
+  }
+
+
+  /**
+   * WalletLifecycle findFirst
+   */
+  export type WalletLifecycleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletLifecycle to fetch.
+     */
+    where?: WalletLifecycleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletLifecycles to fetch.
+     */
+    orderBy?: WalletLifecycleOrderByWithRelationInput | WalletLifecycleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WalletLifecycles.
+     */
+    cursor?: WalletLifecycleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletLifecycles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletLifecycles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WalletLifecycles.
+     */
+    distinct?: WalletLifecycleScalarFieldEnum | WalletLifecycleScalarFieldEnum[]
+  }
+
+
+  /**
+   * WalletLifecycle findFirstOrThrow
+   */
+  export type WalletLifecycleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletLifecycle to fetch.
+     */
+    where?: WalletLifecycleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletLifecycles to fetch.
+     */
+    orderBy?: WalletLifecycleOrderByWithRelationInput | WalletLifecycleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WalletLifecycles.
+     */
+    cursor?: WalletLifecycleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletLifecycles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletLifecycles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WalletLifecycles.
+     */
+    distinct?: WalletLifecycleScalarFieldEnum | WalletLifecycleScalarFieldEnum[]
+  }
+
+
+  /**
+   * WalletLifecycle findMany
+   */
+  export type WalletLifecycleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * Filter, which WalletLifecycles to fetch.
+     */
+    where?: WalletLifecycleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WalletLifecycles to fetch.
+     */
+    orderBy?: WalletLifecycleOrderByWithRelationInput | WalletLifecycleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WalletLifecycles.
+     */
+    cursor?: WalletLifecycleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WalletLifecycles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WalletLifecycles.
+     */
+    skip?: number
+    distinct?: WalletLifecycleScalarFieldEnum | WalletLifecycleScalarFieldEnum[]
+  }
+
+
+  /**
+   * WalletLifecycle create
+   */
+  export type WalletLifecycleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WalletLifecycle.
+     */
+    data: XOR<WalletLifecycleCreateInput, WalletLifecycleUncheckedCreateInput>
+  }
+
+
+  /**
+   * WalletLifecycle createMany
+   */
+  export type WalletLifecycleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WalletLifecycles.
+     */
+    data: WalletLifecycleCreateManyInput | WalletLifecycleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * WalletLifecycle update
+   */
+  export type WalletLifecycleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WalletLifecycle.
+     */
+    data: XOR<WalletLifecycleUpdateInput, WalletLifecycleUncheckedUpdateInput>
+    /**
+     * Choose, which WalletLifecycle to update.
+     */
+    where: WalletLifecycleWhereUniqueInput
+  }
+
+
+  /**
+   * WalletLifecycle updateMany
+   */
+  export type WalletLifecycleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WalletLifecycles.
+     */
+    data: XOR<WalletLifecycleUpdateManyMutationInput, WalletLifecycleUncheckedUpdateManyInput>
+    /**
+     * Filter which WalletLifecycles to update
+     */
+    where?: WalletLifecycleWhereInput
+  }
+
+
+  /**
+   * WalletLifecycle upsert
+   */
+  export type WalletLifecycleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WalletLifecycle to update in case it exists.
+     */
+    where: WalletLifecycleWhereUniqueInput
+    /**
+     * In case the WalletLifecycle found by the `where` argument doesn't exist, create a new WalletLifecycle with this data.
+     */
+    create: XOR<WalletLifecycleCreateInput, WalletLifecycleUncheckedCreateInput>
+    /**
+     * In case the WalletLifecycle was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WalletLifecycleUpdateInput, WalletLifecycleUncheckedUpdateInput>
+  }
+
+
+  /**
+   * WalletLifecycle delete
+   */
+  export type WalletLifecycleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    /**
+     * Filter which WalletLifecycle to delete.
+     */
+    where: WalletLifecycleWhereUniqueInput
+  }
+
+
+  /**
+   * WalletLifecycle deleteMany
+   */
+  export type WalletLifecycleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WalletLifecycles to delete
+     */
+    where?: WalletLifecycleWhereInput
+  }
+
+
+  /**
+   * WalletLifecycle.replacedBy
+   */
+  export type WalletLifecycle$replacedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    where?: WalletLifecycleWhereInput
+  }
+
+
+  /**
+   * WalletLifecycle.replacements
+   */
+  export type WalletLifecycle$replacementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+    where?: WalletLifecycleWhereInput
+    orderBy?: WalletLifecycleOrderByWithRelationInput | WalletLifecycleOrderByWithRelationInput[]
+    cursor?: WalletLifecycleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WalletLifecycleScalarFieldEnum | WalletLifecycleScalarFieldEnum[]
+  }
+
+
+  /**
+   * WalletLifecycle without action
+   */
+  export type WalletLifecycleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WalletLifecycle
+     */
+    select?: WalletLifecycleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: WalletLifecycleInclude<ExtArgs> | null
+  }
+
+
+
+  /**
    * Model TreasuryAccount
    */
 
@@ -16686,6 +17825,21 @@ export namespace Prisma {
   export type ChainScanStateScalarFieldEnum = (typeof ChainScanStateScalarFieldEnum)[keyof typeof ChainScanStateScalarFieldEnum]
 
 
+  export const WalletLifecycleScalarFieldEnum: {
+    id: 'id',
+    walletAddress: 'walletAddress',
+    network: 'network',
+    currency: 'currency',
+    userId: 'userId',
+    status: 'status',
+    sweptAt: 'sweptAt',
+    replacedByWalletId: 'replacedByWalletId',
+    createdAt: 'createdAt'
+  };
+
+  export type WalletLifecycleScalarFieldEnum = (typeof WalletLifecycleScalarFieldEnum)[keyof typeof WalletLifecycleScalarFieldEnum]
+
+
   export const TreasuryAccountScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -16969,6 +18123,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'WalletLifecycleStatus'
+   */
+  export type EnumWalletLifecycleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WalletLifecycleStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'WalletLifecycleStatus[]'
+   */
+  export type ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WalletLifecycleStatus[]'>
     
 
 
@@ -17574,6 +18742,84 @@ export namespace Prisma {
     chain?: StringWithAggregatesFilter<"ChainScanState"> | string
     lastScannedBlock?: BigIntWithAggregatesFilter<"ChainScanState"> | bigint | number
     updatedAt?: DateTimeWithAggregatesFilter<"ChainScanState"> | Date | string
+  }
+
+  export type WalletLifecycleWhereInput = {
+    AND?: WalletLifecycleWhereInput | WalletLifecycleWhereInput[]
+    OR?: WalletLifecycleWhereInput[]
+    NOT?: WalletLifecycleWhereInput | WalletLifecycleWhereInput[]
+    id?: StringFilter<"WalletLifecycle"> | string
+    walletAddress?: StringFilter<"WalletLifecycle"> | string
+    network?: StringFilter<"WalletLifecycle"> | string
+    currency?: StringFilter<"WalletLifecycle"> | string
+    userId?: StringFilter<"WalletLifecycle"> | string
+    status?: EnumWalletLifecycleStatusFilter<"WalletLifecycle"> | $Enums.WalletLifecycleStatus
+    sweptAt?: DateTimeNullableFilter<"WalletLifecycle"> | Date | string | null
+    replacedByWalletId?: StringNullableFilter<"WalletLifecycle"> | string | null
+    createdAt?: DateTimeFilter<"WalletLifecycle"> | Date | string
+    replacedBy?: XOR<WalletLifecycleNullableRelationFilter, WalletLifecycleWhereInput> | null
+    replacements?: WalletLifecycleListRelationFilter
+  }
+
+  export type WalletLifecycleOrderByWithRelationInput = {
+    id?: SortOrder
+    walletAddress?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    sweptAt?: SortOrderInput | SortOrder
+    replacedByWalletId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    replacedBy?: WalletLifecycleOrderByWithRelationInput
+    replacements?: WalletLifecycleOrderByRelationAggregateInput
+  }
+
+  export type WalletLifecycleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    walletAddress?: string
+    AND?: WalletLifecycleWhereInput | WalletLifecycleWhereInput[]
+    OR?: WalletLifecycleWhereInput[]
+    NOT?: WalletLifecycleWhereInput | WalletLifecycleWhereInput[]
+    network?: StringFilter<"WalletLifecycle"> | string
+    currency?: StringFilter<"WalletLifecycle"> | string
+    userId?: StringFilter<"WalletLifecycle"> | string
+    status?: EnumWalletLifecycleStatusFilter<"WalletLifecycle"> | $Enums.WalletLifecycleStatus
+    sweptAt?: DateTimeNullableFilter<"WalletLifecycle"> | Date | string | null
+    replacedByWalletId?: StringNullableFilter<"WalletLifecycle"> | string | null
+    createdAt?: DateTimeFilter<"WalletLifecycle"> | Date | string
+    replacedBy?: XOR<WalletLifecycleNullableRelationFilter, WalletLifecycleWhereInput> | null
+    replacements?: WalletLifecycleListRelationFilter
+  }, "id" | "walletAddress">
+
+  export type WalletLifecycleOrderByWithAggregationInput = {
+    id?: SortOrder
+    walletAddress?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    sweptAt?: SortOrderInput | SortOrder
+    replacedByWalletId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: WalletLifecycleCountOrderByAggregateInput
+    _max?: WalletLifecycleMaxOrderByAggregateInput
+    _min?: WalletLifecycleMinOrderByAggregateInput
+  }
+
+  export type WalletLifecycleScalarWhereWithAggregatesInput = {
+    AND?: WalletLifecycleScalarWhereWithAggregatesInput | WalletLifecycleScalarWhereWithAggregatesInput[]
+    OR?: WalletLifecycleScalarWhereWithAggregatesInput[]
+    NOT?: WalletLifecycleScalarWhereWithAggregatesInput | WalletLifecycleScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WalletLifecycle"> | string
+    walletAddress?: StringWithAggregatesFilter<"WalletLifecycle"> | string
+    network?: StringWithAggregatesFilter<"WalletLifecycle"> | string
+    currency?: StringWithAggregatesFilter<"WalletLifecycle"> | string
+    userId?: StringWithAggregatesFilter<"WalletLifecycle"> | string
+    status?: EnumWalletLifecycleStatusWithAggregatesFilter<"WalletLifecycle"> | $Enums.WalletLifecycleStatus
+    sweptAt?: DateTimeNullableWithAggregatesFilter<"WalletLifecycle"> | Date | string | null
+    replacedByWalletId?: StringNullableWithAggregatesFilter<"WalletLifecycle"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WalletLifecycle"> | Date | string
   }
 
   export type TreasuryAccountWhereInput = {
@@ -18603,6 +19849,93 @@ export namespace Prisma {
     chain?: StringFieldUpdateOperationsInput | string
     lastScannedBlock?: BigIntFieldUpdateOperationsInput | bigint | number
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WalletLifecycleCreateInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    createdAt?: Date | string
+    replacedBy?: WalletLifecycleCreateNestedOneWithoutReplacementsInput
+    replacements?: WalletLifecycleCreateNestedManyWithoutReplacedByInput
+  }
+
+  export type WalletLifecycleUncheckedCreateInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    replacedByWalletId?: string | null
+    createdAt?: Date | string
+    replacements?: WalletLifecycleUncheckedCreateNestedManyWithoutReplacedByInput
+  }
+
+  export type WalletLifecycleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replacedBy?: WalletLifecycleUpdateOneWithoutReplacementsNestedInput
+    replacements?: WalletLifecycleUpdateManyWithoutReplacedByNestedInput
+  }
+
+  export type WalletLifecycleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replacedByWalletId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replacements?: WalletLifecycleUncheckedUpdateManyWithoutReplacedByNestedInput
+  }
+
+  export type WalletLifecycleCreateManyInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    replacedByWalletId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type WalletLifecycleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WalletLifecycleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replacedByWalletId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TreasuryAccountCreateInput = {
@@ -19810,6 +21143,74 @@ export namespace Prisma {
     _max?: NestedBigIntFilter<$PrismaModel>
   }
 
+  export type EnumWalletLifecycleStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletLifecycleStatus | EnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletLifecycleStatusFilter<$PrismaModel> | $Enums.WalletLifecycleStatus
+  }
+
+  export type WalletLifecycleNullableRelationFilter = {
+    is?: WalletLifecycleWhereInput | null
+    isNot?: WalletLifecycleWhereInput | null
+  }
+
+  export type WalletLifecycleListRelationFilter = {
+    every?: WalletLifecycleWhereInput
+    some?: WalletLifecycleWhereInput
+    none?: WalletLifecycleWhereInput
+  }
+
+  export type WalletLifecycleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WalletLifecycleCountOrderByAggregateInput = {
+    id?: SortOrder
+    walletAddress?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    sweptAt?: SortOrder
+    replacedByWalletId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WalletLifecycleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    walletAddress?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    sweptAt?: SortOrder
+    replacedByWalletId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WalletLifecycleMinOrderByAggregateInput = {
+    id?: SortOrder
+    walletAddress?: SortOrder
+    network?: SortOrder
+    currency?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    sweptAt?: SortOrder
+    replacedByWalletId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumWalletLifecycleStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletLifecycleStatus | EnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletLifecycleStatusWithAggregatesFilter<$PrismaModel> | $Enums.WalletLifecycleStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWalletLifecycleStatusFilter<$PrismaModel>
+    _max?: NestedEnumWalletLifecycleStatusFilter<$PrismaModel>
+  }
+
   export type EnumTreasuryAccountTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.TreasuryAccountType | EnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
     in?: $Enums.TreasuryAccountType[] | ListEnumTreasuryAccountTypeFieldRefInput<$PrismaModel>
@@ -20450,6 +21851,68 @@ export namespace Prisma {
     divide?: bigint | number
   }
 
+  export type WalletLifecycleCreateNestedOneWithoutReplacementsInput = {
+    create?: XOR<WalletLifecycleCreateWithoutReplacementsInput, WalletLifecycleUncheckedCreateWithoutReplacementsInput>
+    connectOrCreate?: WalletLifecycleCreateOrConnectWithoutReplacementsInput
+    connect?: WalletLifecycleWhereUniqueInput
+  }
+
+  export type WalletLifecycleCreateNestedManyWithoutReplacedByInput = {
+    create?: XOR<WalletLifecycleCreateWithoutReplacedByInput, WalletLifecycleUncheckedCreateWithoutReplacedByInput> | WalletLifecycleCreateWithoutReplacedByInput[] | WalletLifecycleUncheckedCreateWithoutReplacedByInput[]
+    connectOrCreate?: WalletLifecycleCreateOrConnectWithoutReplacedByInput | WalletLifecycleCreateOrConnectWithoutReplacedByInput[]
+    createMany?: WalletLifecycleCreateManyReplacedByInputEnvelope
+    connect?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+  }
+
+  export type WalletLifecycleUncheckedCreateNestedManyWithoutReplacedByInput = {
+    create?: XOR<WalletLifecycleCreateWithoutReplacedByInput, WalletLifecycleUncheckedCreateWithoutReplacedByInput> | WalletLifecycleCreateWithoutReplacedByInput[] | WalletLifecycleUncheckedCreateWithoutReplacedByInput[]
+    connectOrCreate?: WalletLifecycleCreateOrConnectWithoutReplacedByInput | WalletLifecycleCreateOrConnectWithoutReplacedByInput[]
+    createMany?: WalletLifecycleCreateManyReplacedByInputEnvelope
+    connect?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+  }
+
+  export type EnumWalletLifecycleStatusFieldUpdateOperationsInput = {
+    set?: $Enums.WalletLifecycleStatus
+  }
+
+  export type WalletLifecycleUpdateOneWithoutReplacementsNestedInput = {
+    create?: XOR<WalletLifecycleCreateWithoutReplacementsInput, WalletLifecycleUncheckedCreateWithoutReplacementsInput>
+    connectOrCreate?: WalletLifecycleCreateOrConnectWithoutReplacementsInput
+    upsert?: WalletLifecycleUpsertWithoutReplacementsInput
+    disconnect?: WalletLifecycleWhereInput | boolean
+    delete?: WalletLifecycleWhereInput | boolean
+    connect?: WalletLifecycleWhereUniqueInput
+    update?: XOR<XOR<WalletLifecycleUpdateToOneWithWhereWithoutReplacementsInput, WalletLifecycleUpdateWithoutReplacementsInput>, WalletLifecycleUncheckedUpdateWithoutReplacementsInput>
+  }
+
+  export type WalletLifecycleUpdateManyWithoutReplacedByNestedInput = {
+    create?: XOR<WalletLifecycleCreateWithoutReplacedByInput, WalletLifecycleUncheckedCreateWithoutReplacedByInput> | WalletLifecycleCreateWithoutReplacedByInput[] | WalletLifecycleUncheckedCreateWithoutReplacedByInput[]
+    connectOrCreate?: WalletLifecycleCreateOrConnectWithoutReplacedByInput | WalletLifecycleCreateOrConnectWithoutReplacedByInput[]
+    upsert?: WalletLifecycleUpsertWithWhereUniqueWithoutReplacedByInput | WalletLifecycleUpsertWithWhereUniqueWithoutReplacedByInput[]
+    createMany?: WalletLifecycleCreateManyReplacedByInputEnvelope
+    set?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    disconnect?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    delete?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    connect?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    update?: WalletLifecycleUpdateWithWhereUniqueWithoutReplacedByInput | WalletLifecycleUpdateWithWhereUniqueWithoutReplacedByInput[]
+    updateMany?: WalletLifecycleUpdateManyWithWhereWithoutReplacedByInput | WalletLifecycleUpdateManyWithWhereWithoutReplacedByInput[]
+    deleteMany?: WalletLifecycleScalarWhereInput | WalletLifecycleScalarWhereInput[]
+  }
+
+  export type WalletLifecycleUncheckedUpdateManyWithoutReplacedByNestedInput = {
+    create?: XOR<WalletLifecycleCreateWithoutReplacedByInput, WalletLifecycleUncheckedCreateWithoutReplacedByInput> | WalletLifecycleCreateWithoutReplacedByInput[] | WalletLifecycleUncheckedCreateWithoutReplacedByInput[]
+    connectOrCreate?: WalletLifecycleCreateOrConnectWithoutReplacedByInput | WalletLifecycleCreateOrConnectWithoutReplacedByInput[]
+    upsert?: WalletLifecycleUpsertWithWhereUniqueWithoutReplacedByInput | WalletLifecycleUpsertWithWhereUniqueWithoutReplacedByInput[]
+    createMany?: WalletLifecycleCreateManyReplacedByInputEnvelope
+    set?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    disconnect?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    delete?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    connect?: WalletLifecycleWhereUniqueInput | WalletLifecycleWhereUniqueInput[]
+    update?: WalletLifecycleUpdateWithWhereUniqueWithoutReplacedByInput | WalletLifecycleUpdateWithWhereUniqueWithoutReplacedByInput[]
+    updateMany?: WalletLifecycleUpdateManyWithWhereWithoutReplacedByInput | WalletLifecycleUpdateManyWithWhereWithoutReplacedByInput[]
+    deleteMany?: WalletLifecycleScalarWhereInput | WalletLifecycleScalarWhereInput[]
+  }
+
   export type TreasuryAccountCreateNestedOneWithoutChildrenInput = {
     create?: XOR<TreasuryAccountCreateWithoutChildrenInput, TreasuryAccountUncheckedCreateWithoutChildrenInput>
     connectOrCreate?: TreasuryAccountCreateOrConnectWithoutChildrenInput
@@ -20995,6 +22458,23 @@ export namespace Prisma {
     _sum?: NestedBigIntFilter<$PrismaModel>
     _min?: NestedBigIntFilter<$PrismaModel>
     _max?: NestedBigIntFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWalletLifecycleStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletLifecycleStatus | EnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletLifecycleStatusFilter<$PrismaModel> | $Enums.WalletLifecycleStatus
+  }
+
+  export type NestedEnumWalletLifecycleStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WalletLifecycleStatus | EnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WalletLifecycleStatus[] | ListEnumWalletLifecycleStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWalletLifecycleStatusWithAggregatesFilter<$PrismaModel> | $Enums.WalletLifecycleStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWalletLifecycleStatusFilter<$PrismaModel>
+    _max?: NestedEnumWalletLifecycleStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumTreasuryAccountTypeFilter<$PrismaModel = never> = {
@@ -21583,6 +23063,135 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type WalletLifecycleCreateWithoutReplacementsInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    createdAt?: Date | string
+    replacedBy?: WalletLifecycleCreateNestedOneWithoutReplacementsInput
+  }
+
+  export type WalletLifecycleUncheckedCreateWithoutReplacementsInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    replacedByWalletId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type WalletLifecycleCreateOrConnectWithoutReplacementsInput = {
+    where: WalletLifecycleWhereUniqueInput
+    create: XOR<WalletLifecycleCreateWithoutReplacementsInput, WalletLifecycleUncheckedCreateWithoutReplacementsInput>
+  }
+
+  export type WalletLifecycleCreateWithoutReplacedByInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    createdAt?: Date | string
+    replacements?: WalletLifecycleCreateNestedManyWithoutReplacedByInput
+  }
+
+  export type WalletLifecycleUncheckedCreateWithoutReplacedByInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    createdAt?: Date | string
+    replacements?: WalletLifecycleUncheckedCreateNestedManyWithoutReplacedByInput
+  }
+
+  export type WalletLifecycleCreateOrConnectWithoutReplacedByInput = {
+    where: WalletLifecycleWhereUniqueInput
+    create: XOR<WalletLifecycleCreateWithoutReplacedByInput, WalletLifecycleUncheckedCreateWithoutReplacedByInput>
+  }
+
+  export type WalletLifecycleCreateManyReplacedByInputEnvelope = {
+    data: WalletLifecycleCreateManyReplacedByInput | WalletLifecycleCreateManyReplacedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WalletLifecycleUpsertWithoutReplacementsInput = {
+    update: XOR<WalletLifecycleUpdateWithoutReplacementsInput, WalletLifecycleUncheckedUpdateWithoutReplacementsInput>
+    create: XOR<WalletLifecycleCreateWithoutReplacementsInput, WalletLifecycleUncheckedCreateWithoutReplacementsInput>
+    where?: WalletLifecycleWhereInput
+  }
+
+  export type WalletLifecycleUpdateToOneWithWhereWithoutReplacementsInput = {
+    where?: WalletLifecycleWhereInput
+    data: XOR<WalletLifecycleUpdateWithoutReplacementsInput, WalletLifecycleUncheckedUpdateWithoutReplacementsInput>
+  }
+
+  export type WalletLifecycleUpdateWithoutReplacementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replacedBy?: WalletLifecycleUpdateOneWithoutReplacementsNestedInput
+  }
+
+  export type WalletLifecycleUncheckedUpdateWithoutReplacementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    replacedByWalletId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WalletLifecycleUpsertWithWhereUniqueWithoutReplacedByInput = {
+    where: WalletLifecycleWhereUniqueInput
+    update: XOR<WalletLifecycleUpdateWithoutReplacedByInput, WalletLifecycleUncheckedUpdateWithoutReplacedByInput>
+    create: XOR<WalletLifecycleCreateWithoutReplacedByInput, WalletLifecycleUncheckedCreateWithoutReplacedByInput>
+  }
+
+  export type WalletLifecycleUpdateWithWhereUniqueWithoutReplacedByInput = {
+    where: WalletLifecycleWhereUniqueInput
+    data: XOR<WalletLifecycleUpdateWithoutReplacedByInput, WalletLifecycleUncheckedUpdateWithoutReplacedByInput>
+  }
+
+  export type WalletLifecycleUpdateManyWithWhereWithoutReplacedByInput = {
+    where: WalletLifecycleScalarWhereInput
+    data: XOR<WalletLifecycleUpdateManyMutationInput, WalletLifecycleUncheckedUpdateManyWithoutReplacedByInput>
+  }
+
+  export type WalletLifecycleScalarWhereInput = {
+    AND?: WalletLifecycleScalarWhereInput | WalletLifecycleScalarWhereInput[]
+    OR?: WalletLifecycleScalarWhereInput[]
+    NOT?: WalletLifecycleScalarWhereInput | WalletLifecycleScalarWhereInput[]
+    id?: StringFilter<"WalletLifecycle"> | string
+    walletAddress?: StringFilter<"WalletLifecycle"> | string
+    network?: StringFilter<"WalletLifecycle"> | string
+    currency?: StringFilter<"WalletLifecycle"> | string
+    userId?: StringFilter<"WalletLifecycle"> | string
+    status?: EnumWalletLifecycleStatusFilter<"WalletLifecycle"> | $Enums.WalletLifecycleStatus
+    sweptAt?: DateTimeNullableFilter<"WalletLifecycle"> | Date | string | null
+    replacedByWalletId?: StringNullableFilter<"WalletLifecycle"> | string | null
+    createdAt?: DateTimeFilter<"WalletLifecycle"> | Date | string
+  }
+
   export type TreasuryAccountCreateWithoutChildrenInput = {
     id?: string
     name: string
@@ -22108,6 +23717,52 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WalletLifecycleCreateManyReplacedByInput = {
+    id?: string
+    walletAddress: string
+    network: string
+    currency: string
+    userId: string
+    status: $Enums.WalletLifecycleStatus
+    sweptAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type WalletLifecycleUpdateWithoutReplacedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replacements?: WalletLifecycleUpdateManyWithoutReplacedByNestedInput
+  }
+
+  export type WalletLifecycleUncheckedUpdateWithoutReplacedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    replacements?: WalletLifecycleUncheckedUpdateManyWithoutReplacedByNestedInput
+  }
+
+  export type WalletLifecycleUncheckedUpdateManyWithoutReplacedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletAddress?: StringFieldUpdateOperationsInput | string
+    network?: StringFieldUpdateOperationsInput | string
+    currency?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumWalletLifecycleStatusFieldUpdateOperationsInput | $Enums.WalletLifecycleStatus
+    sweptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TreasuryAccountCreateManyParentAccountInput = {
     id?: string
     name: string
@@ -22246,6 +23901,10 @@ export namespace Prisma {
      */
     export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use WalletLifecycleCountOutputTypeDefaultArgs instead
+     */
+    export type WalletLifecycleCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = WalletLifecycleCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use TreasuryAccountCountOutputTypeDefaultArgs instead
      */
     export type TreasuryAccountCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TreasuryAccountCountOutputTypeDefaultArgs<ExtArgs>
@@ -22289,6 +23948,10 @@ export namespace Prisma {
      * @deprecated Use ChainScanStateDefaultArgs instead
      */
     export type ChainScanStateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChainScanStateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use WalletLifecycleDefaultArgs instead
+     */
+    export type WalletLifecycleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = WalletLifecycleDefaultArgs<ExtArgs>
     /**
      * @deprecated Use TreasuryAccountDefaultArgs instead
      */

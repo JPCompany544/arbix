@@ -21,14 +21,58 @@ export class TreasuryService {
    */
   public static async initialize(): Promise<void> {
     await seedAccounts();
+    // ensure DB-level partial unique index exists to prevent two ACTIVE wallets
+    try {
+      await prisma.$executeRawUnsafe(`
+        CREATE UNIQUE INDEX IF NOT EXISTS "unique_active_wallet_per_network_currency"
+        ON "WalletLifecycle" ("network", "currency")
+        WHERE status = 'ACTIVE'
+      `);
+    } catch (e) {
+      // non-fatal; index creation is best-effort here
+    }
+  }
+
+  /**
+   * Return the ACTIVE wallet for a given network/currency or throw if missing
+   */
+  async getActiveWallet(network: string, currency: string) {
+    const w = await prisma.walletLifecycle.findFirst({ where: { network, currency, status: 'ACTIVE' } });
+    if (!w) throw new Error(`No ACTIVE wallet for ${network}/${currency}`);
+    return w;
+  }
+
+  /**
+   * Atomically rotate the ACTIVE wallet for a given network/currency.
+   * Creates a new GENERATED wallet, promotes it to ACTIVE and marks the old one ROTATED.
+   */
+  async rotateWallet(network: string, currency: string, userId = 'system') {
+    return await prisma.$transaction(async (tx) => {
+      const oldWallet = await tx.walletLifecycle.findFirst({ where: { network, currency, status: 'ACTIVE' } });
+      if (!oldWallet) throw new Error('No ACTIVE wallet found');
+
+      const placeholderAddr = `gen_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const newWallet = await tx.walletLifecycle.create({ data: { network, currency, userId, walletAddress: placeholderAddr, status: 'GENERATED' } });
+
+      await tx.walletLifecycle.update({ where: { id: oldWallet.id }, data: { status: 'ROTATING' } });
+
+      await tx.walletLifecycle.update({ where: { id: newWallet.id }, data: { status: 'ACTIVE' } });
+
+      await tx.walletLifecycle.update({ where: { id: oldWallet.id }, data: { status: 'ROTATED', replacedByWalletId: newWallet.id } });
+
+      return { oldWalletId: oldWallet.id, newWalletId: newWallet.id };
+    });
   }
 
   private async createLedger(
     tx: typeof prisma,
     referenceType: string,
     referenceId: string | null,
-    description: string
+    description: string,
+    adminId: string
   ) {
+    // mark this transaction as originating from the service layer for DB triggers
+    await tx.$executeRawUnsafe(`SET LOCAL treasury.is_service = '1'`);
     const ledger = await tx.treasuryLedger.create({
       data: {
         referenceType,
@@ -36,6 +80,7 @@ export class TreasuryService {
         description,
         network: NETWORK,
         currency: CURRENCY,
+        createdByAdminId: adminId,
       },
     });
     return ledger;
@@ -99,13 +144,14 @@ export class TreasuryService {
     }
   }
 
-  async journalDeposit(userId: string, amount: bigint) {
+  async journalDeposit(userId: string, amount: bigint, adminId: string) {
     return await prisma.$transaction(async (tx) => {
       const ledger = await this.createLedger(
         tx,
         "DEPOSIT",
         userId,
-        `deposit for ${userId}`
+        `deposit for ${userId}`,
+        adminId
       );
 
       const hot = await this.lookupAccount(tx, ACCOUNT_NAMES.HOT_WALLET);
@@ -121,14 +167,15 @@ export class TreasuryService {
     });
   }
 
-  async journalWithdrawal(userId: string, amount: bigint) {
+  async journalWithdrawal(userId: string, amount: bigint, adminId: string) {
     return await prisma.$transaction(async (tx) => {
       const ledger = await this.createLedger(
         tx,
         // using executed withdrawal enum value since schema defines no plain WITHDRAWAL
         "WITHDRAWAL_EXECUTED",
         userId,
-        `withdrawal for ${userId}`
+        `withdrawal for ${userId}`,
+        adminId
       );
 
       const hot = await this.lookupAccount(tx, ACCOUNT_NAMES.HOT_WALLET);
@@ -143,13 +190,14 @@ export class TreasuryService {
     });
   }
 
-  async journalSweep(fromDepositWalletId: string, amount: bigint) {
+  async journalSweep(fromDepositWalletId: string, amount: bigint, adminId: string) {
     return await prisma.$transaction(async (tx) => {
       const ledger = await this.createLedger(
         tx,
         "SWEEP",
         fromDepositWalletId,
-        `sweep from ${fromDepositWalletId}`
+        `sweep from ${fromDepositWalletId}`,
+        adminId
       );
 
       const hot = await this.lookupAccount(tx, ACCOUNT_NAMES.HOT_WALLET);
@@ -167,14 +215,15 @@ export class TreasuryService {
     });
   }
 
-  async journalColdTransfer(amount: bigint) {
+  async journalColdTransfer(amount: bigint, adminId: string) {
     return await prisma.$transaction(async (tx) => {
       const ledger = await this.createLedger(
         tx,
         // use treasury move to represent internal transfers
         "TREASURY_MOVE",
         null,
-        "cold storage transfer"
+        "cold storage transfer",
+        adminId
       );
 
       const hot = await this.lookupAccount(tx, ACCOUNT_NAMES.HOT_WALLET);

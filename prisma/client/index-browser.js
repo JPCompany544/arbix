@@ -188,6 +188,18 @@ exports.Prisma.ChainScanStateScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WalletLifecycleScalarFieldEnum = {
+  id: 'id',
+  walletAddress: 'walletAddress',
+  network: 'network',
+  currency: 'currency',
+  userId: 'userId',
+  status: 'status',
+  sweptAt: 'sweptAt',
+  replacedByWalletId: 'replacedByWalletId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.TreasuryAccountScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -316,6 +328,16 @@ exports.LedgerType = exports.$Enums.LedgerType = {
   EARNING: 'EARNING'
 };
 
+exports.WalletLifecycleStatus = exports.$Enums.WalletLifecycleStatus = {
+  GENERATED: 'GENERATED',
+  ACTIVE: 'ACTIVE',
+  ROTATING: 'ROTATING',
+  ROTATED: 'ROTATED',
+  DISABLED: 'DISABLED',
+  SWEPT: 'SWEPT',
+  ARCHIVED: 'ARCHIVED'
+};
+
 exports.TreasuryAccountType = exports.$Enums.TreasuryAccountType = {
   ASSET: 'ASSET',
   LIABILITY: 'LIABILITY',
@@ -348,6 +370,7 @@ exports.Prisma.ModelName = {
   SystemSetting: 'SystemSetting',
   UserWallet: 'UserWallet',
   ChainScanState: 'ChainScanState',
+  WalletLifecycle: 'WalletLifecycle',
   TreasuryAccount: 'TreasuryAccount',
   TreasuryLedger: 'TreasuryLedger',
   TreasuryEntry: 'TreasuryEntry',
