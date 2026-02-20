@@ -1,34 +1,80 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    // Safe diagnostic — never expose actual credentials
-    const dbUrl = process.env.DATABASE_URL || "NOT_SET";
-    const dbUrlMainnet = process.env.DATABASE_URL_MAINNET || "NOT_SET";
-    const network = process.env.NETWORK || "NOT_SET";
-    const seedKey = process.env.SEED_ENCRYPTION_KEY ? "SET" : "NOT_SET";
-    const seedMainnet = process.env.MASTER_SEED_ENCRYPTED_MAINNET ? "SET" : "NOT_SET";
-    const seedTestnet = process.env.MASTER_SEED_ENCRYPTED ? "SET" : "NOT_SET";
+    const results: Record<string, string> = {};
 
-    // Test Prisma connection
-    let prismaStatus = "UNKNOWN";
-    let prismaError = "";
+    // Test each import individually
     try {
-        const { prisma } = await import("@/lib/prisma");
-        const count = await prisma.user.count();
-        prismaStatus = `CONNECTED (${count} users)`;
+        await import("ethers");
+        results["ethers"] = "OK";
     } catch (e: any) {
-        prismaStatus = "FAILED";
-        prismaError = e.message?.substring(0, 300) || "Unknown error";
+        results["ethers"] = `FAIL: ${e.message?.substring(0, 200)}`;
     }
 
-    return NextResponse.json({
-        network,
-        DATABASE_URL: dbUrl.includes("@") ? dbUrl.replace(/:[^@:]+@/, ":****@") : dbUrl,
-        DATABASE_URL_MAINNET: dbUrlMainnet.includes("@") ? dbUrlMainnet.replace(/:[^@:]+@/, ":****@") : dbUrlMainnet,
-        SEED_ENCRYPTION_KEY: seedKey,
-        MASTER_SEED_ENCRYPTED_MAINNET: seedMainnet,
-        MASTER_SEED_ENCRYPTED: seedTestnet,
-        prismaStatus,
-        prismaError: prismaError || undefined,
-    });
+    try {
+        await import("@solana/web3.js");
+        results["solana"] = "OK";
+    } catch (e: any) {
+        results["solana"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    try {
+        await import("tiny-secp256k1");
+        results["tiny-secp256k1"] = "OK";
+    } catch (e: any) {
+        results["tiny-secp256k1"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    try {
+        await import("bip32");
+        results["bip32"] = "OK";
+    } catch (e: any) {
+        results["bip32"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    try {
+        await import("bitcoinjs-lib");
+        results["bitcoinjs-lib"] = "OK";
+    } catch (e: any) {
+        results["bitcoinjs-lib"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    try {
+        await import("xrpl");
+        results["xrpl"] = "OK";
+    } catch (e: any) {
+        results["xrpl"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    try {
+        await import("bip39");
+        results["bip39"] = "OK";
+    } catch (e: any) {
+        results["bip39"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    try {
+        await import("ed25519-hd-key");
+        results["ed25519-hd-key"] = "OK";
+    } catch (e: any) {
+        results["ed25519-hd-key"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    // Test chain factory
+    try {
+        const { chainFactory } = await import("@/core/chain-factory");
+        results["chain-factory"] = "OK";
+    } catch (e: any) {
+        results["chain-factory"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    // Test wallet service
+    try {
+        const { generateAddress } = await import("@/lib/wallet/wallet-service");
+        results["wallet-service"] = "OK";
+    } catch (e: any) {
+        results["wallet-service"] = `FAIL: ${e.message?.substring(0, 200)}`;
+    }
+
+    return NextResponse.json(results);
 }
