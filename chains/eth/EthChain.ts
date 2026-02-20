@@ -49,7 +49,8 @@ export class EthChain implements Chain {
         // 3. Update DB - Fetch current on-chain balance to establish a baseline
         // This prevents the monitor from crediting historical funds as new deposits
         const provider = providerRegistry.getEvmProvider(this.chain);
-        const currentBalance = await provider.getBalance(address).catch(() => 0n);
+        const timeout = new Promise<bigint>((_, reject) => setTimeout(() => reject(new Error("RPC Timeout")), 4000));
+        const currentBalance = await Promise.race([provider.getBalance(address), timeout]).catch(() => 0n);
 
         await prisma.userWallet.update({
             where: { userId_chain: { userId, chain: this.chain } },
