@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 type Chain = "ETH" | "BSC" | "SOL" | "BTC" | "XRP";
 type TxStatus = "PENDING" | "BROADCASTED" | "CONFIRMED" | "FAILED";
@@ -33,14 +34,17 @@ interface Transaction {
 }
 
 export default function WalletPage() {
-    const [userId, setUserId] = useState("cmls3zx810000uqo2h7j7bwej"); // Default to testnet seed
+    const router = useRouter();
+    const { user: authUser, loading: authLoading } = useAuth();
+    const [userId, setUserId] = useState<string | null>(null);
+
     const [selectedChain, setSelectedChain] = useState<Chain>("ETH");
     const [supportedChains, setSupportedChains] = useState<ChainConfig[]>([]);
     const [wallet, setWallet] = useState<WalletData | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(false);
     const [withdrawing, setWithdrawing] = useState(false);
-    const [status, setStatus] = useState<{ mode: string; isMainnet: boolean; testUserId?: string } | null>(null);
+    const [status, setStatus] = useState<{ mode: string; isMainnet: boolean } | null>(null);
 
     // Withdraw form
     const [withdrawTo, setWithdrawTo] = useState("");
@@ -49,6 +53,17 @@ export default function WalletPage() {
     const [withdrawSuccess, setWithdrawSuccess] = useState("");
 
     const [error, setError] = useState<string | null>(null);
+
+    // Sync with auth
+    useEffect(() => {
+        if (!authLoading) {
+            if (authUser?.id) {
+                setUserId(authUser.id);
+            } else {
+                router.push("/login?redirect=/wallet");
+            }
+        }
+    }, [authUser, authLoading, router]);
 
     // Fetch wallet data
     const fetchWalletData = async (chain: Chain) => {
@@ -149,7 +164,7 @@ export default function WalletPage() {
         navigator.clipboard.writeText(text);
     };
 
-    // Initial load
+    // Initial load config
     useEffect(() => {
         const fetchConfig = async () => {
             try {
@@ -162,7 +177,6 @@ export default function WalletPage() {
 
                 if (configData.chains) setSupportedChains(configData.chains);
                 setStatus(statusData);
-                if (statusData.testUserId) setUserId(statusData.testUserId);
             } catch (e) { }
         };
         fetchConfig();
@@ -175,23 +189,13 @@ export default function WalletPage() {
 
     // Auto-refresh
     useEffect(() => {
+        if (!userId) return;
         const interval = setInterval(() => {
             fetchWalletData(selectedChain);
         }, 15000); // Refresh every 15 seconds
 
         return () => clearInterval(interval);
-    }, [selectedChain]);
-
-    // Status indicator
-    const getStatusColor = (status: TxStatus) => {
-        switch (status) {
-            case "CONFIRMED": return "bg-green-100 text-green-800";
-            case "BROADCASTED": return "bg-blue-100 text-blue-800";
-            case "PENDING": return "bg-yellow-100 text-yellow-800";
-            case "FAILED": return "bg-red-100 text-red-800";
-            default: return "bg-gray-100 text-gray-800";
-        }
-    };
+    }, [selectedChain, userId]);
 
     const getStatusIcon = (status: TxStatus) => {
         switch (status) {
@@ -202,6 +206,17 @@ export default function WalletPage() {
             default: return "⚪";
         }
     };
+
+    if (authLoading || (!userId && !error)) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                    <p className="mt-4 text-gray-600">Authenticating...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
