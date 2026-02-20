@@ -40,9 +40,18 @@ export async function loadMasterSeed(): Promise<string> {
         throw new Error("CRITICAL SECURITY ERROR: Mainnet seed MUST be distinct from testnet seed.");
     }
 
-    const decryptedMnemonic = await decryptSeed(encrypted);
-    cachedMasterSeed = decryptedMnemonic;
-    return decryptedMnemonic;
+    try {
+        const decryptedMnemonic = (await decryptSeed(encrypted)).trim();
+        if (!decryptedMnemonic || decryptedMnemonic.split(" ").length < 12) {
+            throw new Error("Decrypted mnemonic is invalid or too short.");
+        }
+        cachedMasterSeed = decryptedMnemonic;
+        console.log(`[Wallet Utils] Master seed loaded and verified (${mode})`);
+        return decryptedMnemonic;
+    } catch (e: any) {
+        console.error(`[Wallet Utils] Failed to load/decrypt master seed: ${e.message}`);
+        throw e;
+    }
 }
 
 /**

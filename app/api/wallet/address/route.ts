@@ -51,10 +51,19 @@ export async function GET(request: NextRequest) {
             createdAt: wallet.createdAt
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("[API] Get address error:", error);
+
+        // Return more descriptive error message for setup issues
+        if (error.message?.includes("not found in environment") || error.message?.includes("SECURITY ERROR")) {
+            return NextResponse.json(
+                { error: `Configuration error: ${error.message}` },
+                { status: 500 }
+            );
+        }
+
         return NextResponse.json(
-            { error: "Internal server error" },
+            { error: error.message || "Internal server error" },
             { status: 500 }
         );
     }
