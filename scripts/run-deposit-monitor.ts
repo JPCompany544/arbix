@@ -20,8 +20,8 @@ async function keepConnectionAlive() {
 
 async function start() {
     console.log("------------------------------------------------");
-    console.log("🚀 Starting Address-Only Deposit Monitor");
-    console.log("   Mode: Balance Delta Detection (No Block Scanning)");
+    console.log("🚀 Starting Multi-Chain Deposit Monitor");
+    console.log("   Mode: Hybrid (Block Scanning + Balance Polling)");
     console.log("------------------------------------------------");
 
     // Ensure Prisma is connected

@@ -367,6 +367,9 @@ export async function getGlobalOverview(
           reserves: [],
           liabilities: [],
           equity: [],
+          usdReserves: "0.00",
+          usdLiabilities: "0.00",
+          usdEquity: "0.00",
         });
         continue;
       }

@@ -120,7 +120,7 @@ export class TreasuryService {
   }
 
   private async lookupAccount(
-    tx: typeof prisma,
+    tx: any,
     name: string
   ): Promise<{
     id: string;
