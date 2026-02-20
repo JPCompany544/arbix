@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  serverExternalPackages: ['tiny-secp256k1'],
+  outputFileTracingIncludes: {
+    '/api/**': ['./node_modules/tiny-secp256k1/**/*'],
+  },
   images: {
     remotePatterns: [
       {
