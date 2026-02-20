@@ -2,7 +2,7 @@ import { prisma } from "../../../lib/prisma";
 
 export async function seedAccounts() {
   // helper to find or create by name
-  async function ensure(name: string, type: string, parentId?: string) {
+  async function ensure(name: string, type: "ASSET" | "LIABILITY" | "EQUITY", parentId?: string) {
     let acct = await prisma.treasuryAccount.findFirst({ where: { name } });
     if (acct) return acct;
     return prisma.treasuryAccount.create({

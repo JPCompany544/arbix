@@ -1,0 +1,10 @@
+﻿[DB] Initializing Prisma - Mode: TESTNET, Target: postgresql://neondb_owner:****@ep-steep-shape-aiymp707-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+[Network Config] Initialized in TESTNET mode (env: testnet)
+[SweepEngine] Checking health for ETH...
+[Provider Registry] Initializing new EVM provider for ETH at https://eth-sepolia.g.alchemy.com/v2/qE99NzHtbbRNfpetHDaOVVe2UjMvKmKl (ChainID: 11155111)
+[SweepEngine] ETH RPC is healthy.
+--- SWEEP PREVIEW RESULTS ---
+Wallet Count: 1
+Total Amount (Raw): 50000000000000000
+First Entry Status: ELIGIBLE
+First Entry Amount: 50000000000000000

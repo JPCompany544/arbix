@@ -5,7 +5,7 @@ import { providerRegistry } from "../../core/provider-registry";
 import { networkConfig } from "../../core/network-config";
 import { loadMasterSeed, allocateDerivationIndex, assertServerRuntime } from "../../lib/wallet/utils";
 import { getQueue } from "../../lib/wallet/tx-queue";
-import { getNextNonce } from "../../lib/wallet/nonce-manager";
+import { getNextNonce, resetNonce } from "../../lib/wallet/nonce-manager";
 
 /**
  * Ethereum Chain Implementation - Wave 4
@@ -46,10 +46,17 @@ export class EthChain implements Chain {
         const wallet = ethers.HDNodeWallet.fromPhrase(mnemonic, undefined, "m").derivePath(path);
         const address = wallet.address;
 
-        // 3. Update DB
+        // 3. Update DB - Fetch current on-chain balance to establish a baseline
+        // This prevents the monitor from crediting historical funds as new deposits
+        const provider = providerRegistry.getEvmProvider(this.chain);
+        const currentBalance = await provider.getBalance(address).catch(() => 0n);
+
         await prisma.userWallet.update({
             where: { userId_chain: { userId, chain: this.chain } },
-            data: { address }
+            data: {
+                address,
+                lastKnownBalance: currentBalance.toString()
+            }
         });
 
         return { address, derivationIndex: index };
@@ -61,6 +68,7 @@ export class EthChain implements Chain {
      */
     async monitorDeposits(): Promise<void> {
         try {
+            await this.catchUp();
             await this.pollAllWallets();
         } catch (err) {
             console.error(`[${this.chain}Chain] Monitor pass error:`, err);
@@ -107,6 +115,12 @@ export class EthChain implements Chain {
                 });
 
                 if (wallet) {
+                    // NEW: Ignore historical transactions that happened before this wallet was registered in our DB
+                    // block.timestamp is in seconds
+                    if (Number(block.timestamp) * 1000 < wallet.createdAt.getTime() - 120000) {
+                        continue;
+                    }
+
                     // Record it
                     const existing = await prisma.chainTransaction.findUnique({
                         where: { txHash: tx.hash }
@@ -155,18 +169,20 @@ export class EthChain implements Chain {
 
             for (const wallet of activeWallets) {
                 try {
-                    const onChainBalance = await provider.getBalance(wallet.address);
-                    const previous = BigInt(wallet.lastKnownBalance || "0");
-                    const current = BigInt(onChainBalance.toString());
+                    // Refresh wallet to get latest lastKnownBalance from earlier block scan in this pulse
+                    const freshWallet = await prisma.userWallet.findUnique({ where: { id: wallet.id } });
+                    if (!freshWallet) continue;
+
+                    const onChainBalance = await provider.getBalance(freshWallet.address);
+                    const previous = BigInt(freshWallet.lastKnownBalance || "0");
+                    const current = onChainBalance;
 
                     if (current > previous) {
-                        // This is a safety credit in case block scan missed it
-                        // We don't have a txHash here, so we'll use a placeholder or skip if we want strict tx matching
                         const delta = current - previous;
-                        await this.creditDeposit(wallet, delta, "POLLING_DETECTED");
+                        await this.creditDeposit(freshWallet, delta, "POLLING_DETECTED");
                     } else if (current < previous) {
                         await prisma.userWallet.update({
-                            where: { id: wallet.id },
+                            where: { id: freshWallet.id },
                             data: { lastKnownBalance: current.toString() }
                         });
                     }
@@ -176,13 +192,52 @@ export class EthChain implements Chain {
     }
 
     private async creditDeposit(wallet: any, delta: bigint, txHash: string): Promise<void> {
-        // Prevent double credit
-        const alreadyCredited = await prisma.ledgerEntry.findFirst({
-            where: { referenceId: txHash }
-        });
-        if (alreadyCredited && txHash !== "POLLING_DETECTED") return;
+        // 1. DEDUPLICATION & RECONCILIATION
+        if (txHash === "POLLING_DETECTED") {
+            // Check if we already credited this user for this amount recently (last 5 mins)
+            const windowStart = new Date(Date.now() - 5 * 60 * 1000);
+            const recentMatch = await prisma.ledgerEntry.findFirst({
+                where: {
+                    userId: wallet.userId,
+                    chain: this.chain,
+                    amount: delta.toString(),
+                    createdAt: { gte: windowStart }
+                }
+            });
+            if (recentMatch) {
+                console.log(`[${this.chain}Chain] Polling detected balance increase, but recent credit of ${delta} exists. Skipping duplicate.`);
+                return;
+            }
+        } else {
+            // Real TX Hash deduplication
+            const alreadyCredited = await prisma.ledgerEntry.findFirst({
+                where: { referenceId: txHash }
+            });
+            if (alreadyCredited) return;
 
-        console.log(`[${this.chain}Chain] 💰 Deposit detected: ${wallet.address} +${ethers.formatEther(delta)} ${this.chain}`);
+            // RECONCILIATION: Check if this TX was already credited via POLLING_DETECTED
+            const windowStart = new Date(Date.now() - 10 * 60 * 1000);
+            const pollingMatch = await prisma.ledgerEntry.findFirst({
+                where: {
+                    userId: wallet.userId,
+                    chain: this.chain,
+                    amount: delta.toString(),
+                    referenceId: "POLLING_DETECTED",
+                    createdAt: { gte: windowStart }
+                }
+            });
+
+            if (pollingMatch) {
+                console.log(`[${this.chain}Chain] Reconciling TX ${txHash} with earlier polling entry ${pollingMatch.id}`);
+                await prisma.ledgerEntry.update({
+                    where: { id: pollingMatch.id },
+                    data: { referenceId: txHash }
+                });
+                return;
+            }
+        }
+
+        console.log(`[${this.chain}Chain] 💰 Deposit detected: ${wallet.address} +${ethers.formatEther(delta)} ${this.chain} (Ref: ${txHash})`);
 
         await prisma.$transaction(async (tx) => {
             const balanceObj = await tx.userBalance.findUnique({
@@ -249,10 +304,20 @@ export class EthChain implements Chain {
                 // Fetch current fee data for competitive pricing
                 const feeData = await provider.getFeeData();
 
+                // MAINNET SAFETY: Enforce minimum gas prices to prevent underpriced rejection
+                const isMainnet = networkConfig.getMode() === "mainnet";
+                const minPriorityFee = isMainnet ? 1500000000n : 0n; // 1.5 Gwei min tip on mainnet
+                const minGasPrice = isMainnet ? 10000000000n : 0n;   // 10 Gwei min total on mainnet
+
                 // Boost tip to ensure fast inclusion
-                const maxPriorityFeePerGas = feeData.maxPriorityFeePerGas ? (feeData.maxPriorityFeePerGas * 120n / 100n) : 2000000000n; // 2 Gwei fallback
-                const maxFeePerGas = feeData.maxFeePerGas ? (feeData.maxFeePerGas * 120n / 100n) : undefined;
-                const gasPrice = !feeData.maxFeePerGas ? (feeData.gasPrice ? (feeData.gasPrice * 110n / 100n) : undefined) : undefined;
+                let maxPriorityFeePerGas = feeData.maxPriorityFeePerGas ? (feeData.maxPriorityFeePerGas * 150n / 100n) : 2000000000n;
+                if (maxPriorityFeePerGas < minPriorityFee) maxPriorityFeePerGas = minPriorityFee;
+
+                let maxFeePerGas = feeData.maxFeePerGas ? (feeData.maxFeePerGas * 130n / 100n) : undefined;
+                if (maxFeePerGas && maxFeePerGas < minGasPrice) maxFeePerGas = minGasPrice;
+
+                let gasPrice = !feeData.maxFeePerGas ? (feeData.gasPrice ? (feeData.gasPrice * 120n / 100n) : undefined) : undefined;
+                if (gasPrice && gasPrice < minGasPrice) gasPrice = minGasPrice;
 
                 // Pre-flight Balance Check
                 const balance = await provider.getBalance(walletRecord.address);
@@ -266,17 +331,16 @@ export class EthChain implements Chain {
                 } else if (gasPrice) {
                     gasCost = gasLimit * gasPrice;
                 } else {
-                    // Fallback to simple gas price if fee data missing
                     const simpleGasPrice = (await provider.getFeeData()).gasPrice || 1000000000n;
-                    gasCost = gasLimit * simpleGasPrice;
+                    gasCost = gasLimit * (simpleGasPrice < minGasPrice ? minGasPrice : simpleGasPrice);
                 }
 
                 const totalCost = valueWei + gasCost;
                 if (balance < totalCost) {
-                    throw new Error(`Insufficient funds for gas. Balance: ${ethers.formatEther(balance)}, Required: ${ethers.formatEther(totalCost)} (Value + Gas)`);
+                    throw new Error(`Insufficient funds for gas. Balance: ${ethers.formatEther(balance)}, Required: ${ethers.formatEther(totalCost)} (Value + Gas). Try sweeping a slightly smaller amount.`);
                 }
 
-                console.log(`[${this.chain}Chain] Broadcasting withdrawal of ${value} ${this.chain} to ${to} (Nonce: ${nonce})...`);
+                console.log(`[${this.chain}Chain] Broadcasting withdrawal of ${value} ${this.chain} to ${to} (Nonce: ${nonce}, MaxFee: ${maxFeePerGas ? ethers.formatUnits(maxFeePerGas, "gwei") : "N/A"} Gwei)`);
                 const txResponse = await wallet.sendTransaction({
                     to,
                     value: valueWei,
@@ -287,14 +351,11 @@ export class EthChain implements Chain {
                     gasLimit
                 });
 
-                // Verify immediate broadcast success (check if mempool sees it)
-                // Wait 2 seconds for propagation
-                await new Promise(r => setTimeout(r, 2000));
+                // Verify immediate broadcast success
+                await new Promise(r => setTimeout(r, 3000));
                 const check = await provider.getTransaction(txResponse.hash);
                 if (!check) {
-                    console.warn(`[${this.chain}Chain] Warning: TX ${txResponse.hash} not seen immediately after broadcast.`);
-                } else {
-                    console.log(`[${this.chain}Chain] ✅ Broadcast confirmed: ${txResponse.hash}`);
+                    throw new Error(`Transaction ${txResponse.hash} was broadcasted but is not visible in the mempool. It may have been rejected due to low gas or nonce issues.`);
                 }
 
                 return { txHash: txResponse.hash };

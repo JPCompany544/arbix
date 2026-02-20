@@ -57,10 +57,16 @@ export class SolChain implements Chain {
         const keypair = Keypair.fromSeed(derived.key);
         const address = keypair.publicKey.toBase58();
 
-        // 3. Update DB
+        // 3. Update DB - Fetch current on-chain balance to establish a baseline
+        const connection = providerRegistry.getSolanaConnection();
+        const currentBalance = await connection.getBalance(keypair.publicKey).catch(() => 0);
+
         await prisma.userWallet.update({
             where: { userId_chain: { userId, chain: this.chain } },
-            data: { address }
+            data: {
+                address,
+                lastKnownBalance: currentBalance.toString()
+            }
         });
 
         return { address, derivationIndex: index };
@@ -104,7 +110,16 @@ export class SolChain implements Chain {
                             commitment: "confirmed"
                         });
 
-                        if (!tx?.meta) continue;
+                        if (!tx?.meta || !tx.blockTime) continue;
+
+                        // NEW: Ignore historical transactions that happened before this wallet was registered in our DB
+                        // We add a 2-minute buffer for clock drift
+                        const txTimeMs = tx.blockTime * 1000;
+                        const walletCreationTime = wallet.createdAt.getTime();
+                        if (txTimeMs < walletCreationTime - 120000) {
+                            console.log(`[SolChain] 🛡️ Ignoring historical TX ${sig.signature} (happened before wallet registration)`);
+                            continue;
+                        }
 
                         // Calculate net change for this address
                         const accountIndex = tx.transaction.message.accountKeys.findIndex(
@@ -148,23 +163,30 @@ export class SolChain implements Chain {
     private async pollBalanceDeltas(): Promise<void> {
         const connection = providerRegistry.getSolanaConnection();
         try {
+            // Fetch wallets and filter active ones
             const wallets = await prisma.userWallet.findMany({ where: { chain: this.chain } });
             const activeWallets = wallets.filter(w => w.address && w.address !== "ADDRESS_NOT_GENERATED_YET");
             console.log(`[SolChain] Monitoring ${activeWallets.length} user addresses...`);
 
             for (const wallet of activeWallets) {
                 try {
-                    const pubkey = new PublicKey(wallet.address);
+                    // Refresh wallet data inside the loop to get the most recent lastKnownBalance
+                    // this prevents race conditions if pollSignatureHistory just finished
+                    const freshWallet = await prisma.userWallet.findUnique({ where: { id: wallet.id } });
+                    if (!freshWallet) continue;
+
+                    const pubkey = new PublicKey(freshWallet.address);
                     const balance = await connection.getBalance(pubkey);
-                    const previous = BigInt(wallet.lastKnownBalance || "0");
+                    const previous = BigInt(freshWallet.lastKnownBalance || "0");
                     const current = BigInt(balance);
 
                     if (current > previous) {
                         const delta = current - previous;
-                        await this.creditDeposit(wallet, delta, "POLLING_DETECTED");
+                        await this.creditDeposit(freshWallet, delta, "POLLING_DETECTED");
                     } else if (current < previous) {
+                        // User likely withdrew or sweep happened
                         await prisma.userWallet.update({
-                            where: { id: wallet.id },
+                            where: { id: freshWallet.id },
                             data: { lastKnownBalance: current.toString() }
                         });
                     }
@@ -174,12 +196,55 @@ export class SolChain implements Chain {
     }
 
     private async creditDeposit(wallet: any, delta: bigint, txHash: string): Promise<void> {
-        const alreadyCredited = await prisma.ledgerEntry.findFirst({
-            where: { referenceId: txHash }
-        });
-        if (alreadyCredited && txHash !== "POLLING_DETECTED") return;
+        // 1. DEDUPLICATION & RECONCILIATION
+        if (txHash === "POLLING_DETECTED") {
+            // For polling, check if we already credited this user for this amount recently (last 5 mins)
+            // Or if there's a real TX that matches this amount already
+            const windowStart = new Date(Date.now() - 5 * 60 * 1000);
+            const recentMatch = await prisma.ledgerEntry.findFirst({
+                where: {
+                    userId: wallet.userId,
+                    chain: this.chain,
+                    amount: delta.toString(),
+                    createdAt: { gte: windowStart }
+                }
+            });
+            if (recentMatch) {
+                console.log(`[SolChain] Polling detected balance increase, but recent credit of ${delta} exists. Skipping duplicate.`);
+                return;
+            }
+        } else {
+            // For real TX hashes, check if we already have it
+            const existingHash = await prisma.ledgerEntry.findFirst({
+                where: { referenceId: txHash }
+            });
+            if (existingHash) return;
 
-        console.log(`[SolChain] 💰 Credit: ${delta} lamports for user ${wallet.userId}`);
+            // RECONCILIATION: Check if this TX was already credited via POLLING_DETECTED
+            // If so, we "upgrade" the polling entry instead of double-crediting
+            const windowStart = new Date(Date.now() - 10 * 60 * 1000);
+            const pollingMatch = await prisma.ledgerEntry.findFirst({
+                where: {
+                    userId: wallet.userId,
+                    chain: this.chain,
+                    amount: delta.toString(),
+                    referenceId: "POLLING_DETECTED",
+                    createdAt: { gte: windowStart }
+                }
+            });
+
+            if (pollingMatch) {
+                console.log(`[SolChain] Reconciling TX ${txHash} with earlier polling entry ${pollingMatch.id}`);
+                await prisma.ledgerEntry.update({
+                    where: { id: pollingMatch.id },
+                    data: { referenceId: txHash }
+                });
+                // Chain transaction record still needs to be created, but balance is already updated
+                return;
+            }
+        }
+
+        console.log(`[SolChain] 💰 Credit: ${delta} lamports for user ${wallet.userId} (Ref: ${txHash})`);
 
         await prisma.$transaction(async (tx) => {
             const balanceObj = await tx.userBalance.findUnique({

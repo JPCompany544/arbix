@@ -21,6 +21,7 @@ model User {
   transactions      Transaction[]
   wallets           UserWallet[]
   withdrawals       Withdrawal[]
+  balances          UserBalance[]
 }
 
 model Transaction {
@@ -67,6 +68,7 @@ model LedgerEntry {
 model UserBalance {
   id      String @id @default(cuid())
   userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   chain   String
   balance String
 
@@ -306,4 +308,99 @@ enum SweepStatus {
   BROADCASTING
   CONFIRMED
   FAILED
+}
+
+// ────────────────────────────────────────────────────────────────
+// Treasury Global Integrity Models
+// ────────────────────────────────────────────────────────────────
+
+model Network {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  chainId     Int      @unique
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  wallets     Wallet[]
+  reserves    ReserveEntry[]
+  liabilities LiabilityEntry[]
+  syncState   SyncState?
+
+  @@index([isActive])
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  networkId String
+  address   String
+  label     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  network   Network        @relation(fields: [networkId], references: [id])
+  reserves  ReserveEntry[]
+
+  @@unique([networkId, address])
+  @@index([networkId])
+  @@index([isActive])
+}
+
+model ReserveEntry {
+  id            String   @id @default(cuid())
+  walletId      String
+  networkId     String
+  assetSymbol   String
+  rawBalance    BigInt
+  decimals      Int
+  lastUpdatedAt DateTime @default(now()) @updatedAt
+
+  wallet        Wallet  @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  network       Network @relation(fields: [networkId], references: [id], onDelete: Cascade)
+
+  @@unique([walletId, assetSymbol])
+  @@index([networkId, assetSymbol])
+  @@index([lastUpdatedAt])
+}
+
+model LiabilityEntry {
+  id            String   @id @default(cuid())
+  networkId     String
+  assetSymbol   String
+  rawAmount     BigInt
+  decimals      Int
+  createdAt     DateTime @default(now())
+
+  network       Network @relation(fields: [networkId], references: [id], onDelete: Cascade)
+
+  @@index([networkId, assetSymbol])
+  @@index([createdAt])
+}
+
+model PriceCache {
+  assetSymbol   String   @id
+  priceUsd      Decimal  @db.Decimal(38, 18)
+  lastUpdatedAt DateTime @default(now()) @updatedAt
+  ttlSeconds    Int      @default(300)
+
+  @@index([lastUpdatedAt])
+}
+
+model SyncState {
+  id                String   @id @default(cuid())
+  networkId         String   @unique
+  lastSuccessfulSync DateTime?
+  syncStatus        SyncStatus @default(UNKNOWN)
+  errorMessage      String?
+  createdAt         DateTime @default(now())
+
+  network           Network  @relation(fields: [networkId], references: [id], onDelete: Cascade)
+
+  @@index([syncStatus])
+}
+
+enum SyncStatus {
+  OK
+  ERROR
+  STALE
+  UNKNOWN
 }

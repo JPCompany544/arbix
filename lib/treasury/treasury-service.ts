@@ -56,6 +56,18 @@ export interface SweepResult {
 // ─── Treasury Sync ────────────────────────────────────────────────────────────
 
 /**
+ * Sync a single chain's TreasuryState row with a timeout.
+ */
+async function syncChainWithTimeout(chain: SupportedChain, timeoutMs: number = 5000): Promise<void> {
+    return Promise.race([
+        syncChain(chain),
+        new Promise<void>((_, reject) =>
+            setTimeout(() => reject(new Error(`Sync timeout for ${chain}`)), timeoutMs)
+        )
+    ]);
+}
+
+/**
  * Sync a single chain's TreasuryState row.
  *
  * On-chain reserves = SUM(UserWallet.lastKnownBalance) for all wallets on chain.
@@ -154,11 +166,12 @@ export async function syncChain(chain: SupportedChain): Promise<void> {
 
 /**
  * Sync all chains — best-effort parallel, per-chain errors don't block others.
+ * Each chain sync has a 5-second timeout to prevent hanging.
  */
 export async function syncAllChains(): Promise<void> {
     await Promise.allSettled(
         SUPPORTED_CHAINS.map(chain =>
-            syncChain(chain).catch(e => {
+            syncChainWithTimeout(chain, 5000).catch(e => {
                 console.error(`[Treasury] Sync failed for ${chain}:`, e);
             })
         )

@@ -1,10 +1,10 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import { generateAddress } from "../lib/wallet/wallet-service";
+import { prisma } from "../lib/prisma";
 
 
 async function test() {
-    const { prisma } from "../lib/prisma";
     const user = await prisma.user.findFirst();
     if (!user) {
         throw new Error("No users found in database. Run 'npx tsx scripts/seed-test-user.ts' first.");

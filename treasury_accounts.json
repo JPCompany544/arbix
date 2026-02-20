@@ -1,0 +1,123 @@
+[
+  {
+    "id": "cmluxtio80000ze5xuw1hwa2t",
+    "name": "Assets",
+    "type": "ASSET",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": null,
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.000Z"
+  },
+  {
+    "id": "cmluxtiop0001ze5x3g80lekd",
+    "name": "Liabilities",
+    "type": "LIABILITY",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": null,
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.017Z"
+  },
+  {
+    "id": "cmluxtip40002ze5xm7126lu3",
+    "name": "Equity",
+    "type": "EQUITY",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": null,
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.033Z"
+  },
+  {
+    "id": "cmluxtipr0004ze5xzubgboqz",
+    "name": "Hot Wallet",
+    "type": "ASSET",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtio80000ze5xuw1hwa2t",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.055Z"
+  },
+  {
+    "id": "cmluxtiq90006ze5xgcz8nhyr",
+    "name": "Cold Wallet",
+    "type": "ASSET",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtio80000ze5xuw1hwa2t",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.073Z"
+  },
+  {
+    "id": "cmluxtiqg0008ze5x7sixh6zo",
+    "name": "Deposit Wallets",
+    "type": "ASSET",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtio80000ze5xuw1hwa2t",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.080Z"
+  },
+  {
+    "id": "cmluxtiqm000aze5xsyhaw0dw",
+    "name": "Clearing Wallet",
+    "type": "ASSET",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtio80000ze5xuw1hwa2t",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.086Z"
+  },
+  {
+    "id": "cmluxtiqr000cze5xilf37jvg",
+    "name": "User Balances",
+    "type": "LIABILITY",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtiop0001ze5x3g80lekd",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.091Z"
+  },
+  {
+    "id": "cmluxtiqz000eze5xgqial12e",
+    "name": "Pending Withdrawals",
+    "type": "LIABILITY",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtiop0001ze5x3g80lekd",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.100Z"
+  },
+  {
+    "id": "cmluxtir4000gze5xclod8jzb",
+    "name": "Treasury Equity",
+    "type": "EQUITY",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtip40002ze5xm7126lu3",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.105Z"
+  },
+  {
+    "id": "cmluxtirc000ize5xfdymhqou",
+    "name": "Fee Revenue",
+    "type": "EQUITY",
+    "network": null,
+    "currency": "",
+    "walletAddress": null,
+    "parentAccountId": "cmluxtip40002ze5xm7126lu3",
+    "isActive": true,
+    "createdAt": "2026-02-20T13:40:29.112Z"
+  }
+]

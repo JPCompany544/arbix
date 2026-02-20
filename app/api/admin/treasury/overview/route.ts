@@ -1,49 +1,56 @@
 import { NextResponse } from "next/server";
 import { verifyAdmin } from "@/lib/auth";
-import { getTreasuryOverview } from "@/lib/treasury/treasury-service";
-import { getPrices } from "@/lib/pricing/price-service";
+import { getGlobalOverview, NetworkMetrics } from "@/src/treasury/integrity/GlobalOverviewService";
+import { syncTreasuryIntegrity } from "@/src/treasury/integrity/sync-service";
 
-export async function GET() {
+export interface Snapshot {
+    totalAssets: number;
+    totalLiabilities: number;
+    totalEquity: number;
+    networks: Array<{
+        name: string;
+        assets: number;
+        liabilities: number;
+        equity: number;
+        walletCount: number;
+        lastSyncedAt: string;
+    }>;
+}
+
+export async function GET(): Promise<NextResponse<Snapshot | { error: string }>> {
+    console.log("[Treasury Overview API] Request received");
+
     const admin = await verifyAdmin();
     if (!admin) {
+        console.log("[Treasury Overview API] Unauthorized");
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     try {
-        const [overview, prices] = await Promise.all([
-            getTreasuryOverview(),
-            getPrices(),
-        ]);
-
-        const enriched = overview.map(entry => {
-            const price = prices[entry.chain] ?? 0;
-            return {
-                chain: entry.chain,
-                symbol: entry.symbol,
-                // Human-readable amounts
-                totalOnchainBalance: entry.totalOnchainBalance,
-                totalUserLiabilities: entry.totalUserLiabilities,
-                sweepableBalance: entry.sweepableBalance,
-                // Raw strings (BigInt serialised)
-                onchainRaw: entry.onchainRaw.toString(),
-                liabilitiesRaw: entry.liabilitiesRaw.toString(),
-                sweepableRaw: entry.sweepableRaw.toString(),
-                // USD values
-                price,
-                onchainUSD: parseFloat(entry.totalOnchainBalance) * price,
-                liabilitiesUSD: parseFloat(entry.totalUserLiabilities) * price,
-                sweepableUSD: parseFloat(entry.sweepableBalance) * price,
-                // Metadata
-                lastSyncedAt: entry.lastSyncedAt,
-                locked: entry.locked,
-                explorerUrl: entry.explorerUrl,
-                walletCount: entry.walletCount,
-            };
+        // Auto-sync integrity layer before computing overview (rate-limited to every 30s)
+        await syncTreasuryIntegrity().catch((err) => {
+            console.warn("[Treasury Overview API] Sync warning:", err.message);
         });
 
-        return NextResponse.json(enriched);
+        const overviewData = await getGlobalOverview();
+
+        const snapshot: Snapshot = {
+            totalAssets: parseFloat(overviewData.combined.usdSummary.totalReserveUsd),
+            totalLiabilities: parseFloat(overviewData.combined.usdSummary.totalLiabilityUsd),
+            totalEquity: parseFloat(overviewData.combined.usdSummary.totalEquityUsd),
+            networks: overviewData.networks.map((n: NetworkMetrics) => ({
+                name: n.networkName,
+                assets: parseFloat(n.usdReserves),
+                liabilities: parseFloat(n.usdLiabilities),
+                equity: parseFloat(n.usdEquity),
+                walletCount: n.walletCount,
+                lastSyncedAt: n.lastSync ? n.lastSync.toISOString() : new Date().toISOString()
+            }))
+        };
+
+        return NextResponse.json(snapshot);
     } catch (error: any) {
-        console.error("[Treasury Overview] Error:", error);
+        console.error("[Treasury Overview API] Error:", error);
         return NextResponse.json({ error: error.message || "Internal error" }, { status: 500 });
     }
 }

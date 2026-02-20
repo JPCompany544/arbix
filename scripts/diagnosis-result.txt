@@ -1,0 +1,420 @@
+{
+  "timestamp": "2026-02-20T11:49:07.475Z",
+  "layers": {
+    "treasuryState": [],
+    "userWallets": {
+      "ETH": {
+        "totalWallets": 6,
+        "nonZeroCount": 3,
+        "rawSum": "2391284703411027",
+        "nonZeroWallets": [
+          {
+            "address": "0x5660d66aa65E11200D47E6Fc77193DAfE988dF4B",
+            "userId": "cmlsr0doz0000n6qnc21got8f",
+            "balance": "123104468623901"
+          },
+          {
+            "address": "0x86EBE6c0C92aeDb5cfA82c03ceF53f2d55B68Da5",
+            "userId": "system_treasury_vault",
+            "balance": "1134090117393563"
+          },
+          {
+            "address": "0x86EBE6c0C92aeDb5cfA82c03ceF53f2d55B68Da5",
+            "userId": "cmlss6aog0009n6qnl2bf8u8p",
+            "balance": "1134090117393563"
+          }
+        ]
+      },
+      "BSC": {
+        "totalWallets": 0,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroWallets": []
+      },
+      "SOL": {
+        "totalWallets": 1,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroWallets": []
+      },
+      "BTC": {
+        "totalWallets": 1,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroWallets": []
+      },
+      "XRP": {
+        "totalWallets": 0,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroWallets": []
+      }
+    },
+    "userBalances": {
+      "ETH": {
+        "totalEntries": 3,
+        "nonZeroCount": 3,
+        "rawSum": "3417178521100928",
+        "nonZeroEntries": [
+          {
+            "userId": "system_treasury_vault",
+            "balance": "2035012865688563"
+          },
+          {
+            "userId": "cmlss6aog0009n6qnl2bf8u8p",
+            "balance": "1135012865688563"
+          },
+          {
+            "userId": "cmlsr0doz0000n6qnc21got8f",
+            "balance": "247152789723802"
+          }
+        ]
+      },
+      "BSC": {
+        "totalEntries": 0,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroEntries": []
+      },
+      "SOL": {
+        "totalEntries": 0,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroEntries": []
+      },
+      "BTC": {
+        "totalEntries": 0,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroEntries": []
+      },
+      "XRP": {
+        "totalEntries": 0,
+        "nonZeroCount": 0,
+        "rawSum": "0",
+        "nonZeroEntries": []
+      }
+    },
+    "integrityNetworks": {
+      "count": 5,
+      "networks": [
+        {
+          "name": "ETH",
+          "id": "cmlurqkq30000dqy5wewjzg7s",
+          "isActive": true,
+          "chainId": 1,
+          "walletCount": 1,
+          "activeWalletCount": 1,
+          "reserveEntryCount": 1,
+          "liabilityEntryCount": 1,
+          "reservesByAsset": {
+            "ETH": "3294074052477027"
+          },
+          "liabilitiesByAsset": {
+            "ETH": "3294074052477027"
+          },
+          "syncState": {
+            "status": "OK",
+            "lastSync": "2026-02-20T10:50:14.216Z",
+            "error": null
+          },
+          "reserveDetails": [
+            {
+              "walletAddress": "DEPOSIT_VAULT_ETH",
+              "walletLabel": "Total User Deposits (ETH)",
+              "assetSymbol": "ETH",
+              "rawBalance": "3294074052477027",
+              "decimals": 18,
+              "lastUpdated": "2026-02-20T10:50:14.084Z"
+            }
+          ],
+          "liabilityDetails": [
+            {
+              "assetSymbol": "ETH",
+              "rawAmount": "3294074052477027",
+              "decimals": 18
+            }
+          ]
+        },
+        {
+          "name": "BSC",
+          "id": "cmlurqkqm0001dqy58g0km3qo",
+          "isActive": true,
+          "chainId": 56,
+          "walletCount": 1,
+          "activeWalletCount": 1,
+          "reserveEntryCount": 1,
+          "liabilityEntryCount": 1,
+          "reservesByAsset": {
+            "BSC": "0"
+          },
+          "liabilitiesByAsset": {
+            "BSC": "0"
+          },
+          "syncState": {
+            "status": "OK",
+            "lastSync": "2026-02-20T10:50:14.231Z",
+            "error": null
+          },
+          "reserveDetails": [
+            {
+              "walletAddress": "DEPOSIT_VAULT_BSC",
+              "walletLabel": "Total User Deposits (BSC)",
+              "assetSymbol": "BSC",
+              "rawBalance": "0",
+              "decimals": 18,
+              "lastUpdated": "2026-02-20T10:50:14.108Z"
+            }
+          ],
+          "liabilityDetails": [
+            {
+              "assetSymbol": "BSC",
+              "rawAmount": "0",
+              "decimals": 18
+            }
+          ]
+        },
+        {
+          "name": "SOL",
+          "id": "cmlurqkqq0002dqy53d9qpv04",
+          "isActive": true,
+          "chainId": 101,
+          "walletCount": 1,
+          "activeWalletCount": 1,
+          "reserveEntryCount": 1,
+          "liabilityEntryCount": 1,
+          "reservesByAsset": {
+            "SOL": "0"
+          },
+          "liabilitiesByAsset": {
+            "SOL": "0"
+          },
+          "syncState": {
+            "status": "OK",
+            "lastSync": "2026-02-20T10:50:14.260Z",
+            "error": null
+          },
+          "reserveDetails": [
+            {
+              "walletAddress": "DEPOSIT_VAULT_SOL",
+              "walletLabel": "Total User Deposits (SOL)",
+              "assetSymbol": "SOL",
+              "rawBalance": "0",
+              "decimals": 9,
+              "lastUpdated": "2026-02-20T10:50:14.125Z"
+            }
+          ],
+          "liabilityDetails": [
+            {
+              "assetSymbol": "SOL",
+              "rawAmount": "0",
+              "decimals": 9
+            }
+          ]
+        },
+        {
+          "name": "BTC",
+          "id": "cmlurqkqu0003dqy5o7q6jnwx",
+          "isActive": true,
+          "chainId": 0,
+          "walletCount": 1,
+          "activeWalletCount": 1,
+          "reserveEntryCount": 1,
+          "liabilityEntryCount": 1,
+          "reservesByAsset": {
+            "BTC": "0"
+          },
+          "liabilitiesByAsset": {
+            "BTC": "0"
+          },
+          "syncState": {
+            "status": "OK",
+            "lastSync": "2026-02-20T10:50:14.267Z",
+            "error": null
+          },
+          "reserveDetails": [
+            {
+              "walletAddress": "DEPOSIT_VAULT_BTC",
+              "walletLabel": "Total User Deposits (BTC)",
+              "assetSymbol": "BTC",
+              "rawBalance": "0",
+              "decimals": 8,
+              "lastUpdated": "2026-02-20T10:50:14.140Z"
+            }
+          ],
+          "liabilityDetails": [
+            {
+              "assetSymbol": "BTC",
+              "rawAmount": "0",
+              "decimals": 8
+            }
+          ]
+        },
+        {
+          "name": "XRP",
+          "id": "cmlurqkqx0004dqy5yjzntbid",
+          "isActive": true,
+          "chainId": 2,
+          "walletCount": 1,
+          "activeWalletCount": 1,
+          "reserveEntryCount": 1,
+          "liabilityEntryCount": 1,
+          "reservesByAsset": {
+            "XRP": "0"
+          },
+          "liabilitiesByAsset": {
+            "XRP": "0"
+          },
+          "syncState": {
+            "status": "OK",
+            "lastSync": "2026-02-20T10:50:14.270Z",
+            "error": null
+          },
+          "reserveDetails": [
+            {
+              "walletAddress": "DEPOSIT_VAULT_XRP",
+              "walletLabel": "Total User Deposits (XRP)",
+              "assetSymbol": "XRP",
+              "rawBalance": "0",
+              "decimals": 6,
+              "lastUpdated": "2026-02-20T10:50:14.155Z"
+            }
+          ],
+          "liabilityDetails": [
+            {
+              "assetSymbol": "XRP",
+              "rawAmount": "0",
+              "decimals": 6
+            }
+          ]
+        }
+      ]
+    },
+    "priceCache": [
+      {
+        "assetSymbol": "ETH",
+        "priceUsd": "2800.5",
+        "lastUpdatedAt": "2026-02-20T10:50:14.178Z",
+        "ttlSeconds": 300,
+        "ageSeconds": 3533,
+        "isStale": true
+      },
+      {
+        "assetSymbol": "BSC",
+        "priceUsd": "350.25",
+        "lastUpdatedAt": "2026-02-20T10:50:14.197Z",
+        "ttlSeconds": 300,
+        "ageSeconds": 3533,
+        "isStale": true
+      },
+      {
+        "assetSymbol": "BNB",
+        "priceUsd": "350.25",
+        "lastUpdatedAt": "2026-02-20T10:50:14.200Z",
+        "ttlSeconds": 300,
+        "ageSeconds": 3533,
+        "isStale": true
+      },
+      {
+        "assetSymbol": "SOL",
+        "priceUsd": "102.15",
+        "lastUpdatedAt": "2026-02-20T10:50:14.203Z",
+        "ttlSeconds": 300,
+        "ageSeconds": 3533,
+        "isStale": true
+      },
+      {
+        "assetSymbol": "BTC",
+        "priceUsd": "52000",
+        "lastUpdatedAt": "2026-02-20T10:50:14.206Z",
+        "ttlSeconds": 300,
+        "ageSeconds": 3533,
+        "isStale": true
+      },
+      {
+        "assetSymbol": "XRP",
+        "priceUsd": "0.55",
+        "lastUpdatedAt": "2026-02-20T10:50:14.214Z",
+        "ttlSeconds": 300,
+        "ageSeconds": 3533,
+        "isStale": true
+      }
+    ],
+    "usdCalculation": {
+      "perAsset": [
+        {
+          "asset": "ETH",
+          "rawReserves": "3294074052477027",
+          "rawLiabilities": "3294074052477027",
+          "decimals": 18,
+          "humanReserves": 0.003294074052477027,
+          "humanLiabilities": 0.003294074052477027,
+          "priceUsd": 2800.5,
+          "priceMissing": false,
+          "usdReserves": "9.23",
+          "usdLiabilities": "9.23"
+        },
+        {
+          "asset": "BSC",
+          "rawReserves": "0",
+          "rawLiabilities": "0",
+          "decimals": 18,
+          "humanReserves": 0,
+          "humanLiabilities": 0,
+          "priceUsd": 350.25,
+          "priceMissing": false,
+          "usdReserves": "0.00",
+          "usdLiabilities": "0.00"
+        },
+        {
+          "asset": "SOL",
+          "rawReserves": "0",
+          "rawLiabilities": "0",
+          "decimals": 9,
+          "humanReserves": 0,
+          "humanLiabilities": 0,
+          "priceUsd": 102.15,
+          "priceMissing": false,
+          "usdReserves": "0.00",
+          "usdLiabilities": "0.00"
+        },
+        {
+          "asset": "BTC",
+          "rawReserves": "0",
+          "rawLiabilities": "0",
+          "decimals": 8,
+          "humanReserves": 0,
+          "humanLiabilities": 0,
+          "priceUsd": 52000,
+          "priceMissing": false,
+          "usdReserves": "0.00",
+          "usdLiabilities": "0.00"
+        },
+        {
+          "asset": "XRP",
+          "rawReserves": "0",
+          "rawLiabilities": "0",
+          "decimals": 6,
+          "humanReserves": 0,
+          "humanLiabilities": 0,
+          "priceUsd": 0.55,
+          "priceMissing": false,
+          "usdReserves": "0.00",
+          "usdLiabilities": "0.00"
+        }
+      ],
+      "grandTotalReserveUsd": "9.23",
+      "grandTotalLiabilityUsd": "9.23",
+      "grandTotalEquityUsd": "0.00"
+    },
+    "confirmedDeposits": {
+      "totalCount": 0,
+      "latest20": []
+    }
+  },
+  "diagnosis": {
+    "issues": [],
+    "computedTotalAssets": "9.23",
+    "explanation": "Data pipeline looks correct."
+  }
+}

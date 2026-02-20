@@ -1,0 +1,17 @@
+[DB] Initializing Prisma - Mode: TESTNET, Target: postgresql://neondb_owner:****@ep-steep-shape-aiymp707-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+Overall Summary:
+Total Reserve USD: 2489.48
+Total Liability USD: 2489.48
+Total Equity USD: 0.00
+
+Per-Network Breakdown:
+- ETH: Reserves $140.03, Liabilities $140.03, Wallets: 1
+  Assets: [{"asset":"ETH","raw":"50000000000000000"}]
+- BSC: Reserves $0.00, Liabilities $0.00, Wallets: 1
+  Assets: [{"asset":"BSC","raw":"0"}]
+- SOL: Reserves $2349.45, Liabilities $2349.45, Wallets: 1
+  Assets: [{"asset":"SOL","raw":"23000000000"}]
+- BTC: Reserves $0.00, Liabilities $0.00, Wallets: 1
+  Assets: [{"asset":"BTC","raw":"0"}]
+- XRP: Reserves $0.00, Liabilities $0.00, Wallets: 1
+  Assets: [{"asset":"XRP","raw":"0"}]

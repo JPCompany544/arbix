@@ -24,21 +24,21 @@ export class ReconciliationService {
     else if (delta > 0n) status = "EXCESS_ON_CHAIN";
     else status = "DEFICIT_ON_CHAIN";
 
-    // optional table check
-    try {
-      await prisma.reconciliationRecord.create({
-        data: {
-          accountId,
-          ledgerBalance: ledgerBal,
-          onChainBalance,
-          delta,
-          status,
-        },
-      });
-    } catch (e) {
-      // table likely doesn't exist; ignore
-      // console.warn("ReconciliationRecord table missing, skipping insert");
-    }
+    // optional table check - commented out as table doesn't exist yet
+    // try {
+    //   await prisma.reconciliationRecord.create({
+    //     data: {
+    //       accountId,
+    //       ledgerBalance: ledgerBal,
+    //       onChainBalance,
+    //       delta,
+    //       status,
+    //     },
+    //   });
+    // } catch (e) {
+    //   // table likely doesn't exist; ignore
+    //   // console.warn("ReconciliationRecord table missing, skipping insert");
+    // }
 
     return { ledgerBalance: ledgerBal, onChainBalance, delta, status };
   }

@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "test:treasury-foundation": "tsx tests/treasury/treasury-foundation.test.ts"
+    "test:treasury-foundation": "tsx tests/treasury/treasury-foundation.test.ts",
+    "test:global-overview": "tsx tests/treasury/global-overview.test.ts",
+    "migrate:db": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "5.10.2",

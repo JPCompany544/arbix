@@ -21,20 +21,15 @@ class ProviderRegistry {
         const c = chain.toUpperCase();
         if (!this.evmProviders.has(c)) {
             const rpcUrl = networkConfig.getRpc(c);
-            console.log(`[Provider Registry] Initializing new EVM provider for ${c} at ${rpcUrl}`);
+            const chainId = networkConfig.getChainId(c);
+            console.log(`[Provider Registry] Initializing new EVM provider for ${c} at ${rpcUrl} (ChainID: ${chainId})`);
 
-            // Using resilient settings (timeout and retries)
-            const fetchReq = new ethers.FetchRequest(rpcUrl);
-            fetchReq.timeout = 15000; // 15s timeout
-            fetchReq.retryFunc = async (req, resp, attempt) => {
-                if (attempt >= 2) return false;
-                return true;
-            };
-
-            // Using staticNetwork: true to avoid extra 'eth_chainId' calls on every request
-            const provider = new ethers.JsonRpcProvider(fetchReq, undefined, {
-                staticNetwork: true,
-                polling: false
+            // Use explicit network to avoid 'eth_chainId' call
+            const provider = new ethers.JsonRpcProvider(rpcUrl, {
+                chainId: chainId,
+                name: c.toLowerCase()
+            }, {
+                staticNetwork: true
             });
 
             this.evmProviders.set(c, provider);

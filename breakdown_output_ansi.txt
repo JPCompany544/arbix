@@ -1,0 +1,18 @@
+[DB] Initializing Prisma - Mode: TESTNET, Target: postgresql://neondb_owner:****@ep-steep-shape-aiymp707-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+--- ETH Reserve Breakdown ---
+Address: 0x44Ee48EDA612814D724d8800710910f60DE4f031
+Label:   User Wallet cmlub18lc000fcfqczosn8mi3
+Balance: 0.097961604732514 ETH
+Raw:     97961604732514000
+----------------------------
+Address: 0x1111111111111111111111111111111111111111
+Label:   Hot Wallet (ETH)
+Balance: 4.004423703092526 ETH
+Raw:     4004423703092525351
+----------------------------
+
+--- ETH UserWallet Table (Sweepable) ---
+Address: 0x44Ee48EDA612814D724d8800710910f60DE4f031
+Balance: 0.097961604732514 ETH
+Raw:     97961604732514000
+----------------------------

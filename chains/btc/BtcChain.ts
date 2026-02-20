@@ -67,10 +67,23 @@ export class BtcChain implements Chain {
 
         if (!address) throw new Error("Failed to generate BTC address");
 
-        // 3. Update DB
+        // 3. Update DB - Fetch current on-chain balance to establish a baseline
+        const baseUrl = networkConfig.getRpc(this.chain);
+        const balRes = await fetch(`${baseUrl}/address/${address}`).catch(() => null);
+        let currentBalance = "0";
+        if (balRes?.ok) {
+            const data = await balRes.json();
+            const funded = data.chain_stats.funded_txo_sum || 0;
+            const spent = data.chain_stats.spent_txo_sum || 0;
+            currentBalance = (funded - spent).toString();
+        }
+
         await prisma.userWallet.update({
             where: { userId_chain: { userId, chain: this.chain } },
-            data: { address }
+            data: {
+                address,
+                lastKnownBalance: currentBalance
+            }
         });
 
         return { address, derivationIndex: index };
@@ -113,6 +126,13 @@ export class BtcChain implements Chain {
             // 3. Filter for confirmed UTXOs (Min 3 confirmations)
             for (const utxo of utxos) {
                 if (utxo.status.confirmed) {
+                    // NEW: Ignore historical UTXOs that happened before this wallet was registered in our DB
+                    // block_time is in seconds
+                    const txTimeMs = utxo.status.block_time * 1000;
+                    if (txTimeMs < wallet.createdAt.getTime() - 120000) {
+                        continue;
+                    }
+
                     const confirmations = currentHeight - utxo.status.block_height + 1;
 
                     if (confirmations >= 3) {
@@ -249,7 +269,7 @@ export class BtcChain implements Chain {
         // Add Output (Recipient)
         psbt.addOutput({
             address: to,
-            value: Number(targetValue),
+            value: targetValue,
         });
 
         // Add Change Output
@@ -257,7 +277,7 @@ export class BtcChain implements Chain {
         if (change > 546n) { // Dust limit
             psbt.addOutput({
                 address: walletRecord.address,
-                value: Number(change),
+                value: change,
             });
         }
 

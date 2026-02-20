@@ -36,7 +36,7 @@ class NetworkConfig {
 
         if (this.mode === "testnet") {
             switch (c) {
-                case "ETH": return process.env.ETH_TESTNET_RPC || process.env.ETH_SEPOLIA_RPC || "https://sepolia.infura.io/v3/a095fe9b9e4a4048a6817c913e00fa31";
+                case "ETH": return process.env.ETH_TESTNET_RPC || process.env.ETH_SEPOLIA_RPC || "https://rpc.ankr.com/eth_sepolia";
                 case "BSC": return process.env.BSC_TESTNET_RPC || "https://data-seed-prebsc-1-s1.binance.org:8545/";
                 case "SOL": return process.env.SOLANA_TESTNET_RPC || process.env.SOLANA_DEVNET_RPC || "https://api.devnet.solana.com";
                 case "BTC": return process.env.BTC_TESTNET_RPC || "https://blockstream.info/testnet/api";

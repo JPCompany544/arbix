@@ -271,6 +271,58 @@ exports.Prisma.SweepScalarFieldEnum = {
   confirmedAt: 'confirmedAt'
 };
 
+exports.Prisma.NetworkScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  chainId: 'chainId',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WalletScalarFieldEnum = {
+  id: 'id',
+  networkId: 'networkId',
+  address: 'address',
+  label: 'label',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ReserveEntryScalarFieldEnum = {
+  id: 'id',
+  walletId: 'walletId',
+  networkId: 'networkId',
+  assetSymbol: 'assetSymbol',
+  rawBalance: 'rawBalance',
+  decimals: 'decimals',
+  lastUpdatedAt: 'lastUpdatedAt'
+};
+
+exports.Prisma.LiabilityEntryScalarFieldEnum = {
+  id: 'id',
+  networkId: 'networkId',
+  assetSymbol: 'assetSymbol',
+  rawAmount: 'rawAmount',
+  decimals: 'decimals',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PriceCacheScalarFieldEnum = {
+  assetSymbol: 'assetSymbol',
+  priceUsd: 'priceUsd',
+  lastUpdatedAt: 'lastUpdatedAt',
+  ttlSeconds: 'ttlSeconds'
+};
+
+exports.Prisma.SyncStateScalarFieldEnum = {
+  id: 'id',
+  networkId: 'networkId',
+  lastSuccessfulSync: 'lastSuccessfulSync',
+  syncStatus: 'syncStatus',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -360,6 +412,13 @@ exports.SweepStatus = exports.$Enums.SweepStatus = {
   FAILED: 'FAILED'
 };
 
+exports.SyncStatus = exports.$Enums.SyncStatus = {
+  OK: 'OK',
+  ERROR: 'ERROR',
+  STALE: 'STALE',
+  UNKNOWN: 'UNKNOWN'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Transaction: 'Transaction',
@@ -376,7 +435,13 @@ exports.Prisma.ModelName = {
   TreasuryEntry: 'TreasuryEntry',
   BalanceSnapshot: 'BalanceSnapshot',
   TreasuryState: 'TreasuryState',
-  Sweep: 'Sweep'
+  Sweep: 'Sweep',
+  Network: 'Network',
+  Wallet: 'Wallet',
+  ReserveEntry: 'ReserveEntry',
+  LiabilityEntry: 'LiabilityEntry',
+  PriceCache: 'PriceCache',
+  SyncState: 'SyncState'
 };
 
 /**

@@ -93,6 +93,16 @@ export class XrpChain implements Chain {
                 });
 
                 if (wallet) {
+                    // NEW: Ignore historical transactions that happened before this user got this tag recorded in our DB
+                    // txData.date is seconds since Ripple Epoch (2000-01-01)
+                    if (txData.date) {
+                        const rippleEpochOffset = 946684800;
+                        const txTimeMs = (txData.date + rippleEpochOffset) * 1000;
+                        if (txTimeMs < wallet.createdAt.getTime() - 120000) {
+                            continue;
+                        }
+                    }
+
                     const amountDrops = BigInt(txData.Amount);
                     console.log(`[XrpChain] 💰 XRP Deposit Detect: Tag ${tag} (+${xrpl.dropsToXrp(txData.Amount)} XRP)`);
                     await this.creditDeposit(wallet, amountDrops, txHash, BigInt(txData.ledger_index));
