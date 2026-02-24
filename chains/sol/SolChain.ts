@@ -74,125 +74,130 @@ export class SolChain implements Chain {
 
     /**
      * Monitor for incoming SOL deposits
-     * Uses hybrid: Signature scanning (tx history) and Balance polling (delta).
+     * Uses hybrid strategy: 
+     * 1. Bulk check balances (1 RPC call)
+     * 2. Only if balance increases, scan signatures to find TX (Heavy RPC calls)
      */
     async monitorDeposits(): Promise<void> {
-        try {
-            await this.pollSignatureHistory();
-            await this.pollBalanceDeltas();
-        } catch (err) {
-            console.error("[SolChain] Monitor error:", err);
-        }
-    }
-
-    /**
-     * Scan recent signatures for all user wallets
-     */
-    private async pollSignatureHistory(): Promise<void> {
         const connection = providerRegistry.getSolanaConnection();
         try {
-            const wallets = await prisma.userWallet.findMany({ where: { chain: this.chain } });
-            for (const wallet of wallets) {
-                try {
-                    const publicKey = new PublicKey(wallet.address);
-                    const signatures = await connection.getSignaturesForAddress(publicKey, { limit: 10 });
-
-                    for (const sig of signatures) {
-                        if (sig.err) continue;
-
-                        const existing = await prisma.chainTransaction.findUnique({
-                            where: { txHash: sig.signature }
-                        });
-                        if (existing) continue;
-
-                        const tx = await connection.getParsedTransaction(sig.signature, {
-                            maxSupportedTransactionVersion: 0,
-                            commitment: "confirmed"
-                        });
-
-                        if (!tx?.meta || !tx.blockTime) continue;
-
-                        // NEW: Ignore historical transactions that happened before this wallet was registered in our DB
-                        // We add a 2-minute buffer for clock drift
-                        const txTimeMs = tx.blockTime * 1000;
-                        const walletCreationTime = wallet.createdAt.getTime();
-                        if (txTimeMs < walletCreationTime - 120000) {
-                            console.log(`[SolChain] 🛡️ Ignoring historical TX ${sig.signature} (happened before wallet registration)`);
-                            continue;
-                        }
-
-                        // Calculate net change for this address
-                        const accountIndex = tx.transaction.message.accountKeys.findIndex(
-                            ak => ak.pubkey.toBase58() === wallet.address
-                        );
-                        if (accountIndex === -1) continue;
-
-                        const pre = tx.meta.preBalances[accountIndex] || 0;
-                        const post = tx.meta.postBalances[accountIndex] || 0;
-                        const diff = post - pre;
-
-                        if (diff > 0) {
-                            console.log(`[SolChain] 💰 Found Inbound TX: ${sig.signature} (+${diff / LAMPORTS_PER_SOL} SOL)`);
-
-                            await prisma.chainTransaction.create({
-                                data: {
-                                    userId: wallet.userId,
-                                    chain: this.chain,
-                                    to: wallet.address,
-                                    amount: (diff / LAMPORTS_PER_SOL).toString(),
-                                    txHash: sig.signature,
-                                    blockNumber: BigInt(sig.slot),
-                                    direction: "INBOUND",
-                                    status: "BROADCASTED"
-                                }
-                            });
-
-                            await this.creditDeposit(wallet, BigInt(diff), sig.signature);
-                        }
-                    }
-                } catch (e) { }
-            }
-        } catch (e) {
-            console.error("[SolChain] Signature poll failed:", e);
-        }
-    }
-
-    /**
-     * Backup poll for balance changes (delta detection)
-     */
-    private async pollBalanceDeltas(): Promise<void> {
-        const connection = providerRegistry.getSolanaConnection();
-        try {
-            // Fetch wallets and filter active ones
             const wallets = await prisma.userWallet.findMany({ where: { chain: this.chain } });
             const activeWallets = wallets.filter(w => w.address && w.address !== "ADDRESS_NOT_GENERATED_YET");
-            console.log(`[SolChain] Monitoring ${activeWallets.length} user addresses...`);
 
-            for (const wallet of activeWallets) {
-                try {
-                    // Refresh wallet data inside the loop to get the most recent lastKnownBalance
-                    // this prevents race conditions if pollSignatureHistory just finished
-                    const freshWallet = await prisma.userWallet.findUnique({ where: { id: wallet.id } });
-                    if (!freshWallet) continue;
+            if (activeWallets.length === 0) return;
 
-                    const pubkey = new PublicKey(freshWallet.address);
-                    const balance = await connection.getBalance(pubkey);
-                    const previous = BigInt(freshWallet.lastKnownBalance || "0");
-                    const current = BigInt(balance);
+            console.log(`[SolChain] Bulk polling ${activeWallets.length} addresses...`);
 
-                    if (current > previous) {
-                        const delta = current - previous;
-                        await this.creditDeposit(freshWallet, delta, "POLLING_DETECTED");
-                    } else if (current < previous) {
-                        // User likely withdrew or sweep happened
-                        await prisma.userWallet.update({
-                            where: { id: freshWallet.id },
-                            data: { lastKnownBalance: current.toString() }
-                        });
-                    }
-                } catch (e) { }
+            // 1. Bulk fetch all account info (Balances) in 1 RPC call
+            const publicKeys = activeWallets.map(w => new PublicKey(w.address!));
+            const accounts = await connection.getMultipleAccountsInfo(publicKeys);
+
+            for (let i = 0; i < activeWallets.length; i++) {
+                const wallet = activeWallets[i];
+                const account = accounts[i];
+
+                const current = BigInt(account?.lamports || 0);
+                const previous = BigInt(wallet.lastKnownBalance || "0");
+
+                if (current > previous) {
+                    const delta = current - previous;
+                    console.log(`[SolChain] 📈 Balance increase detected for ${wallet.address} (+${delta} lamports). Searching for TX...`);
+
+                    // Trigger signature scan for this specific wallet to find the TX hash
+                    await this.scanTransactionsForWallet(wallet, delta);
+
+                    // Small delay between scans if multiple wallets changed
+                    await new Promise(r => setTimeout(r, 2000));
+                } else if (current < previous) {
+                    // Update baseline if it dropped (likely a sweep or withdrawal)
+                    await prisma.userWallet.update({
+                        where: { id: wallet.id },
+                        data: { lastKnownBalance: current.toString() }
+                    });
+                }
             }
-        } catch (e) { }
+        } catch (err: any) {
+            if (err.message?.includes("429")) {
+                console.warn("[SolChain] RPC Rate limited during bulk poll. Waiting 10s...");
+                await new Promise(r => setTimeout(r, 10000));
+            } else {
+                console.error("[SolChain] Monitor error:", err);
+            }
+        }
+    }
+
+    /**
+     * Scan recent signatures for a specific wallet that we know has a balance increase
+     */
+    private async scanTransactionsForWallet(wallet: any, expectedDelta: bigint): Promise<void> {
+        const connection = providerRegistry.getSolanaConnection();
+        try {
+            const publicKey = new PublicKey(wallet.address);
+            // Limit to 5 signatures to find the recent deposit
+            const signatures = await connection.getSignaturesForAddress(publicKey, { limit: 5 });
+
+            for (const sig of signatures) {
+                if (sig.err) continue;
+
+                // Check if already processed
+                const existing = await prisma.chainTransaction.findUnique({
+                    where: { txHash: sig.signature }
+                });
+                if (existing) continue;
+
+                // Fetch full TX detail
+                const tx = await connection.getParsedTransaction(sig.signature, {
+                    maxSupportedTransactionVersion: 0,
+                    commitment: "confirmed"
+                });
+
+                if (!tx?.meta || !tx.blockTime) continue;
+
+                // Ignore historical transactions before wallet registration
+                const txTimeMs = tx.blockTime * 1000;
+                if (txTimeMs < wallet.createdAt.getTime() - 120000) continue;
+
+                // Calculate net change for this address in this TX
+                const accountIndex = tx.transaction.message.accountKeys.findIndex(
+                    ak => ak.pubkey.toBase58() === wallet.address
+                );
+                if (accountIndex === -1) continue;
+
+                const pre = tx.meta.preBalances[accountIndex] || 0;
+                const post = tx.meta.postBalances[accountIndex] || 0;
+                const diff = post - pre;
+
+                if (diff > 0) {
+                    console.log(`[SolChain] 💰 Found matching TX: ${sig.signature} (+${diff / LAMPORTS_PER_SOL} SOL)`);
+
+                    await prisma.chainTransaction.create({
+                        data: {
+                            userId: wallet.userId,
+                            chain: this.chain,
+                            to: wallet.address,
+                            amount: (diff / LAMPORTS_PER_SOL).toString(),
+                            txHash: sig.signature,
+                            blockNumber: BigInt(sig.slot),
+                            direction: "INBOUND",
+                            status: "BROADCASTED"
+                        }
+                    });
+
+                    await this.creditDeposit(wallet, BigInt(diff), sig.signature);
+
+                    // If we found a TX that matches or explains the delta, we can stop
+                    // (Though there might be multiple deposits, we process them one by one)
+                }
+
+                // Respect RPC limits between TX fetches
+                await new Promise(r => setTimeout(r, 2000));
+            }
+        } catch (e: any) {
+            if (e.message?.includes("429")) {
+                console.warn(`[SolChain] RPC Rate limited scanning ${wallet.address}.`);
+                await new Promise(r => setTimeout(r, 5000));
+            }
+        }
     }
 
     private async creditDeposit(wallet: any, delta: bigint, txHash: string): Promise<void> {

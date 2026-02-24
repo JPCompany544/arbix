@@ -69,7 +69,7 @@ export class EthChain implements Chain {
      */
     async monitorDeposits(): Promise<void> {
         try {
-            await this.catchUp();
+            // await this.catchUp(); // Disabled: Too many RPC calls on free tier providers
             await this.pollAllWallets();
         } catch (err) {
             console.error(`[${this.chain}Chain] Monitor pass error:`, err);
@@ -79,17 +79,25 @@ export class EthChain implements Chain {
     private async catchUp(): Promise<void> {
         const provider = providerRegistry.getEvmProvider(this.chain);
         try {
+            // Skip catch-up if there are no wallets to monitor
+            const walletCount = await prisma.userWallet.count({ where: { chain: this.chain } });
+            if (walletCount === 0) {
+                return;
+            }
+
             const latest = await provider.getBlockNumber();
             const state = await prisma.chainScanState.findUnique({ where: { chain: this.chain } });
 
-            // To prevent large catch-ups, limit to last 100 blocks
-            const lastScanned = state ? Number(state.lastScannedBlock) : latest - 10;
-            const startBlock = Math.max(lastScanned + 1, latest - 100);
+            // Limit catch-up to last 10 blocks to avoid RPC rate limits
+            const lastScanned = state ? Number(state.lastScannedBlock) : latest - 5;
+            const startBlock = Math.max(lastScanned + 1, latest - 10);
 
             if (startBlock <= latest) {
                 console.log(`[${this.chain}Chain] Catching up from block ${startBlock} to ${latest}`);
                 for (let i = startBlock; i <= latest; i++) {
                     await this.scanBlock(i);
+                    // Small delay to avoid RPC rate limits
+                    await new Promise(r => setTimeout(r, 500));
                 }
             }
         } catch (e) {
@@ -165,16 +173,23 @@ export class EthChain implements Chain {
                 where: { chain: this.chain }
             });
 
-            const activeWallets = wallets.filter(w => w.address && w.address !== "ADDRESS_NOT_GENERATED_YET");
+            const activeWallets = wallets.filter((w: any) => w.address && w.address !== "ADDRESS_NOT_GENERATED_YET");
+
+            if (activeWallets.length === 0) {
+                return; // Skip RPC calls when no wallets to monitor
+            }
+
             console.log(`[${this.chain}Chain] Monitoring ${activeWallets.length} user addresses...`);
 
             for (const wallet of activeWallets) {
                 try {
                     // Refresh wallet to get latest lastKnownBalance from earlier block scan in this pulse
                     const freshWallet = await prisma.userWallet.findUnique({ where: { id: wallet.id } });
-                    if (!freshWallet) continue;
+                    if (!freshWallet || !freshWallet.address) continue;
 
+                    console.log(`[${this.chain}Chain] Polling balance for ${freshWallet.address}...`);
                     const onChainBalance = await provider.getBalance(freshWallet.address);
+
                     const previous = BigInt(freshWallet.lastKnownBalance || "0");
                     const current = onChainBalance;
 
@@ -187,7 +202,15 @@ export class EthChain implements Chain {
                             data: { lastKnownBalance: current.toString() }
                         });
                     }
-                } catch (e) { }
+
+                    // Increased delay to 1.5s to avoid RPC rate limits (LlamaRPC/Public)
+                    await new Promise(r => setTimeout(r, 1500));
+                } catch (e: any) {
+                    if (e.message?.includes("429")) {
+                        console.warn(`[${this.chain}Chain] RPC Rate limited. Waiting 5s...`);
+                        await new Promise(r => setTimeout(r, 5000));
+                    }
+                }
             }
         } catch (e) { }
     }

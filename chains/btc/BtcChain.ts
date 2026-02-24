@@ -101,23 +101,27 @@ export class BtcChain implements Chain {
             // Filter out internal/legacy addresses if any
             const activeWallets = wallets.filter(w => w.address && w.address !== "ADDRESS_NOT_GENERATED_YET");
 
-            console.log(`[BtcChain] Monitoring ${activeWallets.length} user addresses...`);
+            // 1. Get Current Tip Height ONCE per pulse
+            const baseUrl = networkConfig.getRpc(this.chain);
+            const heightRes = await fetch(`${baseUrl}/blocks/tip/height`);
+            if (!heightRes.ok) throw new Error("Could not fetch BTC tip height");
+            const currentHeight = parseInt(await heightRes.text());
+
+            console.log(`[BtcChain] Monitoring ${activeWallets.length} user addresses at height ${currentHeight}...`);
 
             for (const wallet of activeWallets) {
-                await this.pollAddress(wallet);
+                await this.pollAddress(wallet, currentHeight);
+                // Respectful delay between wallets
+                await new Promise(r => setTimeout(r, 1000));
             }
         } catch (err) {
             console.error("[BtcChain] Monitor error:", err);
         }
     }
 
-    private async pollAddress(wallet: any): Promise<void> {
+    private async pollAddress(wallet: any, currentHeight: number): Promise<void> {
         const baseUrl = networkConfig.getRpc(this.chain);
         try {
-            // 1. Get Current Tip Height for confirmation check
-            const heightRes = await fetch(`${baseUrl}/blocks/tip/height`);
-            const currentHeight = parseInt(await heightRes.text());
-
             // 2. Fetch UTXOs from Blockstream/Mempool API
             const res = await fetch(`${baseUrl}/address/${wallet.address}/utxo`);
             if (!res.ok) return;

@@ -44,16 +44,18 @@ export const PortfolioProvider = ({ children }: { children: React.ReactNode }) =
             const res = await fetch('/api/wallet/portfolio');
             if (!res.ok) {
                 if (res.status === 401) {
-                    // Auth error, maybe token expired?
-                    // Don't clear auth here, let AuthContext handle it or just fail quietly
+                    setError('Session expired or unauthorized');
+                    setPortfolio(null);
+                } else {
+                    setError('Failed to load portfolio data');
                 }
-                throw new Error('Failed to fetch portfolio');
+                return;
             }
             const data = await res.json();
             setPortfolio(data);
         } catch (err: any) {
-            console.error(err);
-            setError(err.message);
+            console.error('Portfolio fetch error:', err);
+            setError('Network error: Unable to load portfolio');
         } finally {
             setIsLoading(false);
         }

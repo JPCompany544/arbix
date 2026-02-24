@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Eye, ArrowDownCircle, ArrowUpCircle, ChevronRight, CircleHelp, FileText, ShieldAlert, Lock, CreditCard, Users2, Coins, HandCoins, BarChart3, Filter, ArrowRightLeft, LayoutGrid, TrendingUp, Zap, CandlestickChart, RefreshCw, CircleDollarSign, Percent, Trophy, Menu, X } from "lucide-react";
+import { Eye, ArrowDownCircle, ArrowUpCircle, ChevronRight, CircleHelp, FileText, ShieldAlert, Lock, CreditCard, Users2, Coins, HandCoins, BarChart3, Filter, ArrowRightLeft, LayoutGrid, TrendingUp, Zap, CandlestickChart, RefreshCw, CircleDollarSign, Percent, Trophy, Menu, X, Headset } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useModal } from "@/context/ModalContext";
 
@@ -509,14 +509,23 @@ export default function Navbar() {
                 </div>
 
                 {/* Right Side: Auth/User and Lang */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
+                    {/* Support Link */}
+                    <Link
+                        href="/support"
+                        className="flex items-center gap-1.5 text-white/70 hover:text-orange-500 transition-colors text-[12px] font-bold"
+                    >
+                        <Headset size={16} />
+                        <span className="hidden sm:inline">Support</span>
+                    </Link>
+
                     {!isLoggedIn ? (
-                        <>
+                        <div className="flex items-center gap-3">
                             <Link
                                 href="/login"
                                 className="px-4 py-1.5 border border-white/20 rounded-lg text-white hover:text-orange-500 hover:border-orange-500/50 transition-all text-[12px] font-bold bg-black shadow-sm"
                             >
-                                Log in
+                                Login
                             </Link>
                             <Link
                                 href="/signup"
@@ -524,9 +533,9 @@ export default function Navbar() {
                             >
                                 Sign up
                             </Link>
-                        </>
+                        </div>
                     ) : (
-                        <>
+                        <div className="flex items-center gap-4">
                             <button
                                 onClick={() => openModal()}
                                 className="hidden lg:block bg-orange-500 text-white px-4 py-1.5 rounded-md font-black text-[11px] hover:bg-orange-600 transition-all duration-300 shadow-lg shadow-orange-500/20 active:scale-95"
@@ -666,7 +675,7 @@ export default function Navbar() {
                                     </div>
                                 </div>
                             </div>
-                        </>
+                        </div>
                     )}
                     <button className="group flex items-center gap-1 text-white hover:text-orange-500 transition-colors text-[12px] font-black ml-1">
                         EN

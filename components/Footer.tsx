@@ -52,7 +52,7 @@ const Footer = () => {
     if (pathname === "/signup" || pathname === "/login") return null;
 
     return (
-        <footer className="bg-black text-white pt-16 pb-12 px-6 md:px-12 lg:px-24 relative z-20">
+        <footer className="hidden md:block bg-black text-white pt-16 pb-12 px-6 md:px-12 lg:px-24 relative z-20">
             <div className="max-w-[1440px] mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     {/* Logo */}

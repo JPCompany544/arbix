@@ -30,26 +30,45 @@ async function start() {
     // Keep connection alive with periodic heartbeat (every 30s)
     setInterval(keepConnectionAlive, 30000);
 
-    // 1. Polling Monitor (Every 10s)
-    const POLL_INTERVAL = 10000;
+    // 1. Polling Monitor (Every 30s to respect RPC rate limits)
+    const POLL_INTERVAL = 30000;
 
     console.log(`[MONITOR] Starting Poller (Interval: ${POLL_INTERVAL}ms)...`);
 
     async function runMonitors() {
         console.log(`[MONITOR] Pulse at ${new Date().toLocaleTimeString()}`);
-        await Promise.allSettled([
-            checkEvmNativeDeposits("ETH", networkConfig.getRpc("ETH")),
-            checkEvmNativeDeposits("BSC", networkConfig.getRpc("BSC")),
-            checkSolanaDeposits(networkConfig.getRpc("SOL")),
-            checkBitcoinDeposits(),
-            checkXrpDeposits()
-        ]);
+
+        const chains = [
+            { name: "ETH", fn: () => checkEvmNativeDeposits("ETH", networkConfig.getRpc("ETH")) },
+            { name: "BSC", fn: () => checkEvmNativeDeposits("BSC", networkConfig.getRpc("BSC")) },
+            { name: "SOL", fn: () => checkSolanaDeposits(networkConfig.getRpc("SOL")) },
+            { name: "BTC", fn: () => checkBitcoinDeposits() },
+            { name: "XRP", fn: () => checkXrpDeposits() }
+        ];
+
+        for (const chain of chains) {
+            try {
+                console.log(`[MONITOR] Checking ${chain.name}...`);
+                await chain.fn();
+                // Increased delay between chains to respect aggressive RPC limits
+                await new Promise(r => setTimeout(r, 5000));
+            } catch (err: any) {
+                console.error(`[MONITOR] Error monitoring ${chain.name}:`, err.message);
+            }
+        }
     }
 
-    // Initial Run
-    await runMonitors();
+    // Initial Run & Loop
+    while (true) {
+        try {
+            await runMonitors();
+        } catch (err: any) {
+            console.error('[MONITOR] Global pulse error:', err.message);
+        }
 
-    setInterval(runMonitors, POLL_INTERVAL);
+        console.log(`[MONITOR] Cooldown (${POLL_INTERVAL}ms)...`);
+        await new Promise(r => setTimeout(r, POLL_INTERVAL));
+    }
 
     console.log("\n✅ Monitors Active. Press Ctrl+C to stop.");
 }

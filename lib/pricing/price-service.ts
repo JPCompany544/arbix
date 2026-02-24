@@ -25,7 +25,22 @@ const TOKEN_MAP: { [key: string]: string } = {
     PEPE: "pepe",
     WBETH: "wrapped-beacon-eth",
     APT: "aptos",
-    XLM: "stellar"
+    XLM: "stellar",
+    ARB: "arbitrum",
+    OP: "optimism",
+    MATIC: "matic-network",
+    ATOM: "cosmos",
+    FTM: "fantom",
+    SUI: "sui",
+    SEI: "sei-network",
+    TIA: "celestia",
+    INJ: "injective-protocol",
+    RENDER: "render-token",
+    JUP: "jupiter-exchange-solana",
+    PYTH: "pyth-network",
+    TAO: "bittensor",
+    STX: "blockstack",
+    STETH: "lido-staked-ether"
 };
 
 export type MarketData = {

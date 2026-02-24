@@ -1,10 +1,9 @@
-import { prisma } from "../lib/prisma";
-
-async function list() {
+import { prisma } from "./lib/prisma";
+async function test() {
+    console.log("NETWORK:", process.env.NETWORK);
+    const count = await prisma.userWallet.count();
+    console.log("Total Wallets:", count);
     const wallets = await prisma.userWallet.findMany();
-    for (const w of wallets) {
-        console.log(`User: ${w.userId}, Chain: ${w.chain}, Address: ${w.address}, Balance: ${w.lastKnownBalance}`);
-    }
+    console.log(JSON.stringify(wallets.map(w => ({ chain: w.chain, address: w.address })), null, 2));
 }
-
-list().catch(console.error);
+test().catch(console.error);

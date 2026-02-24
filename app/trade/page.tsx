@@ -1,19 +1,60 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import TokenLogo from "@/components/TokenLogo";
+import TradingChart from "@/components/TradingChart";
+import { ChevronDown, ArrowRight } from "lucide-react";
+import { useModal } from "@/context/ModalContext";
+import OrderBook from "@/components/OrderBook";
+import TradeActionModal from "@/components/TradeActionModal";
 
 function TradePageContent() {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const activeSymbol = searchParams.get("symbol") || "ETH";
+    const { openModal } = useModal();
 
-    const stats = [
-        { label: "24h Change", value: "-0.19%", color: "text-red-500" },
-        { label: "24h High", value: "2147.73" },
-        { label: "24h Low", value: "2008.62" },
-        { label: "24h Volume (" + activeSymbol + ")", value: "65689" },
-        { label: "24h Volume (USDT)", value: "136,514,721.00" },
+    const [allMarkets, setAllMarkets] = useState<any[]>([]);
+    const [activeMarket, setActiveMarket] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [isActionModalOpen, setIsActionModalOpen] = useState(false);
+    const [actionModalSide, setActionModalSide] = useState<"buy" | "sell">("buy");
+
+    useEffect(() => {
+        const fetchMarkets = async () => {
+            try {
+                const res = await fetch("/api/prices/markets");
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    setAllMarkets(data);
+                    const found = data.find(m => m.symbol === activeSymbol);
+                    if (found) setActiveMarket(found);
+                }
+            } catch (error) {
+                console.error("Failed to fetch markets:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMarkets();
+        const interval = setInterval(fetchMarkets, 10000); // 10s updates
+        return () => clearInterval(interval);
+    }, [activeSymbol]);
+
+    const stats = activeMarket ? [
+        { label: "24h Change", value: `${activeMarket.change24h >= 0 ? "+" : ""}${activeMarket.change24h.toFixed(2)}%`, color: activeMarket.change24h >= 0 ? "text-emerald-500" : "text-rose-500" },
+        { label: "24h High", value: activeMarket.high24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) },
+        { label: "24h Low", value: activeMarket.low24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) },
+        { label: "24h Volume (" + activeSymbol + ")", value: activeMarket.volume24h.toLocaleString(undefined, { maximumFractionDigits: 0 }) },
+        { label: "24h Volume (USDT)", value: (activeMarket.volume24h * activeMarket.price).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
+    ] : [
+        { label: "24h Change", value: "0.00%", color: "text-gray-500" },
+        { label: "24h High", value: "0.00" },
+        { label: "24h Low", value: "0.00" },
+        { label: "24h Volume", value: "0" },
+        { label: "24h Volume (USDT)", value: "0" },
     ];
 
     const orderHistoryHeaders = [
@@ -25,26 +66,105 @@ function TradePageContent() {
     ];
 
     return (
-        <main className="min-h-screen bg-gray-50 pt-20 px-6 pb-12">
-            <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-1">
+        <main className="min-h-screen bg-[#020202] pt-[112px] md:pt-24 px-4 md:px-6 pb-20 md:pb-12 text-white">
+            <div className="max-w-[1536px] mx-auto flex flex-col gap-1.5 lg:grid lg:grid-cols-12 lg:gap-1.5">
 
-                {/* Left Section: Ticker + Chart + History Tabs */}
-                <div className="lg:col-span-8 flex flex-col gap-1">
-                    {/* Top Ticker Header */}
-                    <div className="bg-white border border-gray-200 rounded-tl-lg px-6 py-3 flex items-center justify-between overflow-x-auto whitespace-nowrap scrollbar-hide">
-                        <div className="flex items-center gap-6 divide-x divide-gray-100">
-                            <div className="flex items-center gap-4 pr-6">
-                                <div className="flex items-center gap-2">
-                                    <TokenLogo symbol={activeSymbol} size={24} />
-                                    <h2 className="text-[16px] font-black text-black uppercase">{activeSymbol}/USDT</h2>
-                                </div>
-                                <span className="text-[18px] font-black text-red-500">2118.5</span>
+                {/* 1. Mobile Only: Price Summary & Pair Selector */}
+                <div className="md:hidden flex flex-col gap-6 mb-6">
+                    <div className="flex flex-col">
+                        <div className="flex items-baseline gap-2">
+                            <h1 className="text-[32px] font-black font-mono tracking-tighter leading-none">
+                                {activeMarket?.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}
+                            </h1>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                            <span className="text-sm font-bold text-gray-500">
+                                ≈ ${activeMarket?.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"} USD
+                            </span>
+                            <span className={`text-sm font-black ${activeMarket?.change24h >= 0 ? "text-[#16c784]" : "text-[#ea3943]"}`}>
+                                {activeMarket?.change24h >= 0 ? "+" : ""}{activeMarket?.change24h.toFixed(2) || "0.00"}%
+                            </span>
+                        </div>
+
+                        {/* High/Low/Vol Row */}
+                        <div className="grid grid-cols-3 gap-4 mt-6 border-t border-white/5 pt-6">
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">24H High</span>
+                                <span className="text-[13px] font-bold font-mono">{activeMarket?.high24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}</span>
                             </div>
-                            <div className="flex items-center gap-10 pl-6">
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">24H Low</span>
+                                <span className="text-[13px] font-bold font-mono">{activeMarket?.low24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}</span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">24H Volume</span>
+                                <span className="text-[13px] font-bold font-mono">{activeMarket?.volume24h.toLocaleString(undefined, { maximumFractionDigits: 0 }) || "0"}</span>
+                            </div>
+                        </div>
+
+                        <div className="mt-4 flex items-center">
+                            <button
+                                onClick={() => openModal()}
+                                className="text-xs font-black text-orange-500 hover:text-orange-400 flex items-center gap-1 uppercase tracking-widest"
+                            >
+                                <span className="text-[16px] leading-none">•</span> Deposit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="h-[1px] bg-white/5 w-full" />
+
+                    <div className="relative">
+                        <select
+                            onChange={(e) => {
+                                const symbol = e.target.value;
+                                router.push(`/trade?symbol=${symbol}`);
+                            }}
+                            value={activeSymbol}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        >
+                            {allMarkets.map(m => (
+                                <option key={m.symbol} value={m.symbol}>{m.symbol} / USDT</option>
+                            ))}
+                        </select>
+                        <div className="flex items-center justify-between">
+                            <div className="flex flex-col">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-xl font-black tracking-tighter uppercase">{activeSymbol} / USDT</h2>
+                                    <ChevronDown size={18} className="text-gray-500" />
+                                </div>
+                                <span className={`text-[11px] font-black mt-0.5 ${activeMarket?.change24h >= 0 ? "text-[#16c784]" : "text-[#ea3943]"}`}>
+                                    {activeMarket?.change24h >= 0 ? "+" : ""}{activeMarket?.change24h.toFixed(2) || "0.00"}%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. Desktop Order Book (Sidebar) */}
+                <div className="hidden lg:block lg:col-span-2 h-[800px]">
+                    <OrderBook symbol={activeSymbol} currentPrice={activeMarket?.price} />
+                </div>
+
+                {/* 3. Main Center Content (Ticker + Chart + History) */}
+                <div className="lg:col-span-7 flex flex-col gap-1.5">
+                    {/* Desktop Ticker Header */}
+                    <div className="hidden md:flex bg-[#0B0E11] border border-white/5 rounded-t-xl px-6 py-4 items-center justify-between overflow-x-auto whitespace-nowrap scrollbar-hide">
+                        <div className="flex items-center gap-8 divide-x divide-white/5">
+                            <div className="flex items-center gap-5 pr-8">
+                                <div className="flex items-center gap-3">
+                                    <TokenLogo symbol={activeSymbol} size={28} />
+                                    <h2 className="text-[18px] font-black text-white uppercase tracking-tighter">{activeSymbol}/USDT</h2>
+                                </div>
+                                <span className="text-[20px] font-black text-[#16c784] font-mono">
+                                    {activeMarket?.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-10 pl-8">
                                 {stats.map((stat) => (
                                     <div key={stat.label} className="flex flex-col">
-                                        <span className="text-[11px] font-medium text-gray-400 leading-none mb-1">{stat.label}</span>
-                                        <span className={`text-[12px] font-bold ${stat.color || 'text-black'} leading-none`}>
+                                        <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">{stat.label}</span>
+                                        <span className={`text-[13px] font-bold ${stat.color || 'text-white'} leading-none`}>
                                             {stat.value}
                                         </span>
                                     </div>
@@ -54,153 +174,118 @@ function TradePageContent() {
                     </div>
 
                     {/* Chart Area */}
-                    <div className="bg-white border border-gray-200 p-6 flex items-center justify-center min-h-[500px]">
-                        <div className="text-center text-gray-400">
-                            <svg className="mx-auto mb-4" width="80" height="80" viewBox="0 0 80 80" fill="none">
-                                <rect x="10" y="30" width="8" height="40" fill="currentColor" opacity="0.3" />
-                                <rect x="24" y="20" width="8" height="50" fill="currentColor" opacity="0.5" />
-                                <rect x="38" y="35" width="8" height="35" fill="currentColor" opacity="0.4" />
-                                <rect x="52" y="15" width="8" height="55" fill="currentColor" opacity="0.6" />
-                                <rect x="66" y="25" width="8" height="45" fill="currentColor" opacity="0.5" />
-                            </svg>
-                            <p className="text-sm font-semibold">TradingView Chart Coming Soon</p>
-                            <p className="text-xs mt-1">Real-time price action for {activeSymbol}/USDT</p>
-                        </div>
+                    <div className="bg-[#0B0E11] border border-white/5 p-1 min-h-[500px]">
+                        <TradingChart symbol={activeSymbol} />
                     </div>
 
-                    {/* History Tabs */}
-                    <div className="bg-white border border-gray-200 rounded-bl-lg">
-                        <div className="flex items-center border-b border-gray-100 px-6">
-                            <button className="px-4 py-3 text-sm font-bold text-black border-b-2 border-black">Order History</button>
-                            <button className="px-4 py-3 text-sm font-medium text-gray-400 hover:text-black">Trade History</button>
-                        </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        {orderHistoryHeaders.map((header) => (
-                                            <th key={header} className="px-6 py-3 text-left text-[11px] font-black text-gray-500 uppercase tracking-wider">{header}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100">
-                                    {mockOrders.length === 0 ? (
-                                        <tr>
-                                            <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
-                                                <div className="flex flex-col items-center gap-2">
-                                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="opacity-30">
-                                                        <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" strokeWidth="2" />
-                                                        <path d="M16 24h16M24 16v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                                                    </svg>
-                                                    <p className="text-sm font-semibold">No Orders Yet</p>
-                                                    <p className="text-xs">Place your first order to get started</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        mockOrders.map((order, idx) => (
-                                            <tr key={idx} className="hover:bg-gray-50">
-                                                <td className="px-6 py-3 font-medium text-gray-600">{order.date}</td>
-                                                <td className="px-6 py-3 font-bold text-black">{order.pair}</td>
-                                                <td className="px-6 py-3">
-                                                    <span className={`font-bold ${order.side === 'Buy' ? 'text-green-500' : 'text-red-500'}`}>
-                                                        {order.side}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-3 text-gray-600">{order.type}</td>
-                                                <td className="px-6 py-3 font-semibold text-black">{order.amount}</td>
-                                                <td className="px-6 py-3 font-semibold text-black">{order.price}</td>
-                                                <td className="px-6 py-3">
-                                                    <button className="text-xs font-bold text-red-500 hover:text-red-600">Cancel</button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                    {/* Mobile Quick Actions: Buy/Sell Buttons */}
+                    <div className="md:hidden flex gap-3 px-1">
+                        <button
+                            onClick={() => {
+                                setActionModalSide("buy");
+                                setIsActionModalOpen(true);
+                            }}
+                            className="flex-1 py-4 bg-[#16c784] hover:bg-[#12a66e] text-black font-black uppercase tracking-widest rounded-xl transition-all active:scale-[0.98]"
+                        >
+                            Buy {activeSymbol}
+                        </button>
+                        <button
+                            onClick={() => {
+                                setActionModalSide("sell");
+                                setIsActionModalOpen(true);
+                            }}
+                            className="flex-1 py-4 bg-[#ea3943] hover:bg-[#cf2d36] text-white font-black uppercase tracking-widest rounded-xl transition-all active:scale-[0.98]"
+                        >
+                            Sell {activeSymbol}
+                        </button>
                     </div>
+
+                    {/* Mobile Order Book */}
+                    <div className="md:hidden mt-4">
+                        <OrderBook symbol={activeSymbol} currentPrice={activeMarket?.price} />
+                    </div>
+
                 </div>
 
-                {/* Right Section: Order Form */}
-                <div className="lg:col-span-4 bg-white border border-gray-200 rounded-tr-lg rounded-br-lg p-6">
-                    <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-                        <button className="flex-1 py-2 text-sm font-bold text-green-500 border-b-2 border-green-500">Buy</button>
-                        <button className="flex-1 py-2 text-sm font-medium text-gray-400 hover:text-red-500">Sell</button>
+                {/* 4. Order Form (Right Sidebar) */}
+                <div className="hidden lg:flex lg:col-span-3 bg-[#0B0E11] border border-white/5 rounded-xl p-6 flex-col h-fit">
+
+                    <div className="flex items-center justify-between mb-8 p-1 bg-[#1E2329] rounded-xl">
+                        <button className="flex-1 py-3 text-xs font-black uppercase tracking-widest text-emerald-500 bg-[#0B0E11] rounded-lg shadow-sm">Buy</button>
+                        <button className="flex-1 py-3 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-rose-500 transition-colors">Sell</button>
                     </div>
 
-                    {/* Available Balance */}
-                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center justify-between">
-                            <span className="text-xs font-medium text-gray-500">Available</span>
-                            <span className="text-sm font-bold text-black">0.00 USDT</span>
+                    <div className="mb-6">
+                        <div className="flex items-center justify-between px-1">
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Available</span>
+                            <span className="text-xs font-bold text-white">0.00 USDT</span>
                         </div>
                     </div>
 
-                    {/* Order Type */}
-                    <div className="mb-4">
-                        <label className="block text-xs font-bold text-gray-600 mb-2">Order Type</label>
-                        <select className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-green-500">
-                            <option>Limit</option>
-                            <option>Market</option>
+                    <div className="mb-5">
+                        <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 px-1">Order Type</label>
+                        <select className="w-full bg-[#1E2329] border border-white/5 rounded-xl px-4 py-3.5 text-sm font-bold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all appearance-none cursor-pointer">
+                            <option>Limit Order</option>
+                            <option>Market Order</option>
                         </select>
                     </div>
 
-                    {/* Price Input */}
-                    <div className="mb-4">
-                        <label className="block text-xs font-bold text-gray-600 mb-2">Price</label>
+                    <div className="mb-5">
+                        <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 px-1">Price</label>
                         <div className="relative">
                             <input
                                 type="text"
                                 placeholder="0.00"
-                                className="w-full px-4 py-3 pr-16 border border-gray-200 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="w-full bg-[#1E2329] border border-white/5 rounded-xl px-4 py-3.5 pr-16 text-sm font-bold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all placeholder:text-gray-600"
                             />
-                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">USDT</span>
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-500 uppercase">USDT</span>
                         </div>
                     </div>
 
-                    {/* Amount Input */}
-                    <div className="mb-4">
-                        <label className="block text-xs font-bold text-gray-600 mb-2">Amount</label>
+                    <div className="mb-6">
+                        <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 px-1">Amount</label>
                         <div className="relative">
                             <input
                                 type="text"
                                 placeholder="0.00"
-                                className="w-full px-4 py-3 pr-16 border border-gray-200 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-green-500"
+                                className="w-full bg-[#1E2329] border border-white/5 rounded-xl px-4 py-3.5 pr-16 text-sm font-bold text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all placeholder:text-gray-600"
                             />
-                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">{activeSymbol}</span>
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-500 uppercase">{activeSymbol}</span>
                         </div>
                     </div>
 
-                    {/* Percentage selectors */}
-                    <div className="grid grid-cols-4 gap-2 mb-6">
+                    <div className="grid grid-cols-4 gap-2 mb-8">
                         {['25%', '50%', '75%', '100%'].map((pct) => (
-                            <button key={pct} className="py-2 text-xs font-bold text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+                            <button key={pct} className="py-2.5 text-[10px] font-black text-gray-400 bg-[#1E2329] hover:bg-[#2B3139] hover:text-white rounded-lg transition-all border border-white/5">
                                 {pct}
                             </button>
                         ))}
                     </div>
 
-                    {/* Total */}
-                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <div className="mb-8 p-4 bg-white/5 border border-white/5 rounded-xl">
                         <div className="flex items-center justify-between">
-                            <span className="text-xs font-medium text-gray-500">Total</span>
-                            <span className="text-sm font-bold text-black">0.00 USDT</span>
+                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Est. Total</span>
+                            <span className="text-sm font-bold text-emerald-500">0.00 USDT</span>
                         </div>
                     </div>
 
-                    {/* Buy Button */}
-                    <button className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors shadow-lg shadow-green-500/20">
+                    <button className="w-full py-4.5 bg-emerald-500 hover:bg-emerald-600 text-[#020202] text-sm font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-emerald-500/10 active:scale-[0.98]">
                         Buy {activeSymbol}
                     </button>
 
-                    {/* Info */}
-                    <p className="mt-4 text-xs text-center text-gray-400">
-                        Please <span className="text-green-500 font-semibold">log in</span> or <span className="text-green-500 font-semibold">sign up</span> to start trading
+                    <p className="mt-6 text-[11px] text-center text-gray-500 font-medium">
+                        Please <span className="text-orange-500 font-bold cursor-pointer hover:underline">Log In</span> or <span className="text-orange-500 font-bold cursor-pointer hover:underline">Register</span> to trade
                     </p>
                 </div>
-
             </div>
+
+            <TradeActionModal
+                isOpen={isActionModalOpen}
+                onClose={() => setIsActionModalOpen(false)}
+                symbol={activeSymbol}
+                currentPrice={activeMarket?.price || 0}
+                initialSide={actionModalSide}
+            />
         </main>
     );
 }
@@ -208,10 +293,10 @@ function TradePageContent() {
 export default function TradePage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+            <div className="min-h-screen bg-[#020202] pt-20 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-                    <p className="text-sm font-semibold text-gray-600">Loading trade page...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                    <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">Initialising Terminal...</p>
                 </div>
             </div>
         }>

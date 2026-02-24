@@ -40,17 +40,17 @@ class NetworkConfig {
                 case "BSC": return process.env.BSC_TESTNET_RPC || "https://data-seed-prebsc-1-s1.binance.org:8545/";
                 case "SOL": return process.env.SOLANA_TESTNET_RPC || process.env.SOLANA_DEVNET_RPC || "https://api.devnet.solana.com";
                 case "BTC": return process.env.BTC_TESTNET_RPC || "https://blockstream.info/testnet/api";
-                case "XRP": return process.env.XRP_TESTNET_RPC || "https://s.altnet.rippletest.net:51234";
+                case "XRP": return process.env.XRP_TESTNET_RPC || "wss://s.altnet.rippletest.net:51233";
                 default: throw new Error(`Unsupported chain for testnet: ${chain}`);
             }
         } else {
-            // Mainnet
+            // Mainnet - Use LlamaRPC/Public for basic monitoring to avoid Alchemy 429
             switch (c) {
-                case "ETH": return process.env.ETH_MAINNET_RPC || "https://eth.llamarpc.com";
-                case "BSC": return process.env.BSC_MAINNET_RPC || "https://bsc-dataseed.binance.org/";
+                case "ETH": return "https://eth.llamarpc.com";
+                case "BSC": return "https://bsc-dataseed.binance.org/";
                 case "SOL": return process.env.SOLANA_MAINNET_RPC || "https://api.mainnet-beta.solana.com";
                 case "BTC": return process.env.BTC_MAINNET_RPC || "https://mempool.space/api";
-                case "XRP": return process.env.XRP_MAINNET_RPC || "https://xrplcluster.com";
+                case "XRP": return process.env.XRP_MAINNET_RPC || "wss://xrplcluster.com";
                 default: throw new Error(`Unsupported chain for mainnet: ${chain}`);
             }
         }
