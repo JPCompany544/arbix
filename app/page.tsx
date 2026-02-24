@@ -284,7 +284,9 @@ export default function HomePage() {
                   </div>
                   <div className="text-right flex flex-col gap-1">
                     <span className="font-bold text-[15px] md:text-lg">
-                      {coin.price ? coin.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: (coin.price < 1 ? 4 : 2) }) : "0.00"}
+                      {coin.price !== null && coin.price !== undefined ?
+                        coin.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: (coin.price < 1 ? 4 : 2) }) :
+                        "0.00"}
                     </span>
                     <span className={`text-[12px] md:text-sm font-black ${(coin.change24h || 0) >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                       {(coin.change24h || 0) >= 0 ? "+" : ""}{(coin.change24h || 0).toFixed(2)}%

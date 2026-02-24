@@ -50,14 +50,20 @@ export default function MarketTable({ initialData }: MarketTableProps) {
         return () => clearInterval(interval);
     }, []);
 
-    const formatPrice = (price: number) => {
+    const formatPrice = (price: number | null | undefined) => {
+        if (price === null || price === undefined || isNaN(price)) {
+            return "0.00";
+        }
         if (price >= 1) {
             return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
         return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 });
     };
 
-    const formatVolume = (volume: number) => {
+    const formatVolume = (volume: number | null | undefined) => {
+        if (volume === null || volume === undefined || isNaN(volume)) {
+            return "0.00";
+        }
         if (volume >= 1000000) {
             return (volume / 1000000).toFixed(2) + "M";
         }

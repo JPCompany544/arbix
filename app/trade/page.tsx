@@ -44,11 +44,11 @@ function TradePageContent() {
     }, [activeSymbol]);
 
     const stats = activeMarket ? [
-        { label: "24h Change", value: `${activeMarket.change24h >= 0 ? "+" : ""}${activeMarket.change24h.toFixed(2)}%`, color: activeMarket.change24h >= 0 ? "text-emerald-500" : "text-rose-500" },
-        { label: "24h High", value: activeMarket.high24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) },
-        { label: "24h Low", value: activeMarket.low24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) },
-        { label: "24h Volume (" + activeSymbol + ")", value: activeMarket.volume24h.toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { label: "24h Volume (USDT)", value: (activeMarket.volume24h * activeMarket.price).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
+        { label: "24h Change", value: `${(activeMarket.change24h ?? 0) >= 0 ? "+" : ""}${(activeMarket.change24h ?? 0).toFixed(2)}%`, color: (activeMarket.change24h ?? 0) >= 0 ? "text-emerald-500" : "text-rose-500" },
+        { label: "24h High", value: (activeMarket.high24h ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 }) },
+        { label: "24h Low", value: (activeMarket.low24h ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 }) },
+        { label: "24h Volume (" + activeSymbol + ")", value: (activeMarket.volume24h ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
+        { label: "24h Volume (USDT)", value: ((activeMarket.volume24h ?? 0) * (activeMarket.price ?? 0)).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
     ] : [
         { label: "24h Change", value: "0.00%", color: "text-gray-500" },
         { label: "24h High", value: "0.00" },
@@ -74,15 +74,15 @@ function TradePageContent() {
                     <div className="flex flex-col">
                         <div className="flex items-baseline gap-2">
                             <h1 className="text-[32px] font-black font-mono tracking-tighter leading-none">
-                                {activeMarket?.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}
+                                {(activeMarket?.price ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </h1>
                         </div>
                         <div className="flex items-center gap-2 mt-1">
                             <span className="text-sm font-bold text-gray-500">
-                                ≈ ${activeMarket?.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"} USD
+                                ≈ ${(activeMarket?.price ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
                             </span>
-                            <span className={`text-sm font-black ${activeMarket?.change24h >= 0 ? "text-[#16c784]" : "text-[#ea3943]"}`}>
-                                {activeMarket?.change24h >= 0 ? "+" : ""}{activeMarket?.change24h.toFixed(2) || "0.00"}%
+                            <span className={`text-sm font-black ${(activeMarket?.change24h ?? 0) >= 0 ? "text-[#16c784]" : "text-[#ea3943]"}`}>
+                                {(activeMarket?.change24h ?? 0) >= 0 ? "+" : ""}{(activeMarket?.change24h ?? 0).toFixed(2)}%
                             </span>
                         </div>
 
@@ -90,15 +90,15 @@ function TradePageContent() {
                         <div className="grid grid-cols-3 gap-4 mt-6 border-t border-white/5 pt-6">
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">24H High</span>
-                                <span className="text-[13px] font-bold font-mono">{activeMarket?.high24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}</span>
+                                <span className="text-[13px] font-bold font-mono">{(activeMarket?.high24h ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">24H Low</span>
-                                <span className="text-[13px] font-bold font-mono">{activeMarket?.low24h.toLocaleString(undefined, { minimumFractionDigits: 2 }) || "0.00"}</span>
+                                <span className="text-[13px] font-bold font-mono">{(activeMarket?.low24h ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">24H Volume</span>
-                                <span className="text-[13px] font-bold font-mono">{activeMarket?.volume24h.toLocaleString(undefined, { maximumFractionDigits: 0 }) || "0"}</span>
+                                <span className="text-[13px] font-bold font-mono">{(activeMarket?.volume24h ?? 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                             </div>
                         </div>
 
@@ -157,7 +157,7 @@ function TradePageContent() {
                                     <h2 className="text-[18px] font-black text-white uppercase tracking-tighter">{activeSymbol}/USDT</h2>
                                 </div>
                                 <span className="text-[20px] font-black text-[#16c784] font-mono">
-                                    {activeMarket?.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}
+                                    {(activeMarket?.price ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                             </div>
                             <div className="flex items-center gap-10 pl-8">
