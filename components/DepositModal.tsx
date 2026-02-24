@@ -2,7 +2,7 @@
 
 import { X, ChevronDown, Check, QrCode, CreditCard, ArrowUpRight, History, Wallet, Copy, ExternalLink, RefreshCw } from "lucide-react";
 import { useModal } from "@/context/ModalContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { usePortfolio } from "@/context/PortfolioContext";
 import Image from "next/image";
@@ -59,6 +59,7 @@ export default function DepositModal() {
     const [withdrawAmount, setWithdrawAmount] = useState("");
     const [withdrawStatus, setWithdrawStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
     const [withdrawError, setWithdrawError] = useState("");
+    const activeRequestRef = useRef(0);
 
     // Get current token details or default
     const currentToken = TOKENS.find(t => t.symbol === selectedToken) || TOKENS[0];
@@ -85,6 +86,8 @@ export default function DepositModal() {
     useEffect(() => {
         if (isModalOpen) {
             setSelectedNetwork(currentToken.networks[0]);
+            setWalletAddress(null);
+            setBalance("0.0");
             setWithdrawStatus('idle');
             setWithdrawAddress("");
             setWithdrawAmount("");
@@ -97,59 +100,56 @@ export default function DepositModal() {
 
         const chain = getChainId(selectedNetwork, currentToken.symbol);
         if (!chain) {
-            // Chain not supported by API yet
+            setWalletAddress(null);
             return;
         }
 
         const fetchData = async () => {
+            const requestId = ++activeRequestRef.current;
             setLoading(true);
+
+            // Immediately clear address on new fetch if it's the first attempt for this selection
+            // We usually do this in the dependencies effect, but let's be safe
+            if (activeTab === 'deposit') setWalletAddress(null);
+
             try {
-                // 1. Fetch Balance (Always)
-                // Use a default user ID if auth context is missing (for dev/demo) or prompt login
                 const userId = user.id || "demo-user";
 
-                try {
-                    const balRes = await fetch(`/api/wallet/balance?chain=${chain}&userId=${userId}`);
-                    if (balRes.ok) {
-                        const balData = await balRes.json();
-                        setBalance(balData.balanceHuman || "0.0");
-                    }
-                } catch (e) {
-                    console.error("Balance fetch error:", e);
+                // 1. Fetch Balance
+                const balRes = await fetch(`/api/wallet/balance?chain=${chain}&userId=${userId}`);
+                if (balRes.ok && requestId === activeRequestRef.current) {
+                    const balData = await balRes.json();
+                    setBalance(balData.balanceHuman || "0.0");
                 }
 
                 // 2. Fetch Address (if Deposit)
                 if (activeTab === 'deposit') {
-                    try {
-                        const addrRes = await fetch(`/api/wallet/address?chain=${chain}&userId=${userId}`);
+                    const addrRes = await fetch(`/api/wallet/address?chain=${chain}&userId=${userId}`);
+                    if (requestId === activeRequestRef.current) {
                         if (addrRes.ok) {
                             const addrData = await addrRes.json();
                             setWalletAddress(addrData.address);
                         } else {
                             setWalletAddress(null);
                         }
-                    } catch (e) {
-                        console.error("Address fetch error:", e);
                     }
                 }
 
                 // 3. Fetch History (if Activity)
                 if (activeTab === 'activity') {
-                    try {
-                        const txRes = await fetch(`/api/wallet/transactions?chain=${chain}&userId=${userId}`);
-                        if (txRes.ok) {
-                            const txData = await txRes.json();
-                            setTransactions(txData.transactions || []);
-                        }
-                    } catch (e) {
-                        console.error("Transactions fetch error:", e);
+                    const txRes = await fetch(`/api/wallet/transactions?chain=${chain}&userId=${userId}`);
+                    if (txRes.ok && requestId === activeRequestRef.current) {
+                        const txData = await txRes.json();
+                        setTransactions(txData.transactions || []);
                     }
                 }
 
             } catch (error) {
                 console.error("Wallet data fetch error:", error);
             } finally {
-                setLoading(false);
+                if (requestId === activeRequestRef.current) {
+                    setLoading(false);
+                }
             }
         };
 
@@ -356,14 +356,17 @@ export default function DepositModal() {
                     {/* DEPOSIT VIEW */}
                     {activeTab === 'deposit' && (
                         <div className="flex flex-col items-center justify-center h-full text-center animate-in fade-in duration-300">
-                            {loading ? (
+                            {loading && !walletAddress ? (
                                 <div className="flex flex-col items-center">
                                     <RefreshCw className="w-8 h-8 text-orange-500 animate-spin mb-4" />
-                                    <p className="text-xs font-bold text-gray-500">Generating Address...</p>
+                                    <p className="text-xs font-bold text-gray-500 italic">Generating Secure Address...</p>
                                 </div>
                             ) : walletAddress ? (
                                 <>
-                                    <div className="w-full max-w-[320px]">
+                                    <div
+                                        key={`${selectedToken}-${selectedNetwork}`}
+                                        className="w-full max-w-[320px] animate-in fade-in slide-in-from-bottom-2 duration-300"
+                                    >
                                         <p className="text-[10px] uppercase font-bold text-gray-400 mb-2 flex justify-between">
                                             <span>Deposit Address</span>
                                             {copied && <span className="text-green-500 animate-in fade-in slide-in-from-right-2">Copied!</span>}
@@ -385,6 +388,12 @@ export default function DepositModal() {
                                                 )}
                                             </div>
                                         </button>
+                                        {loading && (
+                                            <div className="mt-2 flex items-center justify-center gap-2">
+                                                <RefreshCw className="w-3 h-3 text-orange-500 animate-spin" />
+                                                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Syncing...</span>
+                                            </div>
+                                        )}
                                         <p className="mt-3 text-[10px] text-gray-400 font-medium italic">
                                             Tap address to copy to clipboard
                                         </p>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { loadTawk } from "@/lib/loadTawk";
 import {
     MessageSquare,
     HelpCircle,
@@ -18,6 +19,38 @@ import Link from "next/link";
 
 export default function SupportPage() {
     const [tickets, setTickets] = useState([]); // Empty state by default
+
+    useEffect(() => {
+        // 1. Load the script only on this page
+        loadTawk();
+
+        // 2. Wait for API and hide default floating widget immediately
+        const interval = setInterval(() => {
+            if (window.Tawk_API) {
+                window.Tawk_API.hideWidget();
+                clearInterval(interval);
+            }
+        }, 300);
+
+        // 3. Cleanup: Hide widget when leaving support section
+        return () => {
+            clearInterval(interval);
+            if (window.Tawk_API) {
+                window.Tawk_API.minimize();
+                window.Tawk_API.hideWidget();
+            }
+        }
+    }, []);
+
+    const handleChatClick = () => {
+        if (window.Tawk_API) {
+            window.Tawk_API.showWidget();
+            window.Tawk_API.maximize();
+        } else {
+            // Fallback if script hasn't loaded yet
+            alert("Support chat is warming up. Please try again in a moment.");
+        }
+    };
 
     const faqCategories = [
         {
@@ -82,7 +115,10 @@ export default function SupportPage() {
                                         <div className="text-sm text-gray-500 italic">Submit a form to our team</div>
                                     </div>
                                 </button>
-                                <button className="w-full flex items-center gap-4 p-5 bg-[#0B0E11] border border-white/5 rounded-2xl hover:border-orange-500/50 transition-all hover:bg-white/[0.02] group">
+                                <button
+                                    onClick={handleChatClick}
+                                    className="w-full flex items-center gap-4 p-5 bg-[#0B0E11] border border-white/5 rounded-2xl hover:border-orange-500/50 transition-all hover:bg-white/[0.02] group"
+                                >
                                     <div className="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
                                         <MessageSquare className="text-orange-500" size={24} />
                                     </div>
@@ -144,7 +180,10 @@ export default function SupportPage() {
                             <HelpCircle className="text-orange-500" size={30} />
                             <span className="text-[11px] font-black uppercase tracking-widest text-center leading-tight">Ask a Question</span>
                         </button>
-                        <button className="flex flex-col items-center justify-center gap-3 p-5 bg-[#0B0E11] border border-white/5 rounded-2xl active:bg-orange-500/10 active:border-orange-500/30 transition-all h-[120px]">
+                        <button
+                            onClick={handleChatClick}
+                            className="flex flex-col items-center justify-center gap-3 p-5 bg-[#0B0E11] border border-white/5 rounded-2xl active:bg-orange-500/10 active:border-orange-500/30 transition-all h-[120px]"
+                        >
                             <MessageSquare className="text-orange-500" size={30} />
                             <span className="text-[11px] font-black uppercase tracking-widest text-center leading-tight">Live Chat</span>
                         </button>

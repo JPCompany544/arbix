@@ -50,12 +50,10 @@ export default function DashboardPage() {
         { symbol: "TRX", name: "TRON" },
         { symbol: "ADA", name: "Cardano" },
         { symbol: "AVAX", name: "Avalanche" },
-        { symbol: "WBTC", name: "Wrapped Bitcoin" },
         { symbol: "SHIB", name: "SHIBA INU" },
         { symbol: "BCH", name: "Bitcoin Cash" },
         { symbol: "LINK", name: "ChainLink" },
         { symbol: "DOT", name: "Polkadot" },
-        { symbol: "DAI", name: "Dai" },
     ];
 
     // Merge portfolio data with static asset list

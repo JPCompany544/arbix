@@ -10,7 +10,7 @@ const ARTICLE_CONTENT = {
         category: "Account Management",
         updated: "Feb 24, 2026",
         content: `
-            <h2 class="text-xl font-bold text-white mb-4">How to Register an Account on Arbix</h2>
+            <h2 class="text-xl font-bold text-white mb-4">How to Register an Account on Arbit</h2>
             
             <h3 class="text-lg font-bold text-orange-500 mb-4">Registration Methods</h3>
             <p class="text-gray-400 mb-6 leading-relaxed">You can register using your email address or mobile phone number.</p>
@@ -83,7 +83,7 @@ const ARTICLE_CONTENT = {
             <section class="mb-8 pl-4 border-l-2 border-orange-500/30">
                 <h4 class="font-black text-white mb-3">Login with QR Code (Mobile App)</h4>
                 <ul class="list-decimal list-inside text-gray-400 space-y-2">
-                    <li>Open the Arbix mobile app</li>
+                    <li>Open the Arbit mobile app</li>
                     <li>Tap "QR Code Login"</li>
                     <li>Scan the QR code displayed on the web page</li>
                     <li>Confirm login on your mobile device</li>
@@ -109,7 +109,7 @@ const ARTICLE_CONTENT = {
             <div class="space-y-8">
                 <section>
                     <h2 class="text-xl font-bold text-white mb-4">KYC Levels</h2>
-                    <p class="text-gray-400 leading-relaxed mb-6 italic">Arbix offers multiple KYC levels with increasing limits and features:</p>
+                    <p class="text-gray-400 leading-relaxed mb-6 italic">Arbit offers multiple KYC levels with increasing limits and features:</p>
                     <div class="space-y-3">
                         <div class="p-4 bg-white/[0.02] border border-white/5 rounded-xl">
                             <span class="text-orange-500 font-black text-xs uppercase tracking-widest mr-2">Level 1:</span>
@@ -270,7 +270,7 @@ const ARTICLE_CONTENT = {
             <p class="text-gray-400 mb-6 italic">Passkeys are a modern, passwordless authentication method using biometric data or hardware keys.</p>
             
             <div class="bg-[#0B0E11] p-8 rounded-3xl border border-white/5 mb-8">
-                <p class="text-sm text-gray-500 italic leading-relaxed mb-6">By linking your device's biometrics (FaceID, TouchID, or Windows Hello) to Arbix, you can log in with a single touch, eliminating the risk of phishing or password theft.</p>
+                <p class="text-sm text-gray-500 italic leading-relaxed mb-6">By linking your device's biometrics (FaceID, TouchID, or Windows Hello) to Arbit, you can log in with a single touch, eliminating the risk of phishing or password theft.</p>
                 <div class="flex items-center gap-2">
                     <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                     <span class="text-[10px] font-black text-white uppercase tracking-widest">Supported on All Modern Platforms</span>
@@ -299,7 +299,7 @@ const ARTICLE_CONTENT = {
                 
                 <section>
                     <h3 class="text-lg font-bold text-white mb-2 italic uppercase tracking-tight">Manual Account Reset</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed italic">If you have no backup, contact Arbix Support to initiate a manual 2FA reset. You will be required to provide selfie verification holding your government ID and a handwritten note. This process takes 48-72 hours for security reasons.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed italic">If you have no backup, contact Arbit Support to initiate a manual 2FA reset. You will be required to provide selfie verification holding your government ID and a handwritten note. This process takes 48-72 hours for security reasons.</p>
                 </section>
             </div>
         `
@@ -314,12 +314,12 @@ const ARTICLE_CONTENT = {
             <div class="space-y-10">
                 <section class="pl-4 border-l-2 border-orange-500/50">
                     <h3 class="font-black text-white mb-2 uppercase text-sm tracking-widest">Step 1: Get Your Deposit Address</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed italic mb-4">Log in to your Arbix account and navigate to <span class="text-white">Assets → Deposit</span>. Select the cryptocurrency you wish to fund.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed italic mb-4">Log in to your Arbit account and navigate to <span class="text-white">Assets → Deposit</span>. Select the cryptocurrency you wish to fund.</p>
                 </section>
 
                 <section class="pl-4 border-l-2 border-orange-500/50">
                     <h3 class="font-black text-white mb-2 uppercase text-sm tracking-widest">Step 2: Select Network</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed italic mb-4">Choose the correct network (e.g., BTC, ERC-20, TRC-20, BEP-20). <span class="text-rose-500 font-bold">CRITICAL:</span> Ensure the network on your external wallet matches the network selected on Arbix or your funds will be lost permanently.</p>
+                    <p class="text-sm text-gray-500 leading-relaxed italic mb-4">Choose the correct network (e.g., BTC, ERC-20, TRC-20, BEP-20). <span class="text-rose-500 font-bold">CRITICAL:</span> Ensure the network on your external wallet matches the network selected on Arbit or your funds will be lost permanently.</p>
                 </section>
 
                 <section class="pl-4 border-l-2 border-orange-500/50">
@@ -360,7 +360,7 @@ const ARTICLE_CONTENT = {
 
             <div class="mt-8 p-6 bg-rose-500/5 border border-rose-500/20 rounded-2xl italic">
                 <h4 class="text-xs font-black text-rose-500 uppercase tracking-widest mb-1 italic">Withdrawal Warnings</h4>
-                <p class="text-[11px] text-gray-500 italic">Double-check the destination address and network. Arbix cannot recover tokens sent to the wrong address or network.</p>
+                <p class="text-[11px] text-gray-500 italic">Double-check the destination address and network. Arbit cannot recover tokens sent to the wrong address or network.</p>
             </div>
         `
     },
@@ -370,8 +370,8 @@ const ARTICLE_CONTENT = {
         updated: "Feb 24, 2026",
         content: `
             <h2 class="text-xl font-bold text-white mb-4">Funding with Local Currency</h2>
-            <p class="text-gray-400 mb-6 italic">Arbix supports SEPA, SWIFT, and Faster Payments for direct bank-to-wallet funding.</p>
-            <p class="text-sm text-gray-500 leading-relaxed italic">Navigate to Deposit → Fiat, select your currency, and follow the unique payment instructions provided. <span class="text-orange-500">Note:</span> Your bank account name must exactly match your Arbix KYC name.</p>
+            <p class="text-gray-400 mb-6 italic">Arbit supports SEPA, SWIFT, and Faster Payments for direct bank-to-wallet funding.</p>
+            <p class="text-sm text-gray-500 leading-relaxed italic">Navigate to Deposit → Fiat, select your currency, and follow the unique payment instructions provided. <span class="text-orange-500">Note:</span> Your bank account name must exactly match your Arbit KYC name.</p>
         `
     },
     "withdrawal-limits": {
@@ -396,10 +396,10 @@ const ARTICLE_CONTENT = {
             <div class="space-y-8">
                 <section>
                     <h2 class="text-xl font-bold text-white mb-4 uppercase">Getting Started</h2>
-                    <p class="text-gray-400 mb-6 italic">Arbix Spot Trading allows you to exchange one cryptocurrency for another instantly at current market prices.</p>
+                    <p class="text-gray-400 mb-6 italic">Arbit Spot Trading allows you to exchange one cryptocurrency for another instantly at current market prices.</p>
                     
                     <div class="pl-4 border-l-2 border-orange-500/50 space-y-4">
-                        <p class="text-sm text-gray-400 italic"><strong>Step 1: Fund Your Account</strong> — Deposit crypto into your Arbix wallet.</p>
+                        <p class="text-sm text-gray-400 italic"><strong>Step 1: Fund Your Account</strong> — Deposit crypto into your Arbit wallet.</p>
                         <p class="text-sm text-gray-400 italic"><strong>Step 2: Choose a Pair</strong> — Select from hundreds of pairs like BTC/USDT or ETH/BTC.</p>
                         <p class="text-sm text-gray-400 italic"><strong>Step 3: Execute Trade</strong> — Enter your amount and click Buy or Sell.</p>
                     </div>
@@ -442,7 +442,7 @@ const ARTICLE_CONTENT = {
         category: "Trading",
         updated: "Feb 24, 2026",
         content: `
-            <h2 class="text-xl font-bold text-white mb-4 italic">Arbix Fee Structure</h2>
+            <h2 class="text-xl font-bold text-white mb-4 italic">Arbit Fee Structure</h2>
             <p class="text-gray-400 mb-8 italic">We use a competitive maker-taker model to ensure high liquidity and fair pricing for all traders.</p>
             
             <div class="grid grid-cols-2 gap-4 mb-8">
@@ -467,7 +467,7 @@ const ARTICLE_CONTENT = {
         updated: "Feb 24, 2026",
         content: `
             <h2 class="text-xl font-bold text-white mb-4">What is P2P Trading?</h2>
-            <p class="text-gray-400 mb-6 italic leading-relaxed">Arbix P2P (Peer-to-Peer) allows you to buy and sell cryptocurrencies directly between users without an intermediary. This enables a wide range of local payment methods.</p>
+            <p class="text-gray-400 mb-6 italic leading-relaxed">Arbit P2P (Peer-to-Peer) allows you to buy and sell cryptocurrencies directly between users without an intermediary. This enables a wide range of local payment methods.</p>
             
             <div class="space-y-4">
                 <div class="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
@@ -477,7 +477,7 @@ const ARTICLE_CONTENT = {
                     <p class="text-sm text-gray-300 italic"><span class="font-black mr-2">2. Payment:</span> Transfer funds directly to the seller's account.</p>
                 </div>
                 <div class="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
-                    <p class="text-sm text-gray-300 italic"><span class="font-black mr-2">3. Release:</span> Once the seller confirms receipt, Arbix releases the crypto to your wallet via escrow.</p>
+                    <p class="text-sm text-gray-300 italic"><span class="font-black mr-2">3. Release:</span> Once the seller confirms receipt, Arbit releases the crypto to your wallet via escrow.</p>
                 </div>
             </div>
         `

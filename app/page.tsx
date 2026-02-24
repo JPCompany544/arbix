@@ -100,7 +100,7 @@ export default function HomePage() {
       <section className="md:hidden pt-32 pb-16 px-6 bg-white overflow-hidden">
         <div className="max-w-[400px] mx-auto bg-gray-50 border border-gray-100 rounded-3xl p-8 flex flex-col items-center text-center shadow-sm">
           <h2 className="text-2xl font-semibold text-black mb-2 tracking-tight">
-            Welcome to Arbix
+            Welcome to Arbit
           </h2>
           <p className="text-sm text-gray-500 font-medium mb-10">
             {isLoggedIn ? "Welcome back! Ready to grow your portfolio?" : "Login or signup to start trading."}

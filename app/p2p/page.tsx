@@ -54,7 +54,7 @@ export default function P2PPage() {
                 {/* Footer Note */}
                 <div className="pt-6">
                     <p className="text-[8px] text-gray-700 font-bold uppercase tracking-[0.3em]">
-                        REF: 403-ARBIX-P2P
+                        REF: 403-ARBIT-P2P
                     </p>
                 </div>
             </div>

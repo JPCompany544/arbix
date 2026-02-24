@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { User } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -10,9 +11,14 @@ export default function MobileHeader() {
     return (
         <header className="fixed top-10 left-0 right-0 h-14 bg-black border-b border-white/5 flex items-center justify-between px-4 z-[60] transition-colors">
             {/* Left: Logo + Company Name */}
-            <Link href="/" className="flex items-center gap-1.5 active:opacity-80 transition-opacity">
-                <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-orange-600 rounded flex items-center justify-center">
-                    <span className="text-black font-black text-[10px]">A</span>
+            <Link href="/" className="flex items-center gap-2 active:opacity-80 transition-opacity">
+                <div className="relative w-7 h-7">
+                    <Image
+                        src="/Platform Logo main.png"
+                        alt="Arbit Logo"
+                        fill
+                        className="object-contain"
+                    />
                 </div>
                 <span className="text-white font-semibold text-base tracking-tight">
                     Arbit<span className="text-orange-500 font-bold">.</span>

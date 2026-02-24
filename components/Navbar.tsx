@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Eye, ArrowDownCircle, ArrowUpCircle, ChevronRight, CircleHelp, FileText, ShieldAlert, Lock, CreditCard, Users2, Coins, HandCoins, BarChart3, Filter, ArrowRightLeft, LayoutGrid, TrendingUp, Zap, CandlestickChart, RefreshCw, CircleDollarSign, Percent, Trophy, Menu, X, Headset } from "lucide-react";
@@ -218,9 +219,15 @@ export default function Navbar() {
                 {/* Left Side: Logo and Links */}
                 <div className="flex items-center gap-8">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-7 h-7 bg-gradient-to-br from-yellow-400 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
-                            <span className="text-black font-black text-base">A</span>
+                    <Link href="/" className="flex items-center gap-3 group">
+                        <div className="relative w-9 h-9 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <Image
+                                src="/Platform Logo main.png"
+                                alt="Arbit Logo"
+                                fill
+                                className="object-contain"
+                                priority
+                            />
                         </div>
                         <span className="text-white font-extrabold text-lg tracking-tighter">
                             Arbit<span className="text-orange-500 text-xl leading-none">.</span>
@@ -697,9 +704,19 @@ export default function Navbar() {
                 <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl lg:hidden">
                     <div className="flex flex-col h-full p-6">
                         <div className="flex items-center justify-between mb-8">
-                            <span className="text-white font-extrabold text-2xl tracking-tighter">
-                                Arbit<span className="text-orange-500 text-xl leading-none">.</span>
-                            </span>
+                            <Link href="/" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
+                                <div className="relative w-10 h-10">
+                                    <Image
+                                        src="/Platform Logo main.png"
+                                        alt="Arbit Logo"
+                                        fill
+                                        className="object-contain"
+                                    />
+                                </div>
+                                <span className="text-white font-extrabold text-2xl tracking-tighter">
+                                    Arbit<span className="text-orange-500 text-xl leading-none">.</span>
+                                </span>
+                            </Link>
                             <button
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="text-gray-400 hover:text-white transition-colors"

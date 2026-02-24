@@ -18,8 +18,29 @@ const NATIVE_MAP: Record<string, string> = {
     'XRP': 'ripple'
 };
 
+const LOCAL_MAP: Record<string, string> = {
+    'AVAX': '/Avalanche.jpeg',
+    'BCH': '/Bitcoin Cash.png',
+    'ADA': '/Cardano.png',
+    'LINK': '/Chainlink.svg',
+    'DOGE': '/DOGE.svg',
+    'DOT': '/Polkadot.jpeg',
+    'SHIB': '/Shiba Inu.svg',
+    'TON': '/Ton.svg',
+    'TRX': '/Tron.jpeg',
+    'USDT': '/USDT.svg',
+    'SOL': '/Solana.svg',
+    'XRP': '/xrp-logo.png',
+    'BNB': '/BNB.jpeg'
+};
+
 export async function getTokenLogo(params: { chain?: string; address?: string; symbol?: string }): Promise<string> {
     const { chain, address, symbol } = params;
+
+    // 0. Check Local Map First
+    if (symbol && LOCAL_MAP[symbol.toUpperCase()]) {
+        return LOCAL_MAP[symbol.toUpperCase()];
+    }
 
     // 1. Generate Cache Key
     let cacheKey = '';
@@ -29,7 +50,7 @@ export async function getTokenLogo(params: { chain?: string; address?: string; s
         cacheKey = `symbol:${symbol.toUpperCase()}`;
     }
 
-    if (!cacheKey) return '/images/token-placeholder.png';
+    if (!cacheKey) return '';
 
     // 2. Check Cache
     const cached = cache.get(cacheKey);
@@ -38,7 +59,7 @@ export async function getTokenLogo(params: { chain?: string; address?: string; s
     }
 
     // 3. Fetch Logic
-    let logoUrl = '/images/token-placeholder.png';
+    let logoUrl = '';
 
     try {
         if (chain && address) {

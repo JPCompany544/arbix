@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, LayoutDashboard, LogOut, Headset } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
@@ -29,8 +30,13 @@ export default function TradeMobileHeader() {
             <div className="mt-10 h-14 bg-[#0B0E11] border-b border-white/5 flex items-center justify-between px-4">
                 {/* Left: Logo + Name */}
                 <Link href="/" className="flex items-center gap-2 active:opacity-80 transition-opacity">
-                    <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-600 rounded flex items-center justify-center">
-                        <span className="text-black font-black text-[11px]">A</span>
+                    <div className="relative w-7 h-7">
+                        <Image
+                            src="/Platform Logo main.png"
+                            alt="Arbit Logo"
+                            fill
+                            className="object-contain"
+                        />
                     </div>
                     <span className="text-white font-bold text-[17px] tracking-tight">
                         Arbit<span className="text-orange-500 font-black">.</span>
@@ -59,9 +65,19 @@ export default function TradeMobileHeader() {
                 <div className="fixed inset-0 z-[110] bg-black/98 backdrop-blur-2xl">
                     <div className="flex flex-col h-full p-6">
                         <div className="flex items-center justify-between mb-10">
-                            <span className="text-white font-extrabold text-2xl tracking-tighter">
-                                Arbit<span className="text-orange-500 text-xl leading-none">.</span>
-                            </span>
+                            <Link href="/" className="flex items-center gap-3" onClick={() => setMenuOpen(false)}>
+                                <div className="relative w-10 h-10">
+                                    <Image
+                                        src="/Platform Logo main.png"
+                                        alt="Arbit Logo"
+                                        fill
+                                        className="object-contain"
+                                    />
+                                </div>
+                                <span className="text-white font-extrabold text-2xl tracking-tighter">
+                                    Arbit<span className="text-orange-500 text-xl leading-none">.</span>
+                                </span>
+                            </Link>
                             <button
                                 onClick={() => setMenuOpen(false)}
                                 className="w-11 h-11 flex items-center justify-center text-gray-400 active:text-white transition-colors"

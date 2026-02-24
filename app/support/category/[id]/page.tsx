@@ -48,7 +48,7 @@ const CATEGORY_DATA = {
         desc: "Spot trading, order types, order book, and trading features",
         icon: <TrendingUp className="text-orange-500" size={32} />,
         articles: [
-            { id: "spot-trading", title: "How to Trade Spot Markets?", snippet: "Getting started with spot trading on Arbix..." },
+            { id: "spot-trading", title: "How to Trade Spot Markets?", snippet: "Getting started with spot trading on Arbit..." },
             { id: "order-types", title: "Order Types Explained", snippet: "Market, Limit, and Stop orders simplified..." },
             { id: "trading-fees", title: "Trading Fees Explained", snippet: "Maker-taker model and platform fee structure..." }
         ]

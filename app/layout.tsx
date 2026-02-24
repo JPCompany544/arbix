@@ -19,6 +19,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Arbit - Premium Arbitrage Platform",
   description: "Advanced crypto arbitrage and market analytics platform.",
+  icons: {
+    icon: "/Platform Logo main.png",
+    apple: "/Platform Logo main.png",
+  }
 };
 
 export default function RootLayout({

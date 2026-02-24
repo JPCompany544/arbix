@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const Footer = () => {
@@ -57,9 +58,14 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     {/* Logo */}
                     <div className="lg:col-span-1">
-                        <Link href="/" className="flex items-center gap-2 group mb-6">
-                            <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
-                                <span className="text-black font-black text-lg">A</span>
+                        <Link href="/" className="flex items-center gap-3 group mb-6">
+                            <div className="relative w-9 h-9 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <Image
+                                    src="/Platform Logo main.png"
+                                    alt="Arbit Logo"
+                                    fill
+                                    className="object-contain"
+                                />
                             </div>
                             <span className="text-white font-extrabold text-xl tracking-tighter">
                                 Arbit<span className="text-orange-500 text-xl leading-none">.</span>
