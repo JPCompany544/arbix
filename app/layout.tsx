@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Arbit - Premium Arbitrage Platform",
-  description: "Advanced crypto arbitrage and market analytics platform.",
+  title: "Buy & Sell Bitcoin, Ethereum I Cryptocurrency Exchange I Arbit",
+  description: "A high-performance cryptocurrency exchange built for speed, scale, and dominance. Instant wallet provisioning. Secure execution. Infrastructure designed to outperform.",
   icons: {
     icon: "/Platform Logo main.png",
     apple: "/Platform Logo main.png",
