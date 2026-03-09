@@ -77,11 +77,17 @@ model UserBalance {
 model Withdrawal {
   id            String   @id @default(cuid())
   userId        String
+  chain         String
   amount        Float
-  walletAddress String?
+  amountRaw     String   @default("0")
+  walletAddress String
   status        TxStatus @default(PENDING)
   createdAt     DateTime @default(now())
+  processedAt   DateTime?
   user          User     @relation(fields: [userId], references: [id])
+
+  @@index([status])
+  @@index([userId])
 }
 
 model SystemSetting {

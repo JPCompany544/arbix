@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyAdmin } from "@/lib/auth";
 
+/**
+ * GET /api/admin/withdrawals
+ * 
+ * Returns all withdrawal requests for admin review.
+ * Shows pending, approved, rejected, and completed withdrawals.
+ */
 export async function GET() {
     const admin = await verifyAdmin();
     if (!admin) {
@@ -9,29 +15,26 @@ export async function GET() {
     }
 
     try {
-        const withdrawals = await prisma.chainTransaction.findMany({
-            where: {
-                direction: 'OUTBOUND',
-                status: { in: ['PENDING', 'BROADCASTED'] }
-            },
+        const withdrawals = await prisma.withdrawal.findMany({
             include: {
                 user: {
                     select: { email: true }
                 }
             },
-            orderBy: { createdAt: 'asc' }
+            orderBy: { createdAt: 'desc' }
         });
 
-        // Format the response
         const formatted = withdrawals.map((w: any) => ({
             id: w.id,
             userId: w.userId,
             userEmail: w.user.email,
             amount: w.amount,
+            amountRaw: w.amountRaw,
             chain: w.chain,
-            walletAddress: w.to,
+            walletAddress: w.walletAddress,
             status: w.status,
-            date: w.createdAt
+            date: w.createdAt,
+            processedAt: w.processedAt
         }));
 
         return NextResponse.json(formatted);

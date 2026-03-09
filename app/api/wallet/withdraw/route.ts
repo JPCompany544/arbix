@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { processWithdrawal } from "@/lib/wallet/wallet-service";
+import { prisma } from "@/lib/prisma";
 import { chainFactory } from "@/core/chain-factory";
 
 /**
  * POST /api/wallet/withdraw
  * 
- * Initiates a withdrawal from internal balance to external address
+ * Creates a pending withdrawal request that requires admin approval.
+ * Balance is deducted (reserved) immediately, but blockchain transfer
+ * only occurs after admin approves the request.
  */
 export async function POST(request: NextRequest) {
     try {
@@ -50,18 +52,57 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Execute withdrawal via WalletService
-        const result = await processWithdrawal(userId, chain as any, {
-            to,
-            amount // Standard string value
+        const amountStr = amount.toString();
+        const amountFloat = parseFloat(amountStr);
+        const amountSmallestUnit = chainImpl.toSmallestUnit(amountStr);
+
+        // Atomic: check balance, deduct (reserve), create Withdrawal record
+        const withdrawal = await prisma.$transaction(async (tx) => {
+            // Check balance
+            const userBalance = await tx.userBalance.findUnique({
+                where: { userId_chain: { userId, chain } }
+            });
+
+            const currentBalance = userBalance ? BigInt(userBalance.balance) : 0n;
+            if (currentBalance < amountSmallestUnit) {
+                throw new Error("Insufficient internal balance");
+            }
+
+            // Deduct balance (reserve funds)
+            await tx.userBalance.update({
+                where: { userId_chain: { userId, chain } },
+                data: { balance: (currentBalance - amountSmallestUnit).toString() }
+            });
+
+            // Create ledger entry for the hold
+            await tx.ledgerEntry.create({
+                data: {
+                    userId,
+                    chain,
+                    amount: amountSmallestUnit.toString(),
+                    type: "WITHDRAWAL",
+                    referenceId: "PENDING_WITHDRAWAL"
+                }
+            });
+
+            // Create Withdrawal record with PENDING status
+            return await tx.withdrawal.create({
+                data: {
+                    userId,
+                    chain,
+                    amount: amountFloat,
+                    amountRaw: amountSmallestUnit.toString(),
+                    walletAddress: to,
+                    status: "PENDING"
+                }
+            });
         });
 
         return NextResponse.json({
             success: true,
-            txId: result.id,
-            txHash: result.txHash,
-            chain,
-            amount
+            withdrawalId: withdrawal.id,
+            message: "Withdrawal request submitted. Awaiting approval.",
+            status: "PENDING"
         });
 
     } catch (error: any) {
@@ -75,7 +116,7 @@ export async function POST(request: NextRequest) {
         }
 
         return NextResponse.json(
-            { error: error.message || "Withdrawal failed. Please try again." },
+            { error: error.message || "Withdrawal request failed. Please try again." },
             { status: 500 }
         );
     }
