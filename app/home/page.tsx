@@ -100,7 +100,7 @@ export default function HomePage() {
                             Highway to <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Wealth</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-300 font-medium mb-8">
-                            Buy, sell, trade, and hold cryptocurrencies on <span className="font-black text-orange-500">CRYPTOZEP</span>
+                            Buy, sell, trade, and hold cryptocurrencies on <span className="font-black text-orange-500">Arit</span>
                         </p>
                         <div className="inline-block bg-gradient-to-r from-orange-500 to-red-500 p-1 rounded-2xl shadow-2xl shadow-orange-500/50 animate-in zoom-in duration-500">
                             <div className="bg-black px-8 py-6 rounded-xl">

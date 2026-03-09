@@ -43,6 +43,24 @@ const TOKEN_MAP: { [key: string]: string } = {
     STETH: "lido-staked-ether"
 };
 
+// ──────────────────────────────────────────────
+// TEMPORARY PRICE OVERRIDE (easily reversible)
+// To revert: delete PRICE_OVERRIDES and the applyPriceOverrides function
+// ──────────────────────────────────────────────
+const PRICE_OVERRIDES: { [symbol: string]: number } = {
+    SOL: 90.3,
+};
+
+function applyPriceOverrides(data: MarketData[]): MarketData[] {
+    return data.map(item => {
+        const override = PRICE_OVERRIDES[item.symbol];
+        if (override !== undefined) {
+            return { ...item, price: override };
+        }
+        return item;
+    });
+}
+
 export type MarketData = {
     symbol: string;
     pair: string;
@@ -113,7 +131,7 @@ export async function getMarketData(): Promise<MarketData[]> {
     const CACHE_DURATION = 30000; // 30 seconds
 
     if (cachedMarketData && now - lastFetch < CACHE_DURATION) {
-        return cachedMarketData;
+        return applyPriceOverrides(cachedMarketData);
     }
 
     const freshData = await fetchFullMarketData();
@@ -122,7 +140,7 @@ export async function getMarketData(): Promise<MarketData[]> {
         lastFetch = now;
     }
 
-    return cachedMarketData || [];
+    return applyPriceOverrides(cachedMarketData || []);
 }
 
 /**

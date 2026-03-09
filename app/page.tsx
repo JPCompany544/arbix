@@ -169,9 +169,7 @@ export default function HomePage() {
               Gateway to Digital Asset,<br />
               Highway to Wealth
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 font-medium mb-12 max-w-xl">
-              Buy, sell, trade, and hold cryptocurrencies on <span className="font-extrabold text-orange-600 tracking-tight">CRYPTOZEP</span>
-            </p>
+            <p className="text-lg md:text-xl text-gray-600 font-medium mb-12 max-w-xl">Buy, sell, trade, and hold cryptocurrencies on <span className="font-extrabold text-orange-600 tracking-tight">Arbit</span></p>
 
             <div className="flex flex-col items-start gap-8">
               <div className="flex items-center gap-4 bg-gray-50/50 backdrop-blur-sm border border-gray-200 py-3.5 px-6 rounded-2xl">

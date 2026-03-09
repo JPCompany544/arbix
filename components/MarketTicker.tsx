@@ -28,7 +28,7 @@ export default function MarketTicker() {
                 setMarkets([
                     { symbol: "BTC", pair: "BTC / USDT", price: 64320.50, change24h: 2.14 },
                     { symbol: "ETH", pair: "ETH / USDT", price: 3420.15, change24h: -1.03 },
-                    { symbol: "SOL", pair: "SOL / USDT", price: 142.55, change24h: 4.22 },
+                    { symbol: "SOL", pair: "SOL / USDT", price: 90.30, change24h: 4.22 },
                     { symbol: "BNB", pair: "BNB / USDT", price: 585.20, change24h: 0.45 },
                     { symbol: "XRP", pair: "XRP / USDT", price: 0.62, change24h: -1.20 },
                 ]);
