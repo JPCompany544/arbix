@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import AdminSidebar from "./components/AdminSidebar";
-import { Loader2, ShieldAlert } from "lucide-react";
+import { Loader2, ShieldAlert, Menu } from "lucide-react";
 
 export default function AdminLayout({
     children,
@@ -15,6 +15,7 @@ export default function AdminLayout({
     const pathname = usePathname();
     const { user, loading: authLoading } = useAuth();
     const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const isAdminLogin = pathname === "/admin/login";
 
@@ -29,6 +30,11 @@ export default function AdminLayout({
             }
         }
     }, [user, authLoading, router, isAdminLogin]);
+
+    // Close sidebar on navigation for mobile
+    useEffect(() => {
+        setIsSidebarOpen(false);
+    }, [pathname]);
 
     // If it's the login page, just render children without sidebar/check
     if (isAdminLogin) {
@@ -65,12 +71,29 @@ export default function AdminLayout({
     }
 
     return (
-        <div className="flex bg-gray-50 min-h-screen">
+        <div className="flex bg-gray-50 min-h-screen overflow-x-hidden">
             {/* Sidebar */}
-            <AdminSidebar />
-            {/* Main Content */}
-            <div className="flex-1 md:ml-64 bg-gray-50">
-                <main className="p-8 lg:p-12 overflow-y-auto">
+            <AdminSidebar 
+                isOpen={isSidebarOpen} 
+                onClose={() => setIsSidebarOpen(false)} 
+            />
+
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col w-full md:ml-64 min-w-0">
+                {/* Mobile Header */}
+                <header className="h-16 bg-white border-b border-gray-100 flex items-center px-4 md:hidden sticky top-0 z-30">
+                    <button 
+                        onClick={() => setIsSidebarOpen(true)}
+                        className="p-2 text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
+                    >
+                        <Menu size={24} />
+                    </button>
+                    <div className="ml-3 font-black text-lg tracking-tighter italic">
+                        ARBIT<span className="text-orange-500">.</span>ADMIN
+                    </div>
+                </header>
+
+                <main className="flex-1 p-6 lg:p-12 overflow-y-auto">
                     {children}
                 </main>
             </div>

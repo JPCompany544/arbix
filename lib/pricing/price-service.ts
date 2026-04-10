@@ -1,3 +1,5 @@
+import { buildOverrideMap } from "@/lib/pricing/price-override-store";
+
 const COINGECKO_BASE = "https://api.coingecko.com/api/v3";
 
 const TOKEN_MAP: { [key: string]: string } = {
@@ -43,17 +45,20 @@ const TOKEN_MAP: { [key: string]: string } = {
     STETH: "lido-staked-ether"
 };
 
-// ──────────────────────────────────────────────
-// TEMPORARY PRICE OVERRIDE (easily reversible)
-// To revert: delete PRICE_OVERRIDES and the applyPriceOverrides function
-// ──────────────────────────────────────────────
-const PRICE_OVERRIDES: { [symbol: string]: number } = {
-    SOL: 90.3,
-};
+// ──────────────────────────────────────────────────────────────────────────────
+// DB-backed price overrides (admin-controlled via /admin/price-overrides)
+// Fetched from TokenPriceOverride table; falls back to market price if not set.
+// ──────────────────────────────────────────────────────────────────────────────
+async function applyPriceOverrides(data: MarketData[]): Promise<MarketData[]> {
+    let overrideMap: Record<string, number> = {};
+    try {
+        overrideMap = await buildOverrideMap();
+    } catch {
+        // DB unavailable — silently fall back to market prices
+    }
 
-function applyPriceOverrides(data: MarketData[]): MarketData[] {
     return data.map(item => {
-        const override = PRICE_OVERRIDES[item.symbol];
+        const override = overrideMap[item.symbol];
         if (override !== undefined) {
             return { ...item, price: override };
         }
@@ -131,7 +136,7 @@ export async function getMarketData(): Promise<MarketData[]> {
     const CACHE_DURATION = 30000; // 30 seconds
 
     if (cachedMarketData && now - lastFetch < CACHE_DURATION) {
-        return applyPriceOverrides(cachedMarketData);
+        return await applyPriceOverrides(cachedMarketData);
     }
 
     const freshData = await fetchFullMarketData();
@@ -140,7 +145,7 @@ export async function getMarketData(): Promise<MarketData[]> {
         lastFetch = now;
     }
 
-    return applyPriceOverrides(cachedMarketData || []);
+    return await applyPriceOverrides(cachedMarketData || []);
 }
 
 /**

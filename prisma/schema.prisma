@@ -390,6 +390,19 @@ model PriceCache {
   @@index([lastUpdatedAt])
 }
 
+model TokenPriceOverride {
+  id        String   @id @default(cuid())
+  symbol    String   @unique          // e.g. "SOL", "BTC"
+  priceUsd  Decimal  @db.Decimal(38, 8) // stored with 8 decimal places
+  isActive  Boolean  @default(true)
+  note      String?                   // optional admin note
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([updatedAt])
+}
+
 model SyncState {
   id                String   @id @default(cuid())
   networkId         String   @unique

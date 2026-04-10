@@ -339,10 +339,10 @@ export default function DepositModal() {
                             )}
 
                             {activeTab === 'withdraw' && (
-                                <div className="bg-amber-50/50 border border-amber-100 rounded-lg p-3 flex gap-2.5 items-start">
-                                    <div className="w-4 h-4 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-[9px] flex-shrink-0 mt-0.5">i</div>
-                                    <p className="text-[10px] text-amber-800 leading-snug font-medium">
-                                        Withdrawals require admin approval before processing. Your balance will be reserved until the request is reviewed.
+                                <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-3 flex gap-2.5 items-start">
+                                    <div className="w-4 h-4 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-[9px] flex-shrink-0 mt-0.5">i</div>
+                                    <p className="text-[10px] text-blue-800 leading-snug font-medium">
+                                        Withdrawals are processed automatically. Ensure the destination address supports {selectedNetwork}.
                                     </p>
                                 </div>
                             )}
@@ -462,11 +462,8 @@ export default function DepositModal() {
                             )}
 
                             {withdrawStatus === 'success' && (
-                                <div className="mb-4 p-3 bg-green-50 border border-green-100 rounded-lg text-[10px] text-green-700 font-medium flex flex-col gap-1">
-                                    <div className="flex items-center gap-2 font-bold">
-                                        <Check className="w-3 h-3" /> Withdrawal request submitted!
-                                    </div>
-                                    <span className="text-green-600/80">Awaiting admin approval. Your balance has been reserved.</span>
+                                <div className="mb-4 p-2 bg-green-50 border border-green-100 rounded text-[10px] text-green-600 font-medium flex items-center gap-2">
+                                    <Check className="w-3 h-3" /> Withdrawal Submitted!
                                 </div>
                             )}
 
@@ -476,9 +473,9 @@ export default function DepositModal() {
                                 className="w-full bg-black text-white py-3 rounded-xl font-bold text-xs hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
                             >
                                 {withdrawStatus === 'pending' ? (
-                                    <>Submitting...</>
+                                    <>Processing...</>
                                 ) : (
-                                    <>Submit Withdrawal Request <ArrowUpRight className="w-3 h-3" /></>
+                                    <>Confirm Withdrawal <ArrowUpRight className="w-3 h-3" /></>
                                 )}
                             </button>
                         </div>
